@@ -1,30 +1,35 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter_test/flutter_test.dart';
-import 'package:material_ui/material_ui.dart';
 
 import 'package:kalendar_samogon/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('Каркас запускается и показывает пять разделов', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(const KalendarSamogonApp());
+    await tester.pumpAndSettle();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Заголовок первого экрана и его пустое состояние.
+    expect(find.text('Сегодня'), findsWidgets);
+    expect(find.text('Здесь будут задачи на день'), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    // Нижняя навигация: все пять разделов на месте.
+    expect(find.text('Календарь'), findsOneWidget);
+    expect(find.text('Партии'), findsOneWidget);
+    expect(find.text('Рецепты'), findsOneWidget);
+    expect(find.text('Ещё'), findsOneWidget);
+  });
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+  testWidgets('Переключение на раздел «Ещё» показывает список функций', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(const KalendarSamogonApp());
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Ещё'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Калькуляторы'), findsOneWidget);
+    expect(find.text('Склад и погреб'), findsOneWidget);
   });
 }

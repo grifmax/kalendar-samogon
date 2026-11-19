@@ -2,7 +2,7 @@
 
 Android-приложение на Flutter: рецепты, партии и календарь процессов домашнего винокурения — брага, перегонка, настойки, выдержка в бочке и на щепе, дегустации.
 
-**Статус: планирование.** Кода пока нет, есть план и модель данных. Flutter SDK в процессе установки.
+**Статус: M0 — каркас собран и проверен на эмуляторе.** Flutter установлен, приложение запускается: тёмная тема, русская локаль, пять разделов навигации. Дальше — M1 (MVP: БД, рецепты, партии, календарь).
 
 ## Документы
 
@@ -16,23 +16,47 @@ Android-приложение на Flutter: рецепты, партии и ка�
 
 | Компонент | Состояние |
 |---|---|
-| Flutter SDK | ставится в `C:\flutter` (3.50.0 stable, Dart 3.14) |
+| Flutter SDK | `C:\flutter` — 3.50.0 stable, Dart 3.14 |
 | Android Studio | 2025.2.2, JBR 21 (`C:\Program Files\Android\Android Studio\jbr`) |
-| Android SDK | `%LOCALAPPDATA%\Android\Sdk`, platforms 33/34/36, build-tools 34.0.0 и 36.1.0 |
+| Android SDK | `%LOCALAPPDATA%\Android\Sdk`, platforms 33/34/36, build-tools 34.0.0 и 36.1.0, cmdline-tools latest |
 | Эмулятор | AVD `Medium_Phone_API_36.1` |
-| Системный `java` | 1.8 — для Gradle не годится, используем JBR 21 |
+| Системный `java` | 1.8 — для Gradle не годится, Flutter настроен на JBR 21 (`flutter config --jdk-dir`) |
 
-## Сборка (после установки Flutter)
+## Расположение проекта
+
+| Путь | Что это |
+|---|---|
+| `C:\distiller\KalendarSamogon` | **реальный каталог** проекта (ASCII), здесь git-репозиторий и сборка |
+| `C:\distiller\Календарь_самогонщика` | NTFS-джанкшен на него — привычный путь для работы |
+
+Почему так: Dart AOT-компилятор на Windows не читает кириллические пути — сборка падает с `Unable to read file ... app.dill`, а Gradle дополнительно ругается на non-ASCII. Поэтому реальный путь — латиницей, а русский путь работает как ярлык.
+
+Джанкшен создаётся один раз (после переустановки — заново):
 
 ```bash
-cd C:/distiller/Календарь_самогонщика/app
+cmd /c "mklink /J C:\distiller\Календарь_самогонщика C:\distiller\KalendarSamogon"
+```
+
+Сборка и проверки:
+
+```bash
+export PATH="/c/flutter/bin:$PATH"
+cd /c/distiller/KalendarSamogon/app
 flutter pub get
 flutter analyze
 flutter test
 flutter build apk --release
 ```
 
-APK: `app/build/app/outputs/flutter-apk/app-release.apk`.
+APK: `C:\distiller\KalendarSamogon\app\build\app\outputs\flutter-apk\app-release.apk`.
+
+Быстрый путь без ручных команд — `build-apk.cmd` в корне проекта (проверяет джанкшен, гоняет analyze + test и собирает APK).
+
+В `app/android/gradle.properties` оставлен `android.overridePathCheck=true` — страховка, если сборка запускается через кириллический путь. Установка на устройство:
+
+```bash
+adb install -r app/build/app/outputs/flutter-apk/app-release.apk
+```
 
 ## Правила проекта
 

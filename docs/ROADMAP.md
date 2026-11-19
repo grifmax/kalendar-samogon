@@ -2,14 +2,16 @@
 
 Каждый этап заканчивается сборкой APK и записью в `CHANGELOG.md`. Этап считается закрытым, только если выполнены все пункты «Готово, когда».
 
-## M0. Фундамент (полдня)
+## M0. Фундамент — ГОТОВО (19.11.2026)
 
-- [ ] Flutter 3.50.0 stable распакован в `C:\flutter`, `flutter doctor` без критичных ошибок.
-- [ ] `flutter config --android-sdk` на существующий SDK, лицензии приняты.
-- [ ] JDK для Gradle — JBR 21 из Android Studio (системный 1.8 не подходит).
-- [ ] `flutter create` с `--org`, имя пакета, RU-локаль, тема.
-- [ ] Роутинг и нижняя навигация с заглушками 5 экранов.
-- [ ] `flutter build apk --release` собирается, APK ставится на телефон/эмулятор.
+- [x] Flutter 3.50.0 stable распакован в `C:\flutter`, `flutter doctor` без критичных ошибок.
+- [x] `flutter config --android-sdk` на существующий SDK, cmdline-tools поставлены, лицензии приняты.
+- [x] JDK для Gradle — JBR 21 из Android Studio (системный 1.8 не подходит).
+- [x] `flutter create` с `--org ru.distiller`, RU-локаль, тёмная тема «погреб».
+- [x] Нижняя навигация с заглушками 5 экранов, виджет-тесты.
+- [x] `flutter build apk --release` собирается (43 МБ), APK ставится и запускается на эмуляторе.
+
+Замечания по итогам: проект живёт на ASCII-пути `C:\distiller\KalendarSamogon` (джанкшен с кириллическим именем), Flutter 3.50 требует `package:material_ui` вместо `package:flutter/material.dart`.
 
 **Готово, когда:** APK запускается на устройстве, навигация работает, в `flutter doctor` зелёные Android toolchain и device.
 
