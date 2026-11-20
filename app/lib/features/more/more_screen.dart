@@ -9,6 +9,7 @@ import '../../app/app_version.dart';
 import '../../utils/format.dart';
 import '../calculators/calculators_screen.dart';
 import '../reference/reference_screen.dart';
+import '../stats/stats_screen.dart';
 import '../vessels/vessels_screen.dart';
 
 /// Экран «Ещё»: калькуляторы, бэкап, служебная информация.
@@ -32,6 +33,17 @@ class MoreScreen extends StatelessWidget {
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute<void>(
                 builder: (_) => const CalculatorsScreen(),
+              ),
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.insights_outlined),
+            title: const Text('Статистика'),
+            subtitle: const Text('Литры, выход спирта, любимые рецепты'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => const StatsScreen(),
               ),
             ),
           ),
