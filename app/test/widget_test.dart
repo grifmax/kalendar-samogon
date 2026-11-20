@@ -5,6 +5,8 @@ import 'package:kalendar_samogon/data/db/app_database.dart';
 import 'package:kalendar_samogon/data/repositories/batch_repository.dart';
 import 'package:kalendar_samogon/data/repositories/production_repository.dart';
 import 'package:kalendar_samogon/data/repositories/recipe_repository.dart';
+import 'package:kalendar_samogon/app/app_theme.dart';
+import 'package:kalendar_samogon/app/splash_screen.dart';
 import 'package:kalendar_samogon/main.dart';
 import 'package:kalendar_samogon/services/backup_service.dart';
 import 'package:kalendar_samogon/services/notification_service.dart';
@@ -53,6 +55,19 @@ void main() {
     expect(find.text('Партии'), findsOneWidget);
     expect(find.text('Рецепты'), findsOneWidget);
     expect(find.text('Ещё'), findsOneWidget);
+
+    await _teardownTree(tester);
+  });
+
+  testWidgets('Заставка показывает название и подпись', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(theme: AppTheme.dark, home: const SplashView()),
+    );
+    await tester.pump(const Duration(milliseconds: 800));
+
+    expect(find.text('Календарь\nсамогонщика'), findsOneWidget);
+    expect(find.text('браги · настойки · выдержка'), findsOneWidget);
+    expect(find.byType(Image), findsOneWidget);
 
     await _teardownTree(tester);
   });

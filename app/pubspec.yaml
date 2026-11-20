@@ -3,7 +3,7 @@ description: "Календарь самогонщика — рецепты, па
 publish_to: 'none'
 
 # Версию синхронизируем с VERSION в корне проекта (docs/CONVENTIONS.md).
-version: 0.6.0+8
+version: 0.7.0+9
 
 environment:
   sdk: ^3.14.0
@@ -48,3 +48,4 @@ flutter:
   uses-material-design: true
   assets:
     - assets/recipes.json
+    - assets/images/
