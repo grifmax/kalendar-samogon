@@ -223,6 +223,33 @@ class Aging extends Table {
   Set<Column<Object>> get primaryKey => {id};
 }
 
+/// Настаивание: партия стоит на сырье, её надо периодически взбалтывать,
+/// а потом снять с осадка. Отдельно от выдержки: там тара и доля ангела,
+/// здесь — сырьё, срок мацерации и взбалтывания.
+@DataClassName('Maceration')
+class Macerations extends Table {
+  TextColumn get id => text()();
+  TextColumn get batchId =>
+      text().references(Batches, #id, onDelete: KeyAction.cascade)();
+  DateTimeColumn get startedAt => dateTime()();
+
+  /// Плановое снятие с осадка. null — срок не задан.
+  DateTimeColumn get plannedEndAt => dateTime().nullable()();
+
+  /// Взбалтывать каждые N дней. 0 — не взбалтываем.
+  IntColumn get shakeEveryDays => integer().withDefault(const Constant(3))();
+  DateTimeColumn get lastShakenAt => dateTime().nullable()();
+  IntColumn get shakenCount => integer().withDefault(const Constant(0))();
+
+  /// Крепость спирта, на котором стоит сырьё, %.
+  RealColumn get strengthAbv => real().withDefault(const Constant(0))();
+  DateTimeColumn get finishedAt => dateTime().nullable()();
+  TextColumn get notes => text().withDefault(const Constant(''))();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
+}
+
 /// Дегустация: оценка и выводы.
 @DataClassName('Tasting')
 class Tastings extends Table {

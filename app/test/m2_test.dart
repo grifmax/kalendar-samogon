@@ -181,7 +181,7 @@ void main() {
     );
 
     final dump = await backup.exportToMap();
-    expect(dump['backupVersion'], 2);
+    expect(dump['backupVersion'], 3);
     expect((dump['vessels'] as List).length, 1);
     expect((dump['aging'] as List).length, 1);
     expect((dump['tastings'] as List).length, 1);

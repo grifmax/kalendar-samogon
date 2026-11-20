@@ -5,7 +5,7 @@ import 'package:uuid/uuid.dart';
 
 import '../db/app_database.dart';
 
-/// Перегонки, фракции, тара, выдержка и дегустации.
+/// Перегонки, фракции, тара, выдержка, настаивание и дегустации.
 class ProductionRepository {
   ProductionRepository(this.db);
 
@@ -14,10 +14,11 @@ class ProductionRepository {
 
   // ---------- перегонки ----------
 
-  Stream<List<Run>> watchRuns(String batchId) => (db.select(db.runs)
-        ..where((t) => t.batchId.equals(batchId))
-        ..orderBy([(t) => OrderingTerm(expression: t.startedAt)]))
-      .watch();
+  Stream<List<Run>> watchRuns(String batchId) =>
+      (db.select(db.runs)
+            ..where((t) => t.batchId.equals(batchId))
+            ..orderBy([(t) => OrderingTerm(expression: t.startedAt)]))
+          .watch();
 
   Stream<List<RunFraction>> watchFractions(String runId) =>
       (db.select(db.runFractions)
@@ -34,7 +35,9 @@ class ProductionRepository {
     String notes = '',
   }) async {
     final id = _uuid.v4();
-    await db.into(db.runs).insert(
+    await db
+        .into(db.runs)
+        .insert(
           RunsCompanion.insert(
             id: id,
             batchId: batchId,
@@ -75,7 +78,9 @@ class ProductionRepository {
     double? tempC,
     String note = '',
   }) async {
-    await db.into(db.runFractions).insert(
+    await db
+        .into(db.runFractions)
+        .insert(
           RunFractionsCompanion.insert(
             runId: runId,
             kind: kind,
@@ -109,9 +114,9 @@ class ProductionRepository {
 
   // ---------- тара ----------
 
-  Stream<List<Vessel>> watchVessels() => (db.select(db.vessels)
-        ..orderBy([(t) => OrderingTerm(expression: t.name)]))
-      .watch();
+  Stream<List<Vessel>> watchVessels() => (db.select(
+    db.vessels,
+  )..orderBy([(t) => OrderingTerm(expression: t.name)])).watch();
 
   Future<void> addVessel({
     required String name,
@@ -121,7 +126,9 @@ class ProductionRepository {
     int? charLevel,
     String location = '',
   }) async {
-    await db.into(db.vessels).insert(
+    await db
+        .into(db.vessels)
+        .insert(
           VesselsCompanion.insert(
             id: _uuid.v4(),
             name: name,
@@ -146,9 +153,9 @@ class ProductionRepository {
 
   // ---------- выдержка ----------
 
-  Stream<AgingEntry?> watchAging(String batchId) =>
-      (db.select(db.aging)..where((t) => t.batchId.equals(batchId)))
-          .watchSingleOrNull();
+  Stream<AgingEntry?> watchAging(String batchId) => (db.select(
+    db.aging,
+  )..where((t) => t.batchId.equals(batchId))).watchSingleOrNull();
 
   Future<void> startAging({
     required String batchId,
@@ -157,7 +164,9 @@ class ProductionRepository {
     DateTime? plannedEndAt,
     double angelSharePctYear = 3,
   }) async {
-    await db.into(db.aging).insert(
+    await db
+        .into(db.aging)
+        .insert(
           AgingCompanion.insert(
             id: _uuid.v4(),
             batchId: batchId,
@@ -191,12 +200,89 @@ class ProductionRepository {
     return volumeL * math.pow(1 - angelSharePctYear / 100, years).toDouble();
   }
 
+  // ---------- настаивание ----------
+
+  Stream<Maceration?> watchMaceration(String batchId) => (db.select(
+    db.macerations,
+  )..where((t) => t.batchId.equals(batchId))).watchSingleOrNull();
+
+  Future<void> startMaceration({
+    required String batchId,
+    required DateTime startedAt,
+    DateTime? plannedEndAt,
+    int shakeEveryDays = 3,
+    double strengthAbv = 0,
+    String notes = '',
+  }) async {
+    await db
+        .into(db.macerations)
+        .insert(
+          MacerationsCompanion.insert(
+            id: _uuid.v4(),
+            batchId: batchId,
+            startedAt: startedAt,
+            plannedEndAt: Value(plannedEndAt),
+            shakeEveryDays: Value(shakeEveryDays),
+            strengthAbv: Value(strengthAbv),
+            notes: Value(notes),
+          ),
+        );
+  }
+
+  /// Отметить взбалтывание: срок отсчёта сдвигается на сегодня.
+  Future<void> shakeMaceration(String id) async {
+    final entry = await (db.select(
+      db.macerations,
+    )..where((t) => t.id.equals(id))).getSingleOrNull();
+    if (entry == null) return;
+    await (db.update(db.macerations)..where((t) => t.id.equals(id))).write(
+      MacerationsCompanion(
+        lastShakenAt: Value(DateTime.now()),
+        shakenCount: Value(entry.shakenCount + 1),
+      ),
+    );
+  }
+
+  /// Снять с осадка: настаивание закрыто, партия идёт дальше.
+  Future<void> finishMaceration(String id) async {
+    await (db.update(db.macerations)..where((t) => t.id.equals(id))).write(
+      MacerationsCompanion(finishedAt: Value(DateTime.now())),
+    );
+  }
+
+  Future<void> deleteMaceration(String id) async {
+    await (db.delete(db.macerations)..where((t) => t.id.equals(id))).go();
+  }
+
+  /// Когда пора взбалтывать: последний раз + интервал. null — не нужно.
+  ///
+  /// Считается от старта, если ещё не взбалтывали, — иначе первое напоминание
+  /// приходило бы только через интервал после первого взбалтывания.
+  static DateTime? nextShakeAt(Maceration entry) {
+    if (entry.shakeEveryDays <= 0) return null;
+    final base = entry.lastShakenAt ?? entry.startedAt;
+    return base.add(Duration(days: entry.shakeEveryDays));
+  }
+
+  /// Доля пройденного срока настаивания, 0..1. null — срок не задан.
+  static double? macerationProgress(Maceration entry, {DateTime? now}) {
+    final end = entry.plannedEndAt;
+    if (end == null) return null;
+    final total = end.difference(entry.startedAt).inHours;
+    if (total <= 0) return 1;
+    final passed = (now ?? DateTime.now()).difference(entry.startedAt).inHours;
+    return (passed / total).clamp(0.0, 1.0);
+  }
+
   // ---------- дегустации ----------
 
-  Stream<List<Tasting>> watchTastings(String batchId) => (db.select(db.tastings)
-        ..where((t) => t.batchId.equals(batchId))
-        ..orderBy([(t) => OrderingTerm(expression: t.at, mode: OrderingMode.desc)]))
-      .watch();
+  Stream<List<Tasting>> watchTastings(String batchId) =>
+      (db.select(db.tastings)
+            ..where((t) => t.batchId.equals(batchId))
+            ..orderBy([
+              (t) => OrderingTerm(expression: t.at, mode: OrderingMode.desc),
+            ]))
+          .watch();
 
   Future<void> addTasting({
     required String batchId,
@@ -208,7 +294,9 @@ class ProductionRepository {
     String photoPath = '',
     DateTime? at,
   }) async {
-    await db.into(db.tastings).insert(
+    await db
+        .into(db.tastings)
+        .insert(
           TastingsCompanion.insert(
             id: _uuid.v4(),
             batchId: batchId,

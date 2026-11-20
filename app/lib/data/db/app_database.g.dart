@@ -6362,6 +6362,643 @@ class AgingCompanion extends UpdateCompanion<AgingEntry> {
   }
 }
 
+class $MacerationsTable extends Macerations
+    with TableInfo<$MacerationsTable, Maceration> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $MacerationsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _batchIdMeta = const VerificationMeta(
+    'batchId',
+  );
+  @override
+  late final GeneratedColumn<String> batchId = GeneratedColumn<String>(
+    'batch_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES batches (id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _startedAtMeta = const VerificationMeta(
+    'startedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> startedAt = GeneratedColumn<DateTime>(
+    'started_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _plannedEndAtMeta = const VerificationMeta(
+    'plannedEndAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> plannedEndAt = GeneratedColumn<DateTime>(
+    'planned_end_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _shakeEveryDaysMeta = const VerificationMeta(
+    'shakeEveryDays',
+  );
+  @override
+  late final GeneratedColumn<int> shakeEveryDays = GeneratedColumn<int>(
+    'shake_every_days',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(3),
+  );
+  static const VerificationMeta _lastShakenAtMeta = const VerificationMeta(
+    'lastShakenAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> lastShakenAt = GeneratedColumn<DateTime>(
+    'last_shaken_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _shakenCountMeta = const VerificationMeta(
+    'shakenCount',
+  );
+  @override
+  late final GeneratedColumn<int> shakenCount = GeneratedColumn<int>(
+    'shaken_count',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _strengthAbvMeta = const VerificationMeta(
+    'strengthAbv',
+  );
+  @override
+  late final GeneratedColumn<double> strengthAbv = GeneratedColumn<double>(
+    'strength_abv',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _finishedAtMeta = const VerificationMeta(
+    'finishedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> finishedAt = GeneratedColumn<DateTime>(
+    'finished_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _notesMeta = const VerificationMeta('notes');
+  @override
+  late final GeneratedColumn<String> notes = GeneratedColumn<String>(
+    'notes',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    batchId,
+    startedAt,
+    plannedEndAt,
+    shakeEveryDays,
+    lastShakenAt,
+    shakenCount,
+    strengthAbv,
+    finishedAt,
+    notes,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'macerations';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<Maceration> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('batch_id')) {
+      context.handle(
+        _batchIdMeta,
+        batchId.isAcceptableOrUnknown(data['batch_id']!, _batchIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_batchIdMeta);
+    }
+    if (data.containsKey('started_at')) {
+      context.handle(
+        _startedAtMeta,
+        startedAt.isAcceptableOrUnknown(data['started_at']!, _startedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_startedAtMeta);
+    }
+    if (data.containsKey('planned_end_at')) {
+      context.handle(
+        _plannedEndAtMeta,
+        plannedEndAt.isAcceptableOrUnknown(
+          data['planned_end_at']!,
+          _plannedEndAtMeta,
+        ),
+      );
+    }
+    if (data.containsKey('shake_every_days')) {
+      context.handle(
+        _shakeEveryDaysMeta,
+        shakeEveryDays.isAcceptableOrUnknown(
+          data['shake_every_days']!,
+          _shakeEveryDaysMeta,
+        ),
+      );
+    }
+    if (data.containsKey('last_shaken_at')) {
+      context.handle(
+        _lastShakenAtMeta,
+        lastShakenAt.isAcceptableOrUnknown(
+          data['last_shaken_at']!,
+          _lastShakenAtMeta,
+        ),
+      );
+    }
+    if (data.containsKey('shaken_count')) {
+      context.handle(
+        _shakenCountMeta,
+        shakenCount.isAcceptableOrUnknown(
+          data['shaken_count']!,
+          _shakenCountMeta,
+        ),
+      );
+    }
+    if (data.containsKey('strength_abv')) {
+      context.handle(
+        _strengthAbvMeta,
+        strengthAbv.isAcceptableOrUnknown(
+          data['strength_abv']!,
+          _strengthAbvMeta,
+        ),
+      );
+    }
+    if (data.containsKey('finished_at')) {
+      context.handle(
+        _finishedAtMeta,
+        finishedAt.isAcceptableOrUnknown(data['finished_at']!, _finishedAtMeta),
+      );
+    }
+    if (data.containsKey('notes')) {
+      context.handle(
+        _notesMeta,
+        notes.isAcceptableOrUnknown(data['notes']!, _notesMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Maceration map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Maceration(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      batchId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}batch_id'],
+      )!,
+      startedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}started_at'],
+      )!,
+      plannedEndAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}planned_end_at'],
+      ),
+      shakeEveryDays: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}shake_every_days'],
+      )!,
+      lastShakenAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}last_shaken_at'],
+      ),
+      shakenCount: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}shaken_count'],
+      )!,
+      strengthAbv: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}strength_abv'],
+      )!,
+      finishedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}finished_at'],
+      ),
+      notes: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}notes'],
+      )!,
+    );
+  }
+
+  @override
+  $MacerationsTable createAlias(String alias) {
+    return $MacerationsTable(attachedDatabase, alias);
+  }
+}
+
+class Maceration extends DataClass implements Insertable<Maceration> {
+  final String id;
+  final String batchId;
+  final DateTime startedAt;
+
+  /// Плановое снятие с осадка. null — срок не задан.
+  final DateTime? plannedEndAt;
+
+  /// Взбалтывать каждые N дней. 0 — не взбалтываем.
+  final int shakeEveryDays;
+  final DateTime? lastShakenAt;
+  final int shakenCount;
+
+  /// Крепость спирта, на котором стоит сырьё, %.
+  final double strengthAbv;
+  final DateTime? finishedAt;
+  final String notes;
+  const Maceration({
+    required this.id,
+    required this.batchId,
+    required this.startedAt,
+    this.plannedEndAt,
+    required this.shakeEveryDays,
+    this.lastShakenAt,
+    required this.shakenCount,
+    required this.strengthAbv,
+    this.finishedAt,
+    required this.notes,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['batch_id'] = Variable<String>(batchId);
+    map['started_at'] = Variable<DateTime>(startedAt);
+    if (!nullToAbsent || plannedEndAt != null) {
+      map['planned_end_at'] = Variable<DateTime>(plannedEndAt);
+    }
+    map['shake_every_days'] = Variable<int>(shakeEveryDays);
+    if (!nullToAbsent || lastShakenAt != null) {
+      map['last_shaken_at'] = Variable<DateTime>(lastShakenAt);
+    }
+    map['shaken_count'] = Variable<int>(shakenCount);
+    map['strength_abv'] = Variable<double>(strengthAbv);
+    if (!nullToAbsent || finishedAt != null) {
+      map['finished_at'] = Variable<DateTime>(finishedAt);
+    }
+    map['notes'] = Variable<String>(notes);
+    return map;
+  }
+
+  MacerationsCompanion toCompanion(bool nullToAbsent) {
+    return MacerationsCompanion(
+      id: Value(id),
+      batchId: Value(batchId),
+      startedAt: Value(startedAt),
+      plannedEndAt: plannedEndAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(plannedEndAt),
+      shakeEveryDays: Value(shakeEveryDays),
+      lastShakenAt: lastShakenAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastShakenAt),
+      shakenCount: Value(shakenCount),
+      strengthAbv: Value(strengthAbv),
+      finishedAt: finishedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(finishedAt),
+      notes: Value(notes),
+    );
+  }
+
+  factory Maceration.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Maceration(
+      id: serializer.fromJson<String>(json['id']),
+      batchId: serializer.fromJson<String>(json['batchId']),
+      startedAt: serializer.fromJson<DateTime>(json['startedAt']),
+      plannedEndAt: serializer.fromJson<DateTime?>(json['plannedEndAt']),
+      shakeEveryDays: serializer.fromJson<int>(json['shakeEveryDays']),
+      lastShakenAt: serializer.fromJson<DateTime?>(json['lastShakenAt']),
+      shakenCount: serializer.fromJson<int>(json['shakenCount']),
+      strengthAbv: serializer.fromJson<double>(json['strengthAbv']),
+      finishedAt: serializer.fromJson<DateTime?>(json['finishedAt']),
+      notes: serializer.fromJson<String>(json['notes']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'batchId': serializer.toJson<String>(batchId),
+      'startedAt': serializer.toJson<DateTime>(startedAt),
+      'plannedEndAt': serializer.toJson<DateTime?>(plannedEndAt),
+      'shakeEveryDays': serializer.toJson<int>(shakeEveryDays),
+      'lastShakenAt': serializer.toJson<DateTime?>(lastShakenAt),
+      'shakenCount': serializer.toJson<int>(shakenCount),
+      'strengthAbv': serializer.toJson<double>(strengthAbv),
+      'finishedAt': serializer.toJson<DateTime?>(finishedAt),
+      'notes': serializer.toJson<String>(notes),
+    };
+  }
+
+  Maceration copyWith({
+    String? id,
+    String? batchId,
+    DateTime? startedAt,
+    Value<DateTime?> plannedEndAt = const Value.absent(),
+    int? shakeEveryDays,
+    Value<DateTime?> lastShakenAt = const Value.absent(),
+    int? shakenCount,
+    double? strengthAbv,
+    Value<DateTime?> finishedAt = const Value.absent(),
+    String? notes,
+  }) => Maceration(
+    id: id ?? this.id,
+    batchId: batchId ?? this.batchId,
+    startedAt: startedAt ?? this.startedAt,
+    plannedEndAt: plannedEndAt.present ? plannedEndAt.value : this.plannedEndAt,
+    shakeEveryDays: shakeEveryDays ?? this.shakeEveryDays,
+    lastShakenAt: lastShakenAt.present ? lastShakenAt.value : this.lastShakenAt,
+    shakenCount: shakenCount ?? this.shakenCount,
+    strengthAbv: strengthAbv ?? this.strengthAbv,
+    finishedAt: finishedAt.present ? finishedAt.value : this.finishedAt,
+    notes: notes ?? this.notes,
+  );
+  Maceration copyWithCompanion(MacerationsCompanion data) {
+    return Maceration(
+      id: data.id.present ? data.id.value : this.id,
+      batchId: data.batchId.present ? data.batchId.value : this.batchId,
+      startedAt: data.startedAt.present ? data.startedAt.value : this.startedAt,
+      plannedEndAt: data.plannedEndAt.present
+          ? data.plannedEndAt.value
+          : this.plannedEndAt,
+      shakeEveryDays: data.shakeEveryDays.present
+          ? data.shakeEveryDays.value
+          : this.shakeEveryDays,
+      lastShakenAt: data.lastShakenAt.present
+          ? data.lastShakenAt.value
+          : this.lastShakenAt,
+      shakenCount: data.shakenCount.present
+          ? data.shakenCount.value
+          : this.shakenCount,
+      strengthAbv: data.strengthAbv.present
+          ? data.strengthAbv.value
+          : this.strengthAbv,
+      finishedAt: data.finishedAt.present
+          ? data.finishedAt.value
+          : this.finishedAt,
+      notes: data.notes.present ? data.notes.value : this.notes,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Maceration(')
+          ..write('id: $id, ')
+          ..write('batchId: $batchId, ')
+          ..write('startedAt: $startedAt, ')
+          ..write('plannedEndAt: $plannedEndAt, ')
+          ..write('shakeEveryDays: $shakeEveryDays, ')
+          ..write('lastShakenAt: $lastShakenAt, ')
+          ..write('shakenCount: $shakenCount, ')
+          ..write('strengthAbv: $strengthAbv, ')
+          ..write('finishedAt: $finishedAt, ')
+          ..write('notes: $notes')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    batchId,
+    startedAt,
+    plannedEndAt,
+    shakeEveryDays,
+    lastShakenAt,
+    shakenCount,
+    strengthAbv,
+    finishedAt,
+    notes,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Maceration &&
+          other.id == this.id &&
+          other.batchId == this.batchId &&
+          other.startedAt == this.startedAt &&
+          other.plannedEndAt == this.plannedEndAt &&
+          other.shakeEveryDays == this.shakeEveryDays &&
+          other.lastShakenAt == this.lastShakenAt &&
+          other.shakenCount == this.shakenCount &&
+          other.strengthAbv == this.strengthAbv &&
+          other.finishedAt == this.finishedAt &&
+          other.notes == this.notes);
+}
+
+class MacerationsCompanion extends UpdateCompanion<Maceration> {
+  final Value<String> id;
+  final Value<String> batchId;
+  final Value<DateTime> startedAt;
+  final Value<DateTime?> plannedEndAt;
+  final Value<int> shakeEveryDays;
+  final Value<DateTime?> lastShakenAt;
+  final Value<int> shakenCount;
+  final Value<double> strengthAbv;
+  final Value<DateTime?> finishedAt;
+  final Value<String> notes;
+  final Value<int> rowid;
+  const MacerationsCompanion({
+    this.id = const Value.absent(),
+    this.batchId = const Value.absent(),
+    this.startedAt = const Value.absent(),
+    this.plannedEndAt = const Value.absent(),
+    this.shakeEveryDays = const Value.absent(),
+    this.lastShakenAt = const Value.absent(),
+    this.shakenCount = const Value.absent(),
+    this.strengthAbv = const Value.absent(),
+    this.finishedAt = const Value.absent(),
+    this.notes = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  MacerationsCompanion.insert({
+    required String id,
+    required String batchId,
+    required DateTime startedAt,
+    this.plannedEndAt = const Value.absent(),
+    this.shakeEveryDays = const Value.absent(),
+    this.lastShakenAt = const Value.absent(),
+    this.shakenCount = const Value.absent(),
+    this.strengthAbv = const Value.absent(),
+    this.finishedAt = const Value.absent(),
+    this.notes = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       batchId = Value(batchId),
+       startedAt = Value(startedAt);
+  static Insertable<Maceration> custom({
+    Expression<String>? id,
+    Expression<String>? batchId,
+    Expression<DateTime>? startedAt,
+    Expression<DateTime>? plannedEndAt,
+    Expression<int>? shakeEveryDays,
+    Expression<DateTime>? lastShakenAt,
+    Expression<int>? shakenCount,
+    Expression<double>? strengthAbv,
+    Expression<DateTime>? finishedAt,
+    Expression<String>? notes,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (batchId != null) 'batch_id': batchId,
+      if (startedAt != null) 'started_at': startedAt,
+      if (plannedEndAt != null) 'planned_end_at': plannedEndAt,
+      if (shakeEveryDays != null) 'shake_every_days': shakeEveryDays,
+      if (lastShakenAt != null) 'last_shaken_at': lastShakenAt,
+      if (shakenCount != null) 'shaken_count': shakenCount,
+      if (strengthAbv != null) 'strength_abv': strengthAbv,
+      if (finishedAt != null) 'finished_at': finishedAt,
+      if (notes != null) 'notes': notes,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  MacerationsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? batchId,
+    Value<DateTime>? startedAt,
+    Value<DateTime?>? plannedEndAt,
+    Value<int>? shakeEveryDays,
+    Value<DateTime?>? lastShakenAt,
+    Value<int>? shakenCount,
+    Value<double>? strengthAbv,
+    Value<DateTime?>? finishedAt,
+    Value<String>? notes,
+    Value<int>? rowid,
+  }) {
+    return MacerationsCompanion(
+      id: id ?? this.id,
+      batchId: batchId ?? this.batchId,
+      startedAt: startedAt ?? this.startedAt,
+      plannedEndAt: plannedEndAt ?? this.plannedEndAt,
+      shakeEveryDays: shakeEveryDays ?? this.shakeEveryDays,
+      lastShakenAt: lastShakenAt ?? this.lastShakenAt,
+      shakenCount: shakenCount ?? this.shakenCount,
+      strengthAbv: strengthAbv ?? this.strengthAbv,
+      finishedAt: finishedAt ?? this.finishedAt,
+      notes: notes ?? this.notes,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (batchId.present) {
+      map['batch_id'] = Variable<String>(batchId.value);
+    }
+    if (startedAt.present) {
+      map['started_at'] = Variable<DateTime>(startedAt.value);
+    }
+    if (plannedEndAt.present) {
+      map['planned_end_at'] = Variable<DateTime>(plannedEndAt.value);
+    }
+    if (shakeEveryDays.present) {
+      map['shake_every_days'] = Variable<int>(shakeEveryDays.value);
+    }
+    if (lastShakenAt.present) {
+      map['last_shaken_at'] = Variable<DateTime>(lastShakenAt.value);
+    }
+    if (shakenCount.present) {
+      map['shaken_count'] = Variable<int>(shakenCount.value);
+    }
+    if (strengthAbv.present) {
+      map['strength_abv'] = Variable<double>(strengthAbv.value);
+    }
+    if (finishedAt.present) {
+      map['finished_at'] = Variable<DateTime>(finishedAt.value);
+    }
+    if (notes.present) {
+      map['notes'] = Variable<String>(notes.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('MacerationsCompanion(')
+          ..write('id: $id, ')
+          ..write('batchId: $batchId, ')
+          ..write('startedAt: $startedAt, ')
+          ..write('plannedEndAt: $plannedEndAt, ')
+          ..write('shakeEveryDays: $shakeEveryDays, ')
+          ..write('lastShakenAt: $lastShakenAt, ')
+          ..write('shakenCount: $shakenCount, ')
+          ..write('strengthAbv: $strengthAbv, ')
+          ..write('finishedAt: $finishedAt, ')
+          ..write('notes: $notes, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $TastingsTable extends Tastings with TableInfo<$TastingsTable, Tasting> {
   @override
   final GeneratedDatabase attachedDatabase;
@@ -6919,6 +7556,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $RunFractionsTable runFractions = $RunFractionsTable(this);
   late final $VesselsTable vessels = $VesselsTable(this);
   late final $AgingTable aging = $AgingTable(this);
+  late final $MacerationsTable macerations = $MacerationsTable(this);
   late final $TastingsTable tastings = $TastingsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
@@ -6937,6 +7575,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     runFractions,
     vessels,
     aging,
+    macerations,
     tastings,
   ];
   @override
@@ -6996,6 +7635,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         limitUpdateKind: UpdateKind.delete,
       ),
       result: [TableUpdate('aging', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'batches',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('macerations', kind: UpdateKind.delete)],
     ),
     WritePropagation(
       on: TableUpdateQuery.onTableName(
@@ -8605,6 +9251,24 @@ final class $$BatchesTableReferences
     );
   }
 
+  static MultiTypedResultKey<$MacerationsTable, List<Maceration>>
+  _macerationsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.macerations,
+    aliasName: 'batches__id__macerations__batch_id',
+  );
+
+  $$MacerationsTableProcessedTableManager get macerationsRefs {
+    final manager = $$MacerationsTableTableManager(
+      $_db,
+      $_db.macerations,
+    ).filter((f) => f.batchId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_macerationsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
   static MultiTypedResultKey<$TastingsTable, List<Tasting>> _tastingsRefsTable(
     _$AppDatabase db,
   ) => MultiTypedResultKey.fromTable(
@@ -8828,6 +9492,31 @@ class $$BatchesTableFilterComposer
           }) => $$AgingTableFilterComposer(
             $db: $db,
             $table: $db.aging,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> macerationsRefs(
+    Expression<bool> Function($$MacerationsTableFilterComposer f) f,
+  ) {
+    final $$MacerationsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.macerations,
+      getReferencedColumn: (t) => t.batchId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$MacerationsTableFilterComposer(
+            $db: $db,
+            $table: $db.macerations,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -9143,6 +9832,31 @@ class $$BatchesTableAnnotationComposer
     return f(composer);
   }
 
+  Expression<T> macerationsRefs<T extends Object>(
+    Expression<T> Function($$MacerationsTableAnnotationComposer a) f,
+  ) {
+    final $$MacerationsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.macerations,
+      getReferencedColumn: (t) => t.batchId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$MacerationsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.macerations,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
   Expression<T> tastingsRefs<T extends Object>(
     Expression<T> Function($$TastingsTableAnnotationComposer a) f,
   ) {
@@ -9189,6 +9903,7 @@ class $$BatchesTableTableManager
             bool batchIngredientsRefs,
             bool runsRefs,
             bool agingRefs,
+            bool macerationsRefs,
             bool tastingsRefs,
           })
         > {
@@ -9279,6 +9994,7 @@ class $$BatchesTableTableManager
                 batchIngredientsRefs = false,
                 runsRefs = false,
                 agingRefs = false,
+                macerationsRefs = false,
                 tastingsRefs = false,
               }) {
                 return PrefetchHooks(
@@ -9289,6 +10005,7 @@ class $$BatchesTableTableManager
                     if (batchIngredientsRefs) db.batchIngredients,
                     if (runsRefs) db.runs,
                     if (agingRefs) db.aging,
+                    if (macerationsRefs) db.macerations,
                     if (tastingsRefs) db.tastings,
                   ],
                   addJoins:
@@ -9415,6 +10132,26 @@ class $$BatchesTableTableManager
                           referencedColumn: 'batch_id',
                           typedResults: items,
                         ),
+                      if (macerationsRefs)
+                        await $_getPrefetchedDataByColumns<
+                          Batch,
+                          $BatchesTable,
+                          Maceration,
+                          $MacerationsTable
+                        >(
+                          currentTable: table,
+                          referencedTable: $$BatchesTableReferences
+                              ._macerationsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$BatchesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).macerationsRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'batch_id',
+                          typedResults: items,
+                        ),
                       if (tastingsRefs)
                         await $_getPrefetchedDataByColumns<
                           Batch,
@@ -9462,6 +10199,7 @@ typedef $$BatchesTableProcessedTableManager =
         bool batchIngredientsRefs,
         bool runsRefs,
         bool agingRefs,
+        bool macerationsRefs,
         bool tastingsRefs,
       })
     >;
@@ -12388,6 +13126,428 @@ typedef $$AgingTableProcessedTableManager =
       AgingEntry,
       PrefetchHooks Function({bool batchId, bool vesselId})
     >;
+typedef $$MacerationsTableCreateCompanionBuilder =
+    MacerationsCompanion Function({
+      required String id,
+      required String batchId,
+      required DateTime startedAt,
+      Value<DateTime?> plannedEndAt,
+      Value<int> shakeEveryDays,
+      Value<DateTime?> lastShakenAt,
+      Value<int> shakenCount,
+      Value<double> strengthAbv,
+      Value<DateTime?> finishedAt,
+      Value<String> notes,
+      Value<int> rowid,
+    });
+typedef $$MacerationsTableUpdateCompanionBuilder =
+    MacerationsCompanion Function({
+      Value<String> id,
+      Value<String> batchId,
+      Value<DateTime> startedAt,
+      Value<DateTime?> plannedEndAt,
+      Value<int> shakeEveryDays,
+      Value<DateTime?> lastShakenAt,
+      Value<int> shakenCount,
+      Value<double> strengthAbv,
+      Value<DateTime?> finishedAt,
+      Value<String> notes,
+      Value<int> rowid,
+    });
+
+final class $$MacerationsTableReferences
+    extends BaseReferences<_$AppDatabase, $MacerationsTable, Maceration> {
+  $$MacerationsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $BatchesTable _batchIdTable(_$AppDatabase db) =>
+      db.batches.createAlias('macerations__batch_id__batches__id');
+
+  $$BatchesTableProcessedTableManager get batchId {
+    final $_column = $_itemColumn<String>('batch_id')!;
+
+    final manager = $$BatchesTableTableManager(
+      $_db,
+      $_db.batches,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_batchIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$MacerationsTableFilterComposer
+    extends Composer<_$AppDatabase, $MacerationsTable> {
+  $$MacerationsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get startedAt => $composableBuilder(
+    column: $table.startedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get plannedEndAt => $composableBuilder(
+    column: $table.plannedEndAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get shakeEveryDays => $composableBuilder(
+    column: $table.shakeEveryDays,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get lastShakenAt => $composableBuilder(
+    column: $table.lastShakenAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get shakenCount => $composableBuilder(
+    column: $table.shakenCount,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get strengthAbv => $composableBuilder(
+    column: $table.strengthAbv,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get finishedAt => $composableBuilder(
+    column: $table.finishedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get notes => $composableBuilder(
+    column: $table.notes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$BatchesTableFilterComposer get batchId {
+    final $$BatchesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.batchId,
+      referencedTable: $db.batches,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$BatchesTableFilterComposer(
+            $db: $db,
+            $table: $db.batches,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$MacerationsTableOrderingComposer
+    extends Composer<_$AppDatabase, $MacerationsTable> {
+  $$MacerationsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get startedAt => $composableBuilder(
+    column: $table.startedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get plannedEndAt => $composableBuilder(
+    column: $table.plannedEndAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get shakeEveryDays => $composableBuilder(
+    column: $table.shakeEveryDays,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get lastShakenAt => $composableBuilder(
+    column: $table.lastShakenAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get shakenCount => $composableBuilder(
+    column: $table.shakenCount,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get strengthAbv => $composableBuilder(
+    column: $table.strengthAbv,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get finishedAt => $composableBuilder(
+    column: $table.finishedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get notes => $composableBuilder(
+    column: $table.notes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$BatchesTableOrderingComposer get batchId {
+    final $$BatchesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.batchId,
+      referencedTable: $db.batches,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$BatchesTableOrderingComposer(
+            $db: $db,
+            $table: $db.batches,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$MacerationsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $MacerationsTable> {
+  $$MacerationsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get startedAt =>
+      $composableBuilder(column: $table.startedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get plannedEndAt => $composableBuilder(
+    column: $table.plannedEndAt,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get shakeEveryDays => $composableBuilder(
+    column: $table.shakeEveryDays,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get lastShakenAt => $composableBuilder(
+    column: $table.lastShakenAt,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get shakenCount => $composableBuilder(
+    column: $table.shakenCount,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get strengthAbv => $composableBuilder(
+    column: $table.strengthAbv,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get finishedAt => $composableBuilder(
+    column: $table.finishedAt,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get notes =>
+      $composableBuilder(column: $table.notes, builder: (column) => column);
+
+  $$BatchesTableAnnotationComposer get batchId {
+    final $$BatchesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.batchId,
+      referencedTable: $db.batches,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$BatchesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.batches,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$MacerationsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $MacerationsTable,
+          Maceration,
+          $$MacerationsTableFilterComposer,
+          $$MacerationsTableOrderingComposer,
+          $$MacerationsTableAnnotationComposer,
+          $$MacerationsTableCreateCompanionBuilder,
+          $$MacerationsTableUpdateCompanionBuilder,
+          (Maceration, $$MacerationsTableReferences),
+          Maceration,
+          PrefetchHooks Function({bool batchId})
+        > {
+  $$MacerationsTableTableManager(_$AppDatabase db, $MacerationsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$MacerationsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$MacerationsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$MacerationsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> batchId = const Value.absent(),
+                Value<DateTime> startedAt = const Value.absent(),
+                Value<DateTime?> plannedEndAt = const Value.absent(),
+                Value<int> shakeEveryDays = const Value.absent(),
+                Value<DateTime?> lastShakenAt = const Value.absent(),
+                Value<int> shakenCount = const Value.absent(),
+                Value<double> strengthAbv = const Value.absent(),
+                Value<DateTime?> finishedAt = const Value.absent(),
+                Value<String> notes = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => MacerationsCompanion(
+                id: id,
+                batchId: batchId,
+                startedAt: startedAt,
+                plannedEndAt: plannedEndAt,
+                shakeEveryDays: shakeEveryDays,
+                lastShakenAt: lastShakenAt,
+                shakenCount: shakenCount,
+                strengthAbv: strengthAbv,
+                finishedAt: finishedAt,
+                notes: notes,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String batchId,
+                required DateTime startedAt,
+                Value<DateTime?> plannedEndAt = const Value.absent(),
+                Value<int> shakeEveryDays = const Value.absent(),
+                Value<DateTime?> lastShakenAt = const Value.absent(),
+                Value<int> shakenCount = const Value.absent(),
+                Value<double> strengthAbv = const Value.absent(),
+                Value<DateTime?> finishedAt = const Value.absent(),
+                Value<String> notes = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => MacerationsCompanion.insert(
+                id: id,
+                batchId: batchId,
+                startedAt: startedAt,
+                plannedEndAt: plannedEndAt,
+                shakeEveryDays: shakeEveryDays,
+                lastShakenAt: lastShakenAt,
+                shakenCount: shakenCount,
+                strengthAbv: strengthAbv,
+                finishedAt: finishedAt,
+                notes: notes,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$MacerationsTable, Maceration>(table),
+                  $$MacerationsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({batchId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (batchId) {
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.batchId,
+                        referencedTable: $$MacerationsTableReferences
+                            ._batchIdTable(db),
+                        referencedColumn: $$MacerationsTableReferences
+                            ._batchIdTable(db)
+                            .id,
+                      ) as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$MacerationsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $MacerationsTable,
+      Maceration,
+      $$MacerationsTableFilterComposer,
+      $$MacerationsTableOrderingComposer,
+      $$MacerationsTableAnnotationComposer,
+      $$MacerationsTableCreateCompanionBuilder,
+      $$MacerationsTableUpdateCompanionBuilder,
+      (Maceration, $$MacerationsTableReferences),
+      Maceration,
+      PrefetchHooks Function({bool batchId})
+    >;
 typedef $$TastingsTableCreateCompanionBuilder = TastingsCompanion Function({
   required String id,
   required String batchId,
@@ -12804,6 +13964,8 @@ class $AppDatabaseManager {
       $$VesselsTableTableManager(_db, _db.vessels);
   $$AgingTableTableManager get aging =>
       $$AgingTableTableManager(_db, _db.aging);
+  $$MacerationsTableTableManager get macerations =>
+      $$MacerationsTableTableManager(_db, _db.macerations);
   $$TastingsTableTableManager get tastings =>
       $$TastingsTableTableManager(_db, _db.tastings);
 }

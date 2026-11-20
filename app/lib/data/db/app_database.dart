@@ -13,6 +13,7 @@ part 'app_database.g.dart';
 ///
 /// v1 — рецепты, партии, события, замеры.
 /// v2 — состав партии, перегонки с фракциями, тара, выдержка, дегустации.
+/// v3 — настаивание (мацерация) отдельным процессом.
 @DriftDatabase(
   tables: [
     Recipes,
@@ -27,6 +28,7 @@ part 'app_database.g.dart';
     RunFractions,
     Vessels,
     Aging,
+    Macerations,
     Tastings,
   ],
 )
@@ -37,7 +39,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -53,6 +55,10 @@ class AppDatabase extends _$AppDatabase {
             await m.createTable(vessels);
             await m.createTable(aging);
             await m.createTable(tastings);
+          }
+          if (from < 3) {
+            // M2: настаивание отдельным процессом.
+            await m.createTable(macerations);
           }
         },
         beforeOpen: (details) async {

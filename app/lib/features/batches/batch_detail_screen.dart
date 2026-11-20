@@ -8,6 +8,7 @@ import '../../utils/format.dart';
 import '../../widgets/event_tile.dart';
 import '../../widgets/form_fields.dart';
 import '../aging/aging_tab.dart';
+import '../maceration/maceration_tab.dart';
 import '../runs/runs_tab.dart';
 import '../tastings/tastings_tab.dart';
 
@@ -31,71 +32,102 @@ class BatchDetailScreen extends StatelessWidget {
             body: const Center(child: CircularProgressIndicator()),
           );
         }
-        return DefaultTabController(
-          length: 5,
-          child: Scaffold(
-            appBar: AppBar(
-              title: Text(batch.title, maxLines: 1, overflow: TextOverflow.ellipsis),
-              actions: [
-                PopupMenuButton<String>(
-                  onSelected: (value) async {
-                    switch (value) {
-                      case 'fermenting':
-                      case 'distilling':
-                      case 'aging':
-                      case 'ready':
-                      case 'bottled':
-                      case 'done':
-                        await scope.batches.setStatus(batch.id, value);
-                      case 'delete':
-                        final ok = await _confirmDelete(context);
-                        if (ok) {
-                          await scope.batches.deleteBatch(batch.id);
-                          if (context.mounted) Navigator.of(context).pop();
+        // Вкладка «Настаивание» нужна только настойкам и ликёрам: у браги
+        // и перегонок мацерации нет, лишняя вкладка там только мешает.
+        return StreamBuilder<Recipe?>(
+          stream: scope.recipes.watchById(batch.recipeId),
+          builder: (context, recipeSnapshot) {
+            final kind = recipeSnapshot.data?.kind ?? '';
+            final showMaceration = kind == 'tincture' || kind == 'liqueur';
+
+            return DefaultTabController(
+              length: showMaceration ? 6 : 5,
+              child: Scaffold(
+                appBar: AppBar(
+                  title: Text(
+                    batch.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  actions: [
+                    PopupMenuButton<String>(
+                      onSelected: (value) async {
+                        switch (value) {
+                          case 'fermenting':
+                          case 'distilling':
+                          case 'aging':
+                          case 'ready':
+                          case 'bottled':
+                          case 'done':
+                            await scope.batches.setStatus(batch.id, value);
+                          case 'delete':
+                            final ok = await _confirmDelete(context);
+                            if (ok) {
+                              await scope.batches.deleteBatch(batch.id);
+                              if (context.mounted) Navigator.of(context).pop();
+                            }
                         }
-                    }
-                  },
-                  itemBuilder: (context) => const [
-                    PopupMenuItem(value: 'fermenting', child: Text('Бродит')),
-                    PopupMenuItem(value: 'distilling', child: Text('Перегонка')),
-                    PopupMenuItem(value: 'aging', child: Text('Настаивается')),
-                    PopupMenuItem(value: 'ready', child: Text('Готова')),
-                    PopupMenuItem(value: 'bottled', child: Text('В бутылках')),
-                    PopupMenuItem(value: 'done', child: Text('Завершить')),
-                    PopupMenuDivider(),
-                    PopupMenuItem(value: 'delete', child: Text('Удалить партию')),
+                      },
+                      itemBuilder: (context) => const [
+                        PopupMenuItem(
+                          value: 'fermenting',
+                          child: Text('Бродит'),
+                        ),
+                        PopupMenuItem(
+                          value: 'distilling',
+                          child: Text('Перегонка'),
+                        ),
+                        PopupMenuItem(
+                          value: 'aging',
+                          child: Text('Настаивается'),
+                        ),
+                        PopupMenuItem(value: 'ready', child: Text('Готова')),
+                        PopupMenuItem(
+                          value: 'bottled',
+                          child: Text('В бутылках'),
+                        ),
+                        PopupMenuItem(value: 'done', child: Text('Завершить')),
+                        PopupMenuDivider(),
+                        PopupMenuItem(
+                          value: 'delete',
+                          child: Text('Удалить партию'),
+                        ),
+                      ],
+                    ),
                   ],
-                ),
-              ],
-              bottom: const TabBar(
-                isScrollable: true,
-                tabAlignment: TabAlignment.start,
-                tabs: [
-                  Tab(text: 'Таймлайн'),
-                  Tab(text: 'Замеры'),
-                  Tab(text: 'Перегонки'),
-                  Tab(text: 'Выдержка'),
-                  Tab(text: 'Дегустации'),
-                ],
-              ),
-            ),
-            body: Column(
-              children: [
-                _BatchHeader(batch: batch),
-                Expanded(
-                  child: TabBarView(
-                    children: [
-                      _TimelineTab(batch: batch),
-                      _MeasurementsTab(batch: batch),
-                      RunsTab(batchId: batch.id),
-                      AgingTab(batchId: batch.id),
-                      TastingsTab(batchId: batch.id),
+                  bottom: TabBar(
+                    isScrollable: true,
+                    tabAlignment: TabAlignment.start,
+                    tabs: [
+                      const Tab(text: 'Таймлайн'),
+                      const Tab(text: 'Замеры'),
+                      const Tab(text: 'Перегонки'),
+                      const Tab(text: 'Выдержка'),
+                      if (showMaceration) const Tab(text: 'Настаивание'),
+                      const Tab(text: 'Дегустации'),
                     ],
                   ),
                 ),
-              ],
-            ),
-          ),
+                body: Column(
+                  children: [
+                    _BatchHeader(batch: batch),
+                    Expanded(
+                      child: TabBarView(
+                        children: [
+                          _TimelineTab(batch: batch),
+                          _MeasurementsTab(batch: batch),
+                          RunsTab(batchId: batch.id),
+                          AgingTab(batchId: batch.id),
+                          if (showMaceration) MacerationTab(batchId: batch.id),
+                          TastingsTab(batchId: batch.id),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
         );
       },
     );
@@ -157,8 +189,7 @@ class _BatchHeader extends StatelessWidget {
             label: kBatchStatusLabels[batch.status] ?? batch.status,
             color: theme.colorScheme.primary,
           ),
-          if (batch.code.isNotEmpty)
-            _Chip(icon: Icons.tag, label: batch.code),
+          if (batch.code.isNotEmpty) _Chip(icon: Icons.tag, label: batch.code),
         ],
       ),
     );
@@ -184,7 +215,11 @@ class _Chip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 14, color: color ?? theme.colorScheme.onSurfaceVariant),
+          Icon(
+            icon,
+            size: 14,
+            color: color ?? theme.colorScheme.onSurfaceVariant,
+          ),
           const SizedBox(width: 6),
           Text(label, style: theme.textTheme.labelMedium),
         ],
@@ -217,11 +252,9 @@ class _TimelineTab extends StatelessWidget {
             if (index == 0) return _BatchIngredientsCard(batchId: batch.id);
             final i = index - 1;
             final event = events[i];
-            final isNext = event.status == 'planned' &&
-                events
-                    .take(i)
-                    .where((e) => e.status == 'planned')
-                    .isEmpty &&
+            final isNext =
+                event.status == 'planned' &&
+                events.take(i).where((e) => e.status == 'planned').isEmpty &&
                 event.plannedAt.isAfter(now.subtract(const Duration(days: 1)));
             return EventTile(
               event: event,
@@ -280,8 +313,9 @@ class _MeasurementsTab extends StatelessWidget {
       stream: scope.batches.watchMeasurements(batch.id),
       builder: (context, snapshot) {
         final measurements = snapshot.data ?? const <Measurement>[];
-        final density =
-            measurements.where((m) => m.kind == 'sg').toList(growable: false);
+        final density = measurements
+            .where((m) => m.kind == 'sg')
+            .toList(growable: false);
         final prediction = BatchRepository.predictFinish(measurements);
 
         return ListView(
@@ -305,7 +339,10 @@ class _MeasurementsTab extends StatelessWidget {
                 margin: EdgeInsets.zero,
                 color: theme.colorScheme.primary.withValues(alpha: 0.12),
                 child: ListTile(
-                  leading: Icon(Icons.auto_graph, color: theme.colorScheme.primary),
+                  leading: Icon(
+                    Icons.auto_graph,
+                    color: theme.colorScheme.primary,
+                  ),
                   title: const Text('Прогноз готовности'),
                   subtitle: Text(
                     'При текущей скорости плотность дойдёт до 1.000 '
@@ -351,27 +388,27 @@ class _MeasurementsTab extends StatelessWidget {
   }
 
   static IconData _kindIcon(String kind) => switch (kind) {
-        'sg' => Icons.straighten,
-        'abv' => Icons.percent,
-        'temp' => Icons.thermostat,
-        'brix' => Icons.science,
-        _ => Icons.numbers,
-      };
+    'sg' => Icons.straighten,
+    'abv' => Icons.percent,
+    'temp' => Icons.thermostat,
+    'brix' => Icons.science,
+    _ => Icons.numbers,
+  };
 
   static String _kindLabel(String kind) => switch (kind) {
-        'sg' => 'Плотность',
-        'abv' => 'Крепость',
-        'temp' => 'Температура',
-        'brix' => 'Brix',
-        _ => kind,
-      };
+    'sg' => 'Плотность',
+    'abv' => 'Крепость',
+    'temp' => 'Температура',
+    'brix' => 'Brix',
+    _ => kind,
+  };
 
   static String _formatValue(Measurement m) => switch (m.kind) {
-        'sg' => m.value.toStringAsFixed(3),
-        'abv' => '${formatNumber(m.value, decimals: 1)}%',
-        'temp' => '${formatNumber(m.value, decimals: 1)} °C',
-        _ => formatNumber(m.value),
-      };
+    'sg' => m.value.toStringAsFixed(3),
+    'abv' => '${formatNumber(m.value, decimals: 1)}%',
+    'temp' => '${formatNumber(m.value, decimals: 1)} °C',
+    _ => formatNumber(m.value),
+  };
 
   Future<void> _addMeasurement(BuildContext context, Batch batch) async {
     final scope = AppScope.of(context);
@@ -401,10 +438,7 @@ class _DensityChart extends StatelessWidget {
     final first = measurements.first.at;
     final spots = [
       for (final m in measurements)
-        FlSpot(
-          m.at.difference(first).inHours / 24.0,
-          m.value,
-        ),
+        FlSpot(m.at.difference(first).inHours / 24.0, m.value),
     ];
     final maxY = measurements
         .map((m) => m.value)
@@ -419,9 +453,12 @@ class _DensityChart extends StatelessWidget {
         maxY: maxY + 0.01,
         gridData: const FlGridData(show: true, drawVerticalLine: false),
         titlesData: FlTitlesData(
-          topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          rightTitles:
-              const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          topTitles: const AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          ),
+          rightTitles: const AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          ),
           leftTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
@@ -550,7 +587,11 @@ class _AddMeasurementSheetState extends State<_AddMeasurementSheet> {
               onPressed: value == null
                   ? null
                   : () async {
-                      await widget.onAdd(_kind, value, _noteController.text.trim());
+                      await widget.onAdd(
+                        _kind,
+                        value,
+                        _noteController.text.trim(),
+                      );
                       if (context.mounted) Navigator.of(context).pop();
                     },
               child: const Text('Сохранить'),

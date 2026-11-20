@@ -16,7 +16,7 @@ class BackupService {
 
   final AppDatabase db;
 
-  static const backupVersion = 2;
+  static const backupVersion = 3;
 
   Future<Map<String, dynamic>> exportToMap() async {
     final recipes = await db.select(db.recipes).get();
@@ -32,6 +32,7 @@ class BackupService {
     final fractions = await db.select(db.runFractions).get();
     final vessels = await db.select(db.vessels).get();
     final aging = await db.select(db.aging).get();
+    final macerations = await db.select(db.macerations).get();
     final tastings = await db.select(db.tastings).get();
 
     return {
@@ -50,6 +51,7 @@ class BackupService {
       'runFractions': fractions.map(_fractionToMap).toList(),
       'vessels': vessels.map(_vesselToMap).toList(),
       'aging': aging.map(_agingToMap).toList(),
+      'macerations': macerations.map(_macerationToMap).toList(),
       'tastings': tastings.map(_tastingToMap).toList(),
     };
   }
@@ -91,6 +93,7 @@ class BackupService {
       await db.delete(db.runs).go();
       await db.delete(db.runFractions).go();
       await db.delete(db.aging).go();
+      await db.delete(db.macerations).go();
       await db.delete(db.tastings).go();
       await db.delete(db.batches).go();
       await db.delete(db.vessels).go();
@@ -99,7 +102,9 @@ class BackupService {
       await db.delete(db.recipes).go();
 
       for (final m in (data['recipes'] as List? ?? const [])) {
-        await db.into(db.recipes).insert(_recipeFromMap(m as Map<String, dynamic>));
+        await db
+            .into(db.recipes)
+            .insert(_recipeFromMap(m as Map<String, dynamic>));
       }
       for (final m in (data['recipeIngredients'] as List? ?? const [])) {
         await db
@@ -107,13 +112,19 @@ class BackupService {
             .insert(_ingredientFromMap(m as Map<String, dynamic>));
       }
       for (final m in (data['recipeSteps'] as List? ?? const [])) {
-        await db.into(db.recipeSteps).insert(_stepFromMap(m as Map<String, dynamic>));
+        await db
+            .into(db.recipeSteps)
+            .insert(_stepFromMap(m as Map<String, dynamic>));
       }
       for (final m in (data['batches'] as List? ?? const [])) {
-        await db.into(db.batches).insert(_batchFromMap(m as Map<String, dynamic>));
+        await db
+            .into(db.batches)
+            .insert(_batchFromMap(m as Map<String, dynamic>));
       }
       for (final m in (data['batchEvents'] as List? ?? const [])) {
-        await db.into(db.batchEvents).insert(_eventFromMap(m as Map<String, dynamic>));
+        await db
+            .into(db.batchEvents)
+            .insert(_eventFromMap(m as Map<String, dynamic>));
       }
       for (final m in (data['measurements'] as List? ?? const [])) {
         await db
@@ -122,7 +133,9 @@ class BackupService {
       }
       // Таблицы M2: в старых копиях их нет — импорт остаётся совместимым.
       for (final m in (data['vessels'] as List? ?? const [])) {
-        await db.into(db.vessels).insert(_vesselFromMap(m as Map<String, dynamic>));
+        await db
+            .into(db.vessels)
+            .insert(_vesselFromMap(m as Map<String, dynamic>));
       }
       for (final m in (data['batchIngredients'] as List? ?? const [])) {
         await db
@@ -138,7 +151,14 @@ class BackupService {
             .insert(_fractionFromMap(m as Map<String, dynamic>));
       }
       for (final m in (data['aging'] as List? ?? const [])) {
-        await db.into(db.aging).insert(_agingFromMap(m as Map<String, dynamic>));
+        await db
+            .into(db.aging)
+            .insert(_agingFromMap(m as Map<String, dynamic>));
+      }
+      for (final m in (data['macerations'] as List? ?? const [])) {
+        await db
+            .into(db.macerations)
+            .insert(_macerationFromMap(m as Map<String, dynamic>));
       }
       for (final m in (data['tastings'] as List? ?? const [])) {
         await db
@@ -152,14 +172,20 @@ class BackupService {
         'замеров': (data['measurements'] as List? ?? const []).length,
         'прогонов': (data['runs'] as List? ?? const []).length,
         'тары': (data['vessels'] as List? ?? const []).length,
+        'настаиваний': (data['macerations'] as List? ?? const []).length,
         'дегустаций': (data['tastings'] as List? ?? const []).length,
       };
     });
-    return ImportResult(counts: counts, exportedAt: data['exportedAt'] as String?);
+    return ImportResult(
+      counts: counts,
+      exportedAt: data['exportedAt'] as String?,
+    );
   }
 
   Future<void> markBackupNow() async {
-    await db.into(db.appMeta).insertOnConflictUpdate(
+    await db
+        .into(db.appMeta)
+        .insertOnConflictUpdate(
           AppMetaCompanion.insert(
             key: 'lastBackupAt',
             value: DateTime.now().toIso8601String(),
@@ -168,31 +194,32 @@ class BackupService {
   }
 
   Future<String?> lastBackupAt() async {
-    final row = await (db.select(db.appMeta)
-          ..where((t) => t.key.equals('lastBackupAt')))
-        .getSingleOrNull();
+    final row = await (db.select(
+      db.appMeta,
+    )..where((t) => t.key.equals('lastBackupAt'))).getSingleOrNull();
     return row?.value;
   }
 
   // ---------- сериализация ----------
 
   Map<String, dynamic> _recipeToMap(Recipe r) => {
-        'id': r.id,
-        'title': r.title,
-        'kind': r.kind,
-        'styleTags': r.styleTags,
-        'baseVolumeL': r.baseVolumeL,
-        'expectedYieldL': r.expectedYieldL,
-        'expectedAbv': r.expectedAbv,
-        'summary': r.summary,
-        'source': r.source,
-        'isBuiltIn': r.isBuiltIn,
-        'isFavorite': r.isFavorite,
-        'createdAt': r.createdAt.toIso8601String(),
-        'updatedAt': r.updatedAt.toIso8601String(),
-      };
+    'id': r.id,
+    'title': r.title,
+    'kind': r.kind,
+    'styleTags': r.styleTags,
+    'baseVolumeL': r.baseVolumeL,
+    'expectedYieldL': r.expectedYieldL,
+    'expectedAbv': r.expectedAbv,
+    'summary': r.summary,
+    'source': r.source,
+    'isBuiltIn': r.isBuiltIn,
+    'isFavorite': r.isFavorite,
+    'createdAt': r.createdAt.toIso8601String(),
+    'updatedAt': r.updatedAt.toIso8601String(),
+  };
 
-  RecipesCompanion _recipeFromMap(Map<String, dynamic> m) => RecipesCompanion.insert(
+  RecipesCompanion _recipeFromMap(Map<String, dynamic> m) =>
+      RecipesCompanion.insert(
         id: m['id'] as String,
         title: m['title'] as String,
         kind: m['kind'] as String,
@@ -209,13 +236,13 @@ class BackupService {
       );
 
   Map<String, dynamic> _ingredientToMap(RecipeIngredient i) => {
-        'recipeId': i.recipeId,
-        'sortOrder': i.sortOrder,
-        'name': i.name,
-        'amount': i.amount,
-        'unit': i.unit,
-        'note': i.note,
-      };
+    'recipeId': i.recipeId,
+    'sortOrder': i.sortOrder,
+    'name': i.name,
+    'amount': i.amount,
+    'unit': i.unit,
+    'note': i.note,
+  };
 
   RecipeIngredientsCompanion _ingredientFromMap(Map<String, dynamic> m) =>
       RecipeIngredientsCompanion.insert(
@@ -228,17 +255,17 @@ class BackupService {
       );
 
   Map<String, dynamic> _stepToMap(RecipeStep s) => {
-        'recipeId': s.recipeId,
-        'sortOrder': s.sortOrder,
-        'title': s.title,
-        'description': s.description,
-        'offsetDays': s.offsetDays,
-        'durationMin': s.durationMin,
-        'tempC': s.tempC,
-        'eventKind': s.eventKind,
-        'repeatEveryDays': s.repeatEveryDays,
-        'repeatUntilDay': s.repeatUntilDay,
-      };
+    'recipeId': s.recipeId,
+    'sortOrder': s.sortOrder,
+    'title': s.title,
+    'description': s.description,
+    'offsetDays': s.offsetDays,
+    'durationMin': s.durationMin,
+    'tempC': s.tempC,
+    'eventKind': s.eventKind,
+    'repeatEveryDays': s.repeatEveryDays,
+    'repeatUntilDay': s.repeatUntilDay,
+  };
 
   RecipeStepsCompanion _stepFromMap(Map<String, dynamic> m) =>
       RecipeStepsCompanion.insert(
@@ -255,29 +282,32 @@ class BackupService {
       );
 
   Map<String, dynamic> _batchToMap(Batch b) => {
-        'id': b.id,
-        'recipeId': b.recipeId,
-        'code': b.code,
-        'title': b.title,
-        'startedAt': b.startedAt.toIso8601String(),
-        'finishedAt': b.finishedAt?.toIso8601String(),
-        'volumeL': b.volumeL,
-        'abv': b.abv,
-        'status': b.status,
-        'notes': b.notes,
-        'createdAt': b.createdAt.toIso8601String(),
-        'updatedAt': b.updatedAt.toIso8601String(),
-      };
+    'id': b.id,
+    'recipeId': b.recipeId,
+    'code': b.code,
+    'title': b.title,
+    'startedAt': b.startedAt.toIso8601String(),
+    'finishedAt': b.finishedAt?.toIso8601String(),
+    'volumeL': b.volumeL,
+    'abv': b.abv,
+    'status': b.status,
+    'notes': b.notes,
+    'createdAt': b.createdAt.toIso8601String(),
+    'updatedAt': b.updatedAt.toIso8601String(),
+  };
 
-  BatchesCompanion _batchFromMap(Map<String, dynamic> m) => BatchesCompanion.insert(
+  BatchesCompanion _batchFromMap(Map<String, dynamic> m) =>
+      BatchesCompanion.insert(
         id: m['id'] as String,
         recipeId: m['recipeId'] as String,
         code: Value(m['code'] as String? ?? ''),
         title: m['title'] as String,
         startedAt: DateTime.parse(m['startedAt'] as String),
-        finishedAt: Value(m['finishedAt'] == null
-            ? null
-            : DateTime.parse(m['finishedAt'] as String)),
+        finishedAt: Value(
+          m['finishedAt'] == null
+              ? null
+              : DateTime.parse(m['finishedAt'] as String),
+        ),
         volumeL: Value((m['volumeL'] as num?)?.toDouble() ?? 0),
         abv: Value((m['abv'] as num?)?.toDouble() ?? 0),
         status: Value(m['status'] as String? ?? 'fermenting'),
@@ -287,16 +317,16 @@ class BackupService {
       );
 
   Map<String, dynamic> _eventToMap(BatchEvent e) => {
-        'id': e.id,
-        'batchId': e.batchId,
-        'kind': e.kind,
-        'title': e.title,
-        'description': e.description,
-        'plannedAt': e.plannedAt.toIso8601String(),
-        'actualAt': e.actualAt?.toIso8601String(),
-        'status': e.status,
-        'remindBeforeMin': e.remindBeforeMin,
-      };
+    'id': e.id,
+    'batchId': e.batchId,
+    'kind': e.kind,
+    'title': e.title,
+    'description': e.description,
+    'plannedAt': e.plannedAt.toIso8601String(),
+    'actualAt': e.actualAt?.toIso8601String(),
+    'status': e.status,
+    'remindBeforeMin': e.remindBeforeMin,
+  };
 
   BatchEventsCompanion _eventFromMap(Map<String, dynamic> m) =>
       BatchEventsCompanion.insert(
@@ -306,21 +336,23 @@ class BackupService {
         title: m['title'] as String,
         description: Value(m['description'] as String? ?? ''),
         plannedAt: DateTime.parse(m['plannedAt'] as String),
-        actualAt: Value(m['actualAt'] == null
-            ? null
-            : DateTime.parse(m['actualAt'] as String)),
+        actualAt: Value(
+          m['actualAt'] == null
+              ? null
+              : DateTime.parse(m['actualAt'] as String),
+        ),
         status: Value(m['status'] as String? ?? 'planned'),
         remindBeforeMin: Value((m['remindBeforeMin'] as num?)?.toInt() ?? 0),
       );
 
   Map<String, dynamic> _measurementToMap(Measurement m) => {
-        'id': m.id,
-        'batchId': m.batchId,
-        'at': m.at.toIso8601String(),
-        'kind': m.kind,
-        'value': m.value,
-        'note': m.note,
-      };
+    'id': m.id,
+    'batchId': m.batchId,
+    'at': m.at.toIso8601String(),
+    'kind': m.kind,
+    'value': m.value,
+    'note': m.note,
+  };
 
   MeasurementsCompanion _measurementFromMap(Map<String, dynamic> m) =>
       MeasurementsCompanion.insert(
@@ -335,13 +367,13 @@ class BackupService {
   // ---------- M2 ----------
 
   Map<String, dynamic> _batchIngredientToMap(BatchIngredient i) => {
-        'batchId': i.batchId,
-        'sortOrder': i.sortOrder,
-        'name': i.name,
-        'amount': i.amount,
-        'unit': i.unit,
-        'note': i.note,
-      };
+    'batchId': i.batchId,
+    'sortOrder': i.sortOrder,
+    'name': i.name,
+    'amount': i.amount,
+    'unit': i.unit,
+    'note': i.note,
+  };
 
   BatchIngredientsCompanion _batchIngredientFromMap(Map<String, dynamic> m) =>
       BatchIngredientsCompanion.insert(
@@ -354,42 +386,42 @@ class BackupService {
       );
 
   Map<String, dynamic> _runToMap(Run r) => {
-        'id': r.id,
-        'batchId': r.batchId,
-        'kind': r.kind,
-        'startedAt': r.startedAt.toIso8601String(),
-        'endedAt': r.endedAt?.toIso8601String(),
-        'chargeVolumeL': r.chargeVolumeL,
-        'chargeAbv': r.chargeAbv,
-        'cubeTempStartC': r.cubeTempStartC,
-        'cubeTempEndC': r.cubeTempEndC,
-        'notes': r.notes,
-      };
+    'id': r.id,
+    'batchId': r.batchId,
+    'kind': r.kind,
+    'startedAt': r.startedAt.toIso8601String(),
+    'endedAt': r.endedAt?.toIso8601String(),
+    'chargeVolumeL': r.chargeVolumeL,
+    'chargeAbv': r.chargeAbv,
+    'cubeTempStartC': r.cubeTempStartC,
+    'cubeTempEndC': r.cubeTempEndC,
+    'notes': r.notes,
+  };
 
   RunsCompanion _runFromMap(Map<String, dynamic> m) => RunsCompanion.insert(
-        id: m['id'] as String,
-        batchId: m['batchId'] as String,
-        kind: m['kind'] as String,
-        startedAt: DateTime.parse(m['startedAt'] as String),
-        endedAt: Value(m['endedAt'] == null
-            ? null
-            : DateTime.parse(m['endedAt'] as String)),
-        chargeVolumeL: Value((m['chargeVolumeL'] as num?)?.toDouble() ?? 0),
-        chargeAbv: Value((m['chargeAbv'] as num?)?.toDouble() ?? 0),
-        cubeTempStartC: Value((m['cubeTempStartC'] as num?)?.toDouble()),
-        cubeTempEndC: Value((m['cubeTempEndC'] as num?)?.toDouble()),
-        notes: Value(m['notes'] as String? ?? ''),
-      );
+    id: m['id'] as String,
+    batchId: m['batchId'] as String,
+    kind: m['kind'] as String,
+    startedAt: DateTime.parse(m['startedAt'] as String),
+    endedAt: Value(
+      m['endedAt'] == null ? null : DateTime.parse(m['endedAt'] as String),
+    ),
+    chargeVolumeL: Value((m['chargeVolumeL'] as num?)?.toDouble() ?? 0),
+    chargeAbv: Value((m['chargeAbv'] as num?)?.toDouble() ?? 0),
+    cubeTempStartC: Value((m['cubeTempStartC'] as num?)?.toDouble()),
+    cubeTempEndC: Value((m['cubeTempEndC'] as num?)?.toDouble()),
+    notes: Value(m['notes'] as String? ?? ''),
+  );
 
   Map<String, dynamic> _fractionToMap(RunFraction f) => {
-        'runId': f.runId,
-        'jarNo': f.jarNo,
-        'kind': f.kind,
-        'volumeMl': f.volumeMl,
-        'abv': f.abv,
-        'tempC': f.tempC,
-        'note': f.note,
-      };
+    'runId': f.runId,
+    'jarNo': f.jarNo,
+    'kind': f.kind,
+    'volumeMl': f.volumeMl,
+    'abv': f.abv,
+    'tempC': f.tempC,
+    'note': f.note,
+  };
 
   RunFractionsCompanion _fractionFromMap(Map<String, dynamic> m) =>
       RunFractionsCompanion.insert(
@@ -403,15 +435,15 @@ class BackupService {
       );
 
   Map<String, dynamic> _vesselToMap(Vessel v) => {
-        'id': v.id,
-        'name': v.name,
-        'kind': v.kind,
-        'volumeL': v.volumeL,
-        'material': v.material,
-        'charLevel': v.charLevel,
-        'location': v.location,
-        'isOccupied': v.isOccupied,
-      };
+    'id': v.id,
+    'name': v.name,
+    'kind': v.kind,
+    'volumeL': v.volumeL,
+    'material': v.material,
+    'charLevel': v.charLevel,
+    'location': v.location,
+    'isOccupied': v.isOccupied,
+  };
 
   VesselsCompanion _vesselFromMap(Map<String, dynamic> m) =>
       VesselsCompanion.insert(
@@ -426,43 +458,85 @@ class BackupService {
       );
 
   Map<String, dynamic> _agingToMap(AgingEntry a) => {
-        'id': a.id,
-        'batchId': a.batchId,
-        'vesselId': a.vesselId,
-        'startedAt': a.startedAt.toIso8601String(),
-        'plannedEndAt': a.plannedEndAt?.toIso8601String(),
-        'angelSharePctYear': a.angelSharePctYear,
-        'lastToppedAt': a.lastToppedAt?.toIso8601String(),
-        'notes': a.notes,
-      };
+    'id': a.id,
+    'batchId': a.batchId,
+    'vesselId': a.vesselId,
+    'startedAt': a.startedAt.toIso8601String(),
+    'plannedEndAt': a.plannedEndAt?.toIso8601String(),
+    'angelSharePctYear': a.angelSharePctYear,
+    'lastToppedAt': a.lastToppedAt?.toIso8601String(),
+    'notes': a.notes,
+  };
 
   AgingCompanion _agingFromMap(Map<String, dynamic> m) => AgingCompanion.insert(
+    id: m['id'] as String,
+    batchId: m['batchId'] as String,
+    vesselId: Value(m['vesselId'] as String?),
+    startedAt: DateTime.parse(m['startedAt'] as String),
+    plannedEndAt: Value(
+      m['plannedEndAt'] == null
+          ? null
+          : DateTime.parse(m['plannedEndAt'] as String),
+    ),
+    angelSharePctYear: Value((m['angelSharePctYear'] as num?)?.toDouble() ?? 3),
+    lastToppedAt: Value(
+      m['lastToppedAt'] == null
+          ? null
+          : DateTime.parse(m['lastToppedAt'] as String),
+    ),
+    notes: Value(m['notes'] as String? ?? ''),
+  );
+
+  Map<String, dynamic> _macerationToMap(Maceration m) => {
+    'id': m.id,
+    'batchId': m.batchId,
+    'startedAt': m.startedAt.toIso8601String(),
+    'plannedEndAt': m.plannedEndAt?.toIso8601String(),
+    'shakeEveryDays': m.shakeEveryDays,
+    'lastShakenAt': m.lastShakenAt?.toIso8601String(),
+    'shakenCount': m.shakenCount,
+    'strengthAbv': m.strengthAbv,
+    'finishedAt': m.finishedAt?.toIso8601String(),
+    'notes': m.notes,
+  };
+
+  MacerationsCompanion _macerationFromMap(Map<String, dynamic> m) =>
+      MacerationsCompanion.insert(
         id: m['id'] as String,
         batchId: m['batchId'] as String,
-        vesselId: Value(m['vesselId'] as String?),
         startedAt: DateTime.parse(m['startedAt'] as String),
-        plannedEndAt: Value(m['plannedEndAt'] == null
-            ? null
-            : DateTime.parse(m['plannedEndAt'] as String)),
-        angelSharePctYear:
-            Value((m['angelSharePctYear'] as num?)?.toDouble() ?? 3),
-        lastToppedAt: Value(m['lastToppedAt'] == null
-            ? null
-            : DateTime.parse(m['lastToppedAt'] as String)),
+        plannedEndAt: Value(
+          m['plannedEndAt'] == null
+              ? null
+              : DateTime.parse(m['plannedEndAt'] as String),
+        ),
+        shakeEveryDays: Value((m['shakeEveryDays'] as num?)?.toInt() ?? 3),
+        lastShakenAt: Value(
+          m['lastShakenAt'] == null
+              ? null
+              : DateTime.parse(m['lastShakenAt'] as String),
+        ),
+        shakenCount: Value((m['shakenCount'] as num?)?.toInt() ?? 0),
+        strengthAbv: Value((m['strengthAbv'] as num?)?.toDouble() ?? 0),
+        finishedAt: Value(
+          m['finishedAt'] == null
+              ? null
+              : DateTime.parse(m['finishedAt'] as String),
+        ),
         notes: Value(m['notes'] as String? ?? ''),
       );
 
   Map<String, dynamic> _tastingToMap(Tasting t) => {
-        'id': t.id,
-        'batchId': t.batchId,
-        'at': t.at.toIso8601String(),
-        'rating': t.rating,
-        'aroma': t.aroma,
-        'taste': t.taste,
-        'finish': t.finish,
-        'verdict': t.verdict,
-        'photoPath': t.photoPath,
-      };
+    'id': t.id,
+    'batchId': t.batchId,
+    'at': t.at.toIso8601String(),
+    'rating': t.rating,
+    'aroma': t.aroma,
+    'taste': t.taste,
+    'finish': t.finish,
+    'verdict': t.verdict,
+    'photoPath': t.photoPath,
+  };
 
   TastingsCompanion _tastingFromMap(Map<String, dynamic> m) =>
       TastingsCompanion.insert(
