@@ -4,6 +4,7 @@ import '../../app/app_scope.dart';
 import '../../data/db/app_database.dart';
 import '../../utils/format.dart';
 import '../batches/batch_detail_screen.dart';
+import 'recipe_tune_sheet.dart';
 
 /// Карточка рецепта: состав, шаги, запуск партии.
 class RecipeDetailScreen extends StatefulWidget {
@@ -54,10 +55,10 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
     if (recipe == null) return;
     final scope = AppScope.of(context);
 
-    final result = await showModalBottomSheet<_StartResult>(
+    final result = await showRecipeTuneSheet(
       context: context,
-      isScrollControlled: true,
-      builder: (_) => _StartBatchSheet(recipe: recipe),
+      recipe: recipe,
+      ingredients: _ingredients,
     );
     if (result == null || !mounted) return;
 
@@ -66,12 +67,16 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
       steps: _steps,
       startedAt: result.startedAt,
       volumeL: result.volumeL,
-      notes: result.notes,
+      notes: [
+        if (result.notes.isNotEmpty) result.notes,
+        result.summary,
+      ].join('\n'),
+      ingredients: result.ingredients,
     );
     if (!mounted) return;
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Партия запущена: ${result.volumeL.round()} л')),
+      SnackBar(content: Text('Партия запущена: ${result.summary}')),
     );
     await Navigator.of(context).push(
       MaterialPageRoute<void>(
@@ -89,6 +94,12 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
       appBar: AppBar(
         title: Text(recipe?.title ?? 'Рецепт'),
         actions: [
+          if (recipe != null)
+            IconButton(
+              tooltip: 'Настроить под себя',
+              icon: const Icon(Icons.edit_outlined),
+              onPressed: _startBatch,
+            ),
           if (recipe != null)
             IconButton(
               tooltip: recipe.isFavorite ? 'Убрать из избранного' : 'В избранное',
@@ -274,150 +285,6 @@ class _StepTile extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _StartResult {
-  const _StartResult({
-    required this.startedAt,
-    required this.volumeL,
-    required this.notes,
-  });
-
-  final DateTime startedAt;
-  final double volumeL;
-  final String notes;
-}
-
-class _StartBatchSheet extends StatefulWidget {
-  const _StartBatchSheet({required this.recipe});
-
-  final Recipe recipe;
-
-  @override
-  State<_StartBatchSheet> createState() => _StartBatchSheetState();
-}
-
-class _StartBatchSheetState extends State<_StartBatchSheet> {
-  late DateTime _date = DateTime.now();
-  late final TextEditingController _volumeController = TextEditingController(
-    text: widget.recipe.baseVolumeL > 0
-        ? formatNumber(widget.recipe.baseVolumeL)
-        : '20',
-  );
-  final _notesController = TextEditingController();
-
-  @override
-  void dispose() {
-    _volumeController.dispose();
-    _notesController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _pickDate() async {
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: _date,
-      firstDate: DateTime(2020),
-      lastDate: DateTime(2100),
-    );
-    if (picked != null) setState(() => _date = picked);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final volume = double.tryParse(
-          _volumeController.text.replaceAll(',', '.'),
-        ) ??
-        0;
-
-    return Padding(
-      padding: EdgeInsets.only(
-        left: 20,
-        right: 20,
-        top: 20,
-        bottom: MediaQuery.of(context).viewInsets.bottom + 20,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Новая партия', style: theme.textTheme.titleLarge),
-          const SizedBox(height: 4),
-          Text(
-            widget.recipe.title,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
-            ),
-          ),
-          const SizedBox(height: 20),
-          InkWell(
-            onTap: _pickDate,
-            borderRadius: BorderRadius.circular(12),
-            child: InputDecorator(
-              decoration: const InputDecoration(
-                labelText: 'Дата старта',
-                border: OutlineInputBorder(),
-                isDense: true,
-              ),
-              child: Row(
-                children: [
-                  Expanded(child: Text(formatFullDate(_date))),
-                  const Icon(Icons.calendar_today, size: 18),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            controller: _volumeController,
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            onChanged: (_) => setState(() {}),
-            decoration: const InputDecoration(
-              labelText: 'Объём, л',
-              border: OutlineInputBorder(),
-              isDense: true,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            volume > 0
-                ? 'События разложатся по календарю на основе рецепта.'
-                : 'Укажите объём партии',
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
-            ),
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            controller: _notesController,
-            maxLines: 2,
-            decoration: const InputDecoration(
-              labelText: 'Заметка (необязательно)',
-              border: OutlineInputBorder(),
-              isDense: true,
-            ),
-          ),
-          const SizedBox(height: 20),
-          SizedBox(
-            width: double.infinity,
-            child: FilledButton(
-              onPressed: volume <= 0
-                  ? null
-                  : () => Navigator.of(context).pop(
-                        _StartResult(
-                          startedAt: _date,
-                          volumeL: volume,
-                          notes: _notesController.text.trim(),
-                        ),
-                      ),
-              child: const Text('Запустить'),
-            ),
-          ),
-        ],
       ),
     );
   }

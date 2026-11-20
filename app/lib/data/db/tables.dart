@@ -125,3 +125,120 @@ class AppMeta extends Table {
   @override
   Set<Column<Object>> get primaryKey => {key};
 }
+
+/// Состав конкретной партии — снимок рецепта с правками пользователя.
+///
+/// Нужен, чтобы правка рецепта перед запуском не терялась: в партии хранится
+/// то, что реально заложено, а не то, что написано в шаблоне.
+@DataClassName('BatchIngredient')
+class BatchIngredients extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get batchId =>
+      text().references(Batches, #id, onDelete: KeyAction.cascade)();
+  IntColumn get sortOrder => integer().withDefault(const Constant(0))();
+  TextColumn get name => text()();
+  RealColumn get amount => real()();
+  TextColumn get unit => text()();
+  TextColumn get note => text().withDefault(const Constant(''))();
+}
+
+/// Перегонка партии: один прогон куба.
+@DataClassName('Run')
+class Runs extends Table {
+  TextColumn get id => text()();
+  TextColumn get batchId =>
+      text().references(Batches, #id, onDelete: KeyAction.cascade)();
+
+  /// strip | spirit | rectification | gin | steam
+  TextColumn get kind => text()();
+  DateTimeColumn get startedAt => dateTime()();
+  DateTimeColumn get endedAt => dateTime().nullable()();
+
+  /// Залито в куб: объём и крепость.
+  RealColumn get chargeVolumeL => real().withDefault(const Constant(0))();
+  RealColumn get chargeAbv => real().withDefault(const Constant(0))();
+
+  /// Температура в кубе на старте и на финише, °C.
+  RealColumn get cubeTempStartC => real().nullable()();
+  RealColumn get cubeTempEndC => real().nullable()();
+
+  TextColumn get notes => text().withDefault(const Constant(''))();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
+}
+
+/// Фракция перегонки по банкам: голова/тело/хвост.
+@DataClassName('RunFraction')
+class RunFractions extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get runId =>
+      text().references(Runs, #id, onDelete: KeyAction.cascade)();
+  IntColumn get jarNo => integer().withDefault(const Constant(1))();
+
+  /// foreshots | heads | hearts | tails | feints
+  TextColumn get kind => text()();
+  RealColumn get volumeMl => real()();
+  RealColumn get abv => real()();
+  RealColumn get tempC => real().nullable()();
+  TextColumn get note => text().withDefault(const Constant(''))();
+}
+
+/// Тара: бочка, бутыль, банка, нерж.
+@DataClassName('Vessel')
+class Vessels extends Table {
+  TextColumn get id => text()();
+  TextColumn get name => text()();
+
+  /// barrel | glass | steel | jar | bottle | fermenter
+  TextColumn get kind => text()();
+  RealColumn get volumeL => real()();
+  TextColumn get material => text().withDefault(const Constant(''))();
+
+  /// Обжиг бочки: 1 — лёгкий, 2 — средний, 3 — сильный.
+  IntColumn get charLevel => integer().nullable()();
+  TextColumn get location => text().withDefault(const Constant(''))();
+  BoolColumn get isOccupied => boolean().withDefault(const Constant(false))();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
+}
+
+/// Выдержка партии в таре.
+@DataClassName('AgingEntry')
+class Aging extends Table {
+  TextColumn get id => text()();
+  TextColumn get batchId =>
+      text().references(Batches, #id, onDelete: KeyAction.cascade)();
+  TextColumn get vesselId => text().nullable().references(Vessels, #id)();
+  DateTimeColumn get startedAt => dateTime()();
+  DateTimeColumn get plannedEndAt => dateTime().nullable()();
+
+  /// Потери на испарение, % в год.
+  RealColumn get angelSharePctYear => real().withDefault(const Constant(3))();
+  DateTimeColumn get lastToppedAt => dateTime().nullable()();
+  TextColumn get notes => text().withDefault(const Constant(''))();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
+}
+
+/// Дегустация: оценка и выводы.
+@DataClassName('Tasting')
+class Tastings extends Table {
+  TextColumn get id => text()();
+  TextColumn get batchId =>
+      text().references(Batches, #id, onDelete: KeyAction.cascade)();
+  DateTimeColumn get at => dateTime()();
+
+  /// 1..5
+  IntColumn get rating => integer().withDefault(const Constant(0))();
+  TextColumn get aroma => text().withDefault(const Constant(''))();
+  TextColumn get taste => text().withDefault(const Constant(''))();
+  TextColumn get finish => text().withDefault(const Constant(''))();
+  TextColumn get verdict => text().withDefault(const Constant(''))();
+  TextColumn get photoPath => text().withDefault(const Constant(''))();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
+}

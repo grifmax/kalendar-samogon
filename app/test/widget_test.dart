@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kalendar_samogon/data/db/app_database.dart';
 import 'package:kalendar_samogon/data/repositories/batch_repository.dart';
+import 'package:kalendar_samogon/data/repositories/production_repository.dart';
 import 'package:kalendar_samogon/data/repositories/recipe_repository.dart';
 import 'package:kalendar_samogon/main.dart';
 import 'package:kalendar_samogon/services/backup_service.dart';
@@ -13,6 +14,7 @@ Widget _app(AppDatabase db) => KalendarSamogonApp(
       db: db,
       recipes: RecipeRepository(db),
       batches: BatchRepository(db),
+      production: ProductionRepository(db),
       notifications: NotificationService(),
       backup: BackupService(db),
     );

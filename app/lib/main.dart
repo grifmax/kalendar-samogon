@@ -6,6 +6,7 @@ import 'app/app_theme.dart';
 import 'app/home_shell.dart';
 import 'data/db/app_database.dart';
 import 'data/repositories/batch_repository.dart';
+import 'data/repositories/production_repository.dart';
 import 'data/repositories/recipe_repository.dart';
 import 'data/seed/recipe_seeder.dart';
 import 'services/backup_service.dart';
@@ -28,6 +29,7 @@ Future<void> main() async {
       db: db,
       recipes: RecipeRepository(db),
       batches: BatchRepository(db),
+      production: ProductionRepository(db),
       notifications: notifications,
       backup: BackupService(db),
     ),
@@ -41,6 +43,7 @@ class KalendarSamogonApp extends StatelessWidget {
     required this.db,
     required this.recipes,
     required this.batches,
+    required this.production,
     required this.notifications,
     required this.backup,
   });
@@ -48,6 +51,7 @@ class KalendarSamogonApp extends StatelessWidget {
   final AppDatabase db;
   final RecipeRepository recipes;
   final BatchRepository batches;
+  final ProductionRepository production;
   final NotificationService notifications;
   final BackupService backup;
 
@@ -57,6 +61,7 @@ class KalendarSamogonApp extends StatelessWidget {
       db: db,
       recipes: recipes,
       batches: batches,
+      production: production,
       notifications: notifications,
       backup: backup,
       child: MaterialApp(

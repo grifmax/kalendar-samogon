@@ -6,6 +6,8 @@ import '../../data/db/app_database.dart';
 import '../../data/repositories/batch_repository.dart';
 import '../../utils/format.dart';
 import '../../widgets/event_tile.dart';
+import '../runs/runs_tab.dart';
+import '../tastings/tastings_tab.dart';
 
 /// Карточка партии: таймлайн событий, замеры с графиком, статус.
 class BatchDetailScreen extends StatelessWidget {
@@ -28,7 +30,7 @@ class BatchDetailScreen extends StatelessWidget {
           );
         }
         return DefaultTabController(
-          length: 2,
+          length: 4,
           child: Scaffold(
             appBar: AppBar(
               title: Text(batch.title, maxLines: 1, overflow: TextOverflow.ellipsis),
@@ -64,9 +66,13 @@ class BatchDetailScreen extends StatelessWidget {
                 ),
               ],
               bottom: const TabBar(
+                isScrollable: true,
+                tabAlignment: TabAlignment.start,
                 tabs: [
                   Tab(text: 'Таймлайн'),
                   Tab(text: 'Замеры'),
+                  Tab(text: 'Перегонки'),
+                  Tab(text: 'Дегустации'),
                 ],
               ),
             ),
@@ -78,6 +84,8 @@ class BatchDetailScreen extends StatelessWidget {
                     children: [
                       _TimelineTab(batch: batch),
                       _MeasurementsTab(batch: batch),
+                      RunsTab(batchId: batch.id),
+                      TastingsTab(batchId: batch.id),
                     ],
                   ),
                 ),
@@ -200,15 +208,16 @@ class _TimelineTab extends StatelessWidget {
         final now = DateTime.now();
         return ListView.builder(
           padding: const EdgeInsets.fromLTRB(8, 0, 8, 32),
-          itemCount: events.length,
-          itemBuilder: (context, i) {
+          itemCount: events.length + 1,
+          itemBuilder: (context, index) {
+            if (index == 0) return _BatchIngredientsCard(batchId: batch.id);
+            final i = index - 1;
             final event = events[i];
             final isNext = event.status == 'planned' &&
-                (i == 0 ||
-                    events
-                            .take(i)
-                            .where((e) => e.status == 'planned')
-                            .isEmpty) &&
+                events
+                    .take(i)
+                    .where((e) => e.status == 'planned')
+                    .isEmpty &&
                 event.plannedAt.isAfter(now.subtract(const Duration(days: 1)));
             return EventTile(
               event: event,
@@ -545,6 +554,54 @@ class _AddMeasurementSheetState extends State<_AddMeasurementSheet> {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// Состав, сохранённый в партии: то, что реально заложено с учётом правок.
+class _BatchIngredientsCard extends StatelessWidget {
+  const _BatchIngredientsCard({required this.batchId});
+
+  final String batchId;
+
+  @override
+  Widget build(BuildContext context) {
+    final scope = AppScope.of(context);
+    final theme = Theme.of(context);
+
+    return StreamBuilder<List<BatchIngredient>>(
+      stream: scope.batches.watchIngredients(batchId),
+      builder: (context, snapshot) {
+        final items = snapshot.data ?? const <BatchIngredient>[];
+        if (items.isEmpty) return const SizedBox.shrink();
+        return Card(
+          margin: const EdgeInsets.fromLTRB(8, 0, 8, 12),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Заложено', style: theme.textTheme.titleSmall),
+                const SizedBox(height: 6),
+                for (final item in items)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 2),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(child: Text(item.name)),
+                        Text(
+                          '${formatNumber(item.amount, decimals: 3)} ${item.unit}',
+                          style: const TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

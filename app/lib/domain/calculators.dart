@@ -1,5 +1,7 @@
 import 'dart:math' as math;
 
+import 'reference.dart';
+
 /// Расчёты винокурения — чистые функции без зависимостей от UI.
 ///
 /// Все они покрыты юнит-тестами (test/calculators_test.dart). Формулы —
@@ -244,4 +246,80 @@ double costPerLiterOfAlcohol({
 double scaleFactor({required double recipeVolumeL, required double myVolumeL}) {
   if (recipeVolumeL <= 0 || myVolumeL <= 0) return 1;
   return myVolumeL / recipeVolumeL;
+}
+
+// ---------- дополнительные расчёты (M2) ----------
+
+/// Поправка плотности сусла к 20 °C.
+///
+/// Для сахарных растворов при нагреве ареометр показывает заниженную плотность:
+/// примерно 0,002 на каждые 5 °C выше 20.
+double washDensityCorrection({required double sg, required double tempC}) {
+  final delta = tempC - 20;
+  return sg + delta * 0.0004;
+}
+
+/// Потенциальная крепость по начальной плотности (до брожения).
+///
+/// Оценка: (OG − 1.000) × 131 — сколько процентов спирта получится,
+/// если брожение дойдёт до 1.000.
+double potentialAbvFromGravity({required double og}) {
+  if (og <= 1.0) return 0;
+  return (og - 1.0) * 131.25;
+}
+
+/// Потенциальная крепость по Brix (для фруктовых заторов и сусла).
+///
+/// Приближение: 1 °Bx ≈ 0,55 % об. спирта при полном сбраживании.
+double potentialAbvFromBrix({required double brix}) {
+  if (brix <= 0) return 0;
+  return brix * 0.55;
+}
+
+/// Купаж трёх объёмов.
+double blendThree({
+  required double v1,
+  required double a1,
+  required double v2,
+  required double a2,
+  required double v3,
+  required double a3,
+}) {
+  final total = v1 + v2 + v3;
+  if (total <= 0) return 0;
+  return (v1 * a1 + v2 * a2 + v3 * a3) / total;
+}
+
+/// Сколько долить в бочку, чтобы компенсировать ангельскую долю.
+///
+/// [currentL] — сколько сейчас в бочке, [targetL] — до какого уровня доливать.
+double topUpNeeded({required double currentL, required double targetL}) {
+  final delta = targetL - currentL;
+  return delta > 0 ? delta : 0;
+}
+
+/// Сколько литров абсолютного спирта даст сырьё.
+///
+/// [massKg] — масса, [sugarFraction] — доля сахара или крахмала,
+/// [fromStarch] — считать по крахмалу (0,71 л АС/кг) или по сахару (0,64).
+double alcoholFromRaw({
+  required double massKg,
+  required double sugarFraction,
+  bool fromStarch = false,
+}) {
+  if (massKg <= 0 || sugarFraction <= 0) return 0;
+  final perKg = fromStarch ? kAlcoholPerKgStarch : kAlcoholPerKgSugar;
+  return massKg * sugarFraction * perKg;
+}
+
+/// Разбить объём голов на банки по [jarMl].
+///
+/// Возвращает число полных банок и остаток в миллилитрах.
+({int fullJars, double restMl}) headsIntoJars({
+  required double headsMl,
+  required double jarMl,
+}) {
+  if (jarMl <= 0 || headsMl <= 0) return (fullJars: 0, restMl: 0);
+  final full = (headsMl / jarMl).floor();
+  return (fullJars: full, restMl: headsMl - full * jarMl);
 }

@@ -3771,6 +3771,3136 @@ class AppMetaCompanion extends UpdateCompanion<AppMetaData> {
   }
 }
 
+class $BatchIngredientsTable extends BatchIngredients
+    with TableInfo<$BatchIngredientsTable, BatchIngredient> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $BatchIngredientsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _batchIdMeta = const VerificationMeta(
+    'batchId',
+  );
+  @override
+  late final GeneratedColumn<String> batchId = GeneratedColumn<String>(
+    'batch_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES batches (id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _sortOrderMeta = const VerificationMeta(
+    'sortOrder',
+  );
+  @override
+  late final GeneratedColumn<int> sortOrder = GeneratedColumn<int>(
+    'sort_order',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _amountMeta = const VerificationMeta('amount');
+  @override
+  late final GeneratedColumn<double> amount = GeneratedColumn<double>(
+    'amount',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _unitMeta = const VerificationMeta('unit');
+  @override
+  late final GeneratedColumn<String> unit = GeneratedColumn<String>(
+    'unit',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
+  late final GeneratedColumn<String> note = GeneratedColumn<String>(
+    'note',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    batchId,
+    sortOrder,
+    name,
+    amount,
+    unit,
+    note,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'batch_ingredients';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<BatchIngredient> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('batch_id')) {
+      context.handle(
+        _batchIdMeta,
+        batchId.isAcceptableOrUnknown(data['batch_id']!, _batchIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_batchIdMeta);
+    }
+    if (data.containsKey('sort_order')) {
+      context.handle(
+        _sortOrderMeta,
+        sortOrder.isAcceptableOrUnknown(data['sort_order']!, _sortOrderMeta),
+      );
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('amount')) {
+      context.handle(
+        _amountMeta,
+        amount.isAcceptableOrUnknown(data['amount']!, _amountMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_amountMeta);
+    }
+    if (data.containsKey('unit')) {
+      context.handle(
+        _unitMeta,
+        unit.isAcceptableOrUnknown(data['unit']!, _unitMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_unitMeta);
+    }
+    if (data.containsKey('note')) {
+      context.handle(
+        _noteMeta,
+        note.isAcceptableOrUnknown(data['note']!, _noteMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  BatchIngredient map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return BatchIngredient(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      batchId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}batch_id'],
+      )!,
+      sortOrder: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}sort_order'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      amount: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}amount'],
+      )!,
+      unit: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}unit'],
+      )!,
+      note: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}note'],
+      )!,
+    );
+  }
+
+  @override
+  $BatchIngredientsTable createAlias(String alias) {
+    return $BatchIngredientsTable(attachedDatabase, alias);
+  }
+}
+
+class BatchIngredient extends DataClass implements Insertable<BatchIngredient> {
+  final int id;
+  final String batchId;
+  final int sortOrder;
+  final String name;
+  final double amount;
+  final String unit;
+  final String note;
+  const BatchIngredient({
+    required this.id,
+    required this.batchId,
+    required this.sortOrder,
+    required this.name,
+    required this.amount,
+    required this.unit,
+    required this.note,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['batch_id'] = Variable<String>(batchId);
+    map['sort_order'] = Variable<int>(sortOrder);
+    map['name'] = Variable<String>(name);
+    map['amount'] = Variable<double>(amount);
+    map['unit'] = Variable<String>(unit);
+    map['note'] = Variable<String>(note);
+    return map;
+  }
+
+  BatchIngredientsCompanion toCompanion(bool nullToAbsent) {
+    return BatchIngredientsCompanion(
+      id: Value(id),
+      batchId: Value(batchId),
+      sortOrder: Value(sortOrder),
+      name: Value(name),
+      amount: Value(amount),
+      unit: Value(unit),
+      note: Value(note),
+    );
+  }
+
+  factory BatchIngredient.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return BatchIngredient(
+      id: serializer.fromJson<int>(json['id']),
+      batchId: serializer.fromJson<String>(json['batchId']),
+      sortOrder: serializer.fromJson<int>(json['sortOrder']),
+      name: serializer.fromJson<String>(json['name']),
+      amount: serializer.fromJson<double>(json['amount']),
+      unit: serializer.fromJson<String>(json['unit']),
+      note: serializer.fromJson<String>(json['note']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'batchId': serializer.toJson<String>(batchId),
+      'sortOrder': serializer.toJson<int>(sortOrder),
+      'name': serializer.toJson<String>(name),
+      'amount': serializer.toJson<double>(amount),
+      'unit': serializer.toJson<String>(unit),
+      'note': serializer.toJson<String>(note),
+    };
+  }
+
+  BatchIngredient copyWith({
+    int? id,
+    String? batchId,
+    int? sortOrder,
+    String? name,
+    double? amount,
+    String? unit,
+    String? note,
+  }) => BatchIngredient(
+    id: id ?? this.id,
+    batchId: batchId ?? this.batchId,
+    sortOrder: sortOrder ?? this.sortOrder,
+    name: name ?? this.name,
+    amount: amount ?? this.amount,
+    unit: unit ?? this.unit,
+    note: note ?? this.note,
+  );
+  BatchIngredient copyWithCompanion(BatchIngredientsCompanion data) {
+    return BatchIngredient(
+      id: data.id.present ? data.id.value : this.id,
+      batchId: data.batchId.present ? data.batchId.value : this.batchId,
+      sortOrder: data.sortOrder.present ? data.sortOrder.value : this.sortOrder,
+      name: data.name.present ? data.name.value : this.name,
+      amount: data.amount.present ? data.amount.value : this.amount,
+      unit: data.unit.present ? data.unit.value : this.unit,
+      note: data.note.present ? data.note.value : this.note,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('BatchIngredient(')
+          ..write('id: $id, ')
+          ..write('batchId: $batchId, ')
+          ..write('sortOrder: $sortOrder, ')
+          ..write('name: $name, ')
+          ..write('amount: $amount, ')
+          ..write('unit: $unit, ')
+          ..write('note: $note')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, batchId, sortOrder, name, amount, unit, note);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is BatchIngredient &&
+          other.id == this.id &&
+          other.batchId == this.batchId &&
+          other.sortOrder == this.sortOrder &&
+          other.name == this.name &&
+          other.amount == this.amount &&
+          other.unit == this.unit &&
+          other.note == this.note);
+}
+
+class BatchIngredientsCompanion extends UpdateCompanion<BatchIngredient> {
+  final Value<int> id;
+  final Value<String> batchId;
+  final Value<int> sortOrder;
+  final Value<String> name;
+  final Value<double> amount;
+  final Value<String> unit;
+  final Value<String> note;
+  const BatchIngredientsCompanion({
+    this.id = const Value.absent(),
+    this.batchId = const Value.absent(),
+    this.sortOrder = const Value.absent(),
+    this.name = const Value.absent(),
+    this.amount = const Value.absent(),
+    this.unit = const Value.absent(),
+    this.note = const Value.absent(),
+  });
+  BatchIngredientsCompanion.insert({
+    this.id = const Value.absent(),
+    required String batchId,
+    this.sortOrder = const Value.absent(),
+    required String name,
+    required double amount,
+    required String unit,
+    this.note = const Value.absent(),
+  }) : batchId = Value(batchId),
+       name = Value(name),
+       amount = Value(amount),
+       unit = Value(unit);
+  static Insertable<BatchIngredient> custom({
+    Expression<int>? id,
+    Expression<String>? batchId,
+    Expression<int>? sortOrder,
+    Expression<String>? name,
+    Expression<double>? amount,
+    Expression<String>? unit,
+    Expression<String>? note,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (batchId != null) 'batch_id': batchId,
+      if (sortOrder != null) 'sort_order': sortOrder,
+      if (name != null) 'name': name,
+      if (amount != null) 'amount': amount,
+      if (unit != null) 'unit': unit,
+      if (note != null) 'note': note,
+    });
+  }
+
+  BatchIngredientsCompanion copyWith({
+    Value<int>? id,
+    Value<String>? batchId,
+    Value<int>? sortOrder,
+    Value<String>? name,
+    Value<double>? amount,
+    Value<String>? unit,
+    Value<String>? note,
+  }) {
+    return BatchIngredientsCompanion(
+      id: id ?? this.id,
+      batchId: batchId ?? this.batchId,
+      sortOrder: sortOrder ?? this.sortOrder,
+      name: name ?? this.name,
+      amount: amount ?? this.amount,
+      unit: unit ?? this.unit,
+      note: note ?? this.note,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (batchId.present) {
+      map['batch_id'] = Variable<String>(batchId.value);
+    }
+    if (sortOrder.present) {
+      map['sort_order'] = Variable<int>(sortOrder.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (amount.present) {
+      map['amount'] = Variable<double>(amount.value);
+    }
+    if (unit.present) {
+      map['unit'] = Variable<String>(unit.value);
+    }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('BatchIngredientsCompanion(')
+          ..write('id: $id, ')
+          ..write('batchId: $batchId, ')
+          ..write('sortOrder: $sortOrder, ')
+          ..write('name: $name, ')
+          ..write('amount: $amount, ')
+          ..write('unit: $unit, ')
+          ..write('note: $note')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $RunsTable extends Runs with TableInfo<$RunsTable, Run> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $RunsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _batchIdMeta = const VerificationMeta(
+    'batchId',
+  );
+  @override
+  late final GeneratedColumn<String> batchId = GeneratedColumn<String>(
+    'batch_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES batches (id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _kindMeta = const VerificationMeta('kind');
+  @override
+  late final GeneratedColumn<String> kind = GeneratedColumn<String>(
+    'kind',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _startedAtMeta = const VerificationMeta(
+    'startedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> startedAt = GeneratedColumn<DateTime>(
+    'started_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _endedAtMeta = const VerificationMeta(
+    'endedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> endedAt = GeneratedColumn<DateTime>(
+    'ended_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _chargeVolumeLMeta = const VerificationMeta(
+    'chargeVolumeL',
+  );
+  @override
+  late final GeneratedColumn<double> chargeVolumeL = GeneratedColumn<double>(
+    'charge_volume_l',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _chargeAbvMeta = const VerificationMeta(
+    'chargeAbv',
+  );
+  @override
+  late final GeneratedColumn<double> chargeAbv = GeneratedColumn<double>(
+    'charge_abv',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _cubeTempStartCMeta = const VerificationMeta(
+    'cubeTempStartC',
+  );
+  @override
+  late final GeneratedColumn<double> cubeTempStartC = GeneratedColumn<double>(
+    'cube_temp_start_c',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _cubeTempEndCMeta = const VerificationMeta(
+    'cubeTempEndC',
+  );
+  @override
+  late final GeneratedColumn<double> cubeTempEndC = GeneratedColumn<double>(
+    'cube_temp_end_c',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _notesMeta = const VerificationMeta('notes');
+  @override
+  late final GeneratedColumn<String> notes = GeneratedColumn<String>(
+    'notes',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    batchId,
+    kind,
+    startedAt,
+    endedAt,
+    chargeVolumeL,
+    chargeAbv,
+    cubeTempStartC,
+    cubeTempEndC,
+    notes,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'runs';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<Run> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('batch_id')) {
+      context.handle(
+        _batchIdMeta,
+        batchId.isAcceptableOrUnknown(data['batch_id']!, _batchIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_batchIdMeta);
+    }
+    if (data.containsKey('kind')) {
+      context.handle(
+        _kindMeta,
+        kind.isAcceptableOrUnknown(data['kind']!, _kindMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_kindMeta);
+    }
+    if (data.containsKey('started_at')) {
+      context.handle(
+        _startedAtMeta,
+        startedAt.isAcceptableOrUnknown(data['started_at']!, _startedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_startedAtMeta);
+    }
+    if (data.containsKey('ended_at')) {
+      context.handle(
+        _endedAtMeta,
+        endedAt.isAcceptableOrUnknown(data['ended_at']!, _endedAtMeta),
+      );
+    }
+    if (data.containsKey('charge_volume_l')) {
+      context.handle(
+        _chargeVolumeLMeta,
+        chargeVolumeL.isAcceptableOrUnknown(
+          data['charge_volume_l']!,
+          _chargeVolumeLMeta,
+        ),
+      );
+    }
+    if (data.containsKey('charge_abv')) {
+      context.handle(
+        _chargeAbvMeta,
+        chargeAbv.isAcceptableOrUnknown(data['charge_abv']!, _chargeAbvMeta),
+      );
+    }
+    if (data.containsKey('cube_temp_start_c')) {
+      context.handle(
+        _cubeTempStartCMeta,
+        cubeTempStartC.isAcceptableOrUnknown(
+          data['cube_temp_start_c']!,
+          _cubeTempStartCMeta,
+        ),
+      );
+    }
+    if (data.containsKey('cube_temp_end_c')) {
+      context.handle(
+        _cubeTempEndCMeta,
+        cubeTempEndC.isAcceptableOrUnknown(
+          data['cube_temp_end_c']!,
+          _cubeTempEndCMeta,
+        ),
+      );
+    }
+    if (data.containsKey('notes')) {
+      context.handle(
+        _notesMeta,
+        notes.isAcceptableOrUnknown(data['notes']!, _notesMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Run map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Run(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      batchId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}batch_id'],
+      )!,
+      kind: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}kind'],
+      )!,
+      startedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}started_at'],
+      )!,
+      endedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}ended_at'],
+      ),
+      chargeVolumeL: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}charge_volume_l'],
+      )!,
+      chargeAbv: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}charge_abv'],
+      )!,
+      cubeTempStartC: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}cube_temp_start_c'],
+      ),
+      cubeTempEndC: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}cube_temp_end_c'],
+      ),
+      notes: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}notes'],
+      )!,
+    );
+  }
+
+  @override
+  $RunsTable createAlias(String alias) {
+    return $RunsTable(attachedDatabase, alias);
+  }
+}
+
+class Run extends DataClass implements Insertable<Run> {
+  final String id;
+  final String batchId;
+
+  /// strip | spirit | rectification | gin | steam
+  final String kind;
+  final DateTime startedAt;
+  final DateTime? endedAt;
+
+  /// Залито в куб: объём и крепость.
+  final double chargeVolumeL;
+  final double chargeAbv;
+
+  /// Температура в кубе на старте и на финише, °C.
+  final double? cubeTempStartC;
+  final double? cubeTempEndC;
+  final String notes;
+  const Run({
+    required this.id,
+    required this.batchId,
+    required this.kind,
+    required this.startedAt,
+    this.endedAt,
+    required this.chargeVolumeL,
+    required this.chargeAbv,
+    this.cubeTempStartC,
+    this.cubeTempEndC,
+    required this.notes,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['batch_id'] = Variable<String>(batchId);
+    map['kind'] = Variable<String>(kind);
+    map['started_at'] = Variable<DateTime>(startedAt);
+    if (!nullToAbsent || endedAt != null) {
+      map['ended_at'] = Variable<DateTime>(endedAt);
+    }
+    map['charge_volume_l'] = Variable<double>(chargeVolumeL);
+    map['charge_abv'] = Variable<double>(chargeAbv);
+    if (!nullToAbsent || cubeTempStartC != null) {
+      map['cube_temp_start_c'] = Variable<double>(cubeTempStartC);
+    }
+    if (!nullToAbsent || cubeTempEndC != null) {
+      map['cube_temp_end_c'] = Variable<double>(cubeTempEndC);
+    }
+    map['notes'] = Variable<String>(notes);
+    return map;
+  }
+
+  RunsCompanion toCompanion(bool nullToAbsent) {
+    return RunsCompanion(
+      id: Value(id),
+      batchId: Value(batchId),
+      kind: Value(kind),
+      startedAt: Value(startedAt),
+      endedAt: endedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(endedAt),
+      chargeVolumeL: Value(chargeVolumeL),
+      chargeAbv: Value(chargeAbv),
+      cubeTempStartC: cubeTempStartC == null && nullToAbsent
+          ? const Value.absent()
+          : Value(cubeTempStartC),
+      cubeTempEndC: cubeTempEndC == null && nullToAbsent
+          ? const Value.absent()
+          : Value(cubeTempEndC),
+      notes: Value(notes),
+    );
+  }
+
+  factory Run.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Run(
+      id: serializer.fromJson<String>(json['id']),
+      batchId: serializer.fromJson<String>(json['batchId']),
+      kind: serializer.fromJson<String>(json['kind']),
+      startedAt: serializer.fromJson<DateTime>(json['startedAt']),
+      endedAt: serializer.fromJson<DateTime?>(json['endedAt']),
+      chargeVolumeL: serializer.fromJson<double>(json['chargeVolumeL']),
+      chargeAbv: serializer.fromJson<double>(json['chargeAbv']),
+      cubeTempStartC: serializer.fromJson<double?>(json['cubeTempStartC']),
+      cubeTempEndC: serializer.fromJson<double?>(json['cubeTempEndC']),
+      notes: serializer.fromJson<String>(json['notes']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'batchId': serializer.toJson<String>(batchId),
+      'kind': serializer.toJson<String>(kind),
+      'startedAt': serializer.toJson<DateTime>(startedAt),
+      'endedAt': serializer.toJson<DateTime?>(endedAt),
+      'chargeVolumeL': serializer.toJson<double>(chargeVolumeL),
+      'chargeAbv': serializer.toJson<double>(chargeAbv),
+      'cubeTempStartC': serializer.toJson<double?>(cubeTempStartC),
+      'cubeTempEndC': serializer.toJson<double?>(cubeTempEndC),
+      'notes': serializer.toJson<String>(notes),
+    };
+  }
+
+  Run copyWith({
+    String? id,
+    String? batchId,
+    String? kind,
+    DateTime? startedAt,
+    Value<DateTime?> endedAt = const Value.absent(),
+    double? chargeVolumeL,
+    double? chargeAbv,
+    Value<double?> cubeTempStartC = const Value.absent(),
+    Value<double?> cubeTempEndC = const Value.absent(),
+    String? notes,
+  }) => Run(
+    id: id ?? this.id,
+    batchId: batchId ?? this.batchId,
+    kind: kind ?? this.kind,
+    startedAt: startedAt ?? this.startedAt,
+    endedAt: endedAt.present ? endedAt.value : this.endedAt,
+    chargeVolumeL: chargeVolumeL ?? this.chargeVolumeL,
+    chargeAbv: chargeAbv ?? this.chargeAbv,
+    cubeTempStartC: cubeTempStartC.present
+        ? cubeTempStartC.value
+        : this.cubeTempStartC,
+    cubeTempEndC: cubeTempEndC.present ? cubeTempEndC.value : this.cubeTempEndC,
+    notes: notes ?? this.notes,
+  );
+  Run copyWithCompanion(RunsCompanion data) {
+    return Run(
+      id: data.id.present ? data.id.value : this.id,
+      batchId: data.batchId.present ? data.batchId.value : this.batchId,
+      kind: data.kind.present ? data.kind.value : this.kind,
+      startedAt: data.startedAt.present ? data.startedAt.value : this.startedAt,
+      endedAt: data.endedAt.present ? data.endedAt.value : this.endedAt,
+      chargeVolumeL: data.chargeVolumeL.present
+          ? data.chargeVolumeL.value
+          : this.chargeVolumeL,
+      chargeAbv: data.chargeAbv.present ? data.chargeAbv.value : this.chargeAbv,
+      cubeTempStartC: data.cubeTempStartC.present
+          ? data.cubeTempStartC.value
+          : this.cubeTempStartC,
+      cubeTempEndC: data.cubeTempEndC.present
+          ? data.cubeTempEndC.value
+          : this.cubeTempEndC,
+      notes: data.notes.present ? data.notes.value : this.notes,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Run(')
+          ..write('id: $id, ')
+          ..write('batchId: $batchId, ')
+          ..write('kind: $kind, ')
+          ..write('startedAt: $startedAt, ')
+          ..write('endedAt: $endedAt, ')
+          ..write('chargeVolumeL: $chargeVolumeL, ')
+          ..write('chargeAbv: $chargeAbv, ')
+          ..write('cubeTempStartC: $cubeTempStartC, ')
+          ..write('cubeTempEndC: $cubeTempEndC, ')
+          ..write('notes: $notes')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    batchId,
+    kind,
+    startedAt,
+    endedAt,
+    chargeVolumeL,
+    chargeAbv,
+    cubeTempStartC,
+    cubeTempEndC,
+    notes,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Run &&
+          other.id == this.id &&
+          other.batchId == this.batchId &&
+          other.kind == this.kind &&
+          other.startedAt == this.startedAt &&
+          other.endedAt == this.endedAt &&
+          other.chargeVolumeL == this.chargeVolumeL &&
+          other.chargeAbv == this.chargeAbv &&
+          other.cubeTempStartC == this.cubeTempStartC &&
+          other.cubeTempEndC == this.cubeTempEndC &&
+          other.notes == this.notes);
+}
+
+class RunsCompanion extends UpdateCompanion<Run> {
+  final Value<String> id;
+  final Value<String> batchId;
+  final Value<String> kind;
+  final Value<DateTime> startedAt;
+  final Value<DateTime?> endedAt;
+  final Value<double> chargeVolumeL;
+  final Value<double> chargeAbv;
+  final Value<double?> cubeTempStartC;
+  final Value<double?> cubeTempEndC;
+  final Value<String> notes;
+  final Value<int> rowid;
+  const RunsCompanion({
+    this.id = const Value.absent(),
+    this.batchId = const Value.absent(),
+    this.kind = const Value.absent(),
+    this.startedAt = const Value.absent(),
+    this.endedAt = const Value.absent(),
+    this.chargeVolumeL = const Value.absent(),
+    this.chargeAbv = const Value.absent(),
+    this.cubeTempStartC = const Value.absent(),
+    this.cubeTempEndC = const Value.absent(),
+    this.notes = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  RunsCompanion.insert({
+    required String id,
+    required String batchId,
+    required String kind,
+    required DateTime startedAt,
+    this.endedAt = const Value.absent(),
+    this.chargeVolumeL = const Value.absent(),
+    this.chargeAbv = const Value.absent(),
+    this.cubeTempStartC = const Value.absent(),
+    this.cubeTempEndC = const Value.absent(),
+    this.notes = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       batchId = Value(batchId),
+       kind = Value(kind),
+       startedAt = Value(startedAt);
+  static Insertable<Run> custom({
+    Expression<String>? id,
+    Expression<String>? batchId,
+    Expression<String>? kind,
+    Expression<DateTime>? startedAt,
+    Expression<DateTime>? endedAt,
+    Expression<double>? chargeVolumeL,
+    Expression<double>? chargeAbv,
+    Expression<double>? cubeTempStartC,
+    Expression<double>? cubeTempEndC,
+    Expression<String>? notes,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (batchId != null) 'batch_id': batchId,
+      if (kind != null) 'kind': kind,
+      if (startedAt != null) 'started_at': startedAt,
+      if (endedAt != null) 'ended_at': endedAt,
+      if (chargeVolumeL != null) 'charge_volume_l': chargeVolumeL,
+      if (chargeAbv != null) 'charge_abv': chargeAbv,
+      if (cubeTempStartC != null) 'cube_temp_start_c': cubeTempStartC,
+      if (cubeTempEndC != null) 'cube_temp_end_c': cubeTempEndC,
+      if (notes != null) 'notes': notes,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  RunsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? batchId,
+    Value<String>? kind,
+    Value<DateTime>? startedAt,
+    Value<DateTime?>? endedAt,
+    Value<double>? chargeVolumeL,
+    Value<double>? chargeAbv,
+    Value<double?>? cubeTempStartC,
+    Value<double?>? cubeTempEndC,
+    Value<String>? notes,
+    Value<int>? rowid,
+  }) {
+    return RunsCompanion(
+      id: id ?? this.id,
+      batchId: batchId ?? this.batchId,
+      kind: kind ?? this.kind,
+      startedAt: startedAt ?? this.startedAt,
+      endedAt: endedAt ?? this.endedAt,
+      chargeVolumeL: chargeVolumeL ?? this.chargeVolumeL,
+      chargeAbv: chargeAbv ?? this.chargeAbv,
+      cubeTempStartC: cubeTempStartC ?? this.cubeTempStartC,
+      cubeTempEndC: cubeTempEndC ?? this.cubeTempEndC,
+      notes: notes ?? this.notes,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (batchId.present) {
+      map['batch_id'] = Variable<String>(batchId.value);
+    }
+    if (kind.present) {
+      map['kind'] = Variable<String>(kind.value);
+    }
+    if (startedAt.present) {
+      map['started_at'] = Variable<DateTime>(startedAt.value);
+    }
+    if (endedAt.present) {
+      map['ended_at'] = Variable<DateTime>(endedAt.value);
+    }
+    if (chargeVolumeL.present) {
+      map['charge_volume_l'] = Variable<double>(chargeVolumeL.value);
+    }
+    if (chargeAbv.present) {
+      map['charge_abv'] = Variable<double>(chargeAbv.value);
+    }
+    if (cubeTempStartC.present) {
+      map['cube_temp_start_c'] = Variable<double>(cubeTempStartC.value);
+    }
+    if (cubeTempEndC.present) {
+      map['cube_temp_end_c'] = Variable<double>(cubeTempEndC.value);
+    }
+    if (notes.present) {
+      map['notes'] = Variable<String>(notes.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('RunsCompanion(')
+          ..write('id: $id, ')
+          ..write('batchId: $batchId, ')
+          ..write('kind: $kind, ')
+          ..write('startedAt: $startedAt, ')
+          ..write('endedAt: $endedAt, ')
+          ..write('chargeVolumeL: $chargeVolumeL, ')
+          ..write('chargeAbv: $chargeAbv, ')
+          ..write('cubeTempStartC: $cubeTempStartC, ')
+          ..write('cubeTempEndC: $cubeTempEndC, ')
+          ..write('notes: $notes, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $RunFractionsTable extends RunFractions
+    with TableInfo<$RunFractionsTable, RunFraction> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $RunFractionsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _runIdMeta = const VerificationMeta('runId');
+  @override
+  late final GeneratedColumn<String> runId = GeneratedColumn<String>(
+    'run_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES runs (id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _jarNoMeta = const VerificationMeta('jarNo');
+  @override
+  late final GeneratedColumn<int> jarNo = GeneratedColumn<int>(
+    'jar_no',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(1),
+  );
+  static const VerificationMeta _kindMeta = const VerificationMeta('kind');
+  @override
+  late final GeneratedColumn<String> kind = GeneratedColumn<String>(
+    'kind',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _volumeMlMeta = const VerificationMeta(
+    'volumeMl',
+  );
+  @override
+  late final GeneratedColumn<double> volumeMl = GeneratedColumn<double>(
+    'volume_ml',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _abvMeta = const VerificationMeta('abv');
+  @override
+  late final GeneratedColumn<double> abv = GeneratedColumn<double>(
+    'abv',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _tempCMeta = const VerificationMeta('tempC');
+  @override
+  late final GeneratedColumn<double> tempC = GeneratedColumn<double>(
+    'temp_c',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
+  late final GeneratedColumn<String> note = GeneratedColumn<String>(
+    'note',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    runId,
+    jarNo,
+    kind,
+    volumeMl,
+    abv,
+    tempC,
+    note,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'run_fractions';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<RunFraction> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('run_id')) {
+      context.handle(
+        _runIdMeta,
+        runId.isAcceptableOrUnknown(data['run_id']!, _runIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_runIdMeta);
+    }
+    if (data.containsKey('jar_no')) {
+      context.handle(
+        _jarNoMeta,
+        jarNo.isAcceptableOrUnknown(data['jar_no']!, _jarNoMeta),
+      );
+    }
+    if (data.containsKey('kind')) {
+      context.handle(
+        _kindMeta,
+        kind.isAcceptableOrUnknown(data['kind']!, _kindMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_kindMeta);
+    }
+    if (data.containsKey('volume_ml')) {
+      context.handle(
+        _volumeMlMeta,
+        volumeMl.isAcceptableOrUnknown(data['volume_ml']!, _volumeMlMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_volumeMlMeta);
+    }
+    if (data.containsKey('abv')) {
+      context.handle(
+        _abvMeta,
+        abv.isAcceptableOrUnknown(data['abv']!, _abvMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_abvMeta);
+    }
+    if (data.containsKey('temp_c')) {
+      context.handle(
+        _tempCMeta,
+        tempC.isAcceptableOrUnknown(data['temp_c']!, _tempCMeta),
+      );
+    }
+    if (data.containsKey('note')) {
+      context.handle(
+        _noteMeta,
+        note.isAcceptableOrUnknown(data['note']!, _noteMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  RunFraction map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return RunFraction(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      runId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}run_id'],
+      )!,
+      jarNo: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}jar_no'],
+      )!,
+      kind: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}kind'],
+      )!,
+      volumeMl: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}volume_ml'],
+      )!,
+      abv: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}abv'],
+      )!,
+      tempC: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}temp_c'],
+      ),
+      note: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}note'],
+      )!,
+    );
+  }
+
+  @override
+  $RunFractionsTable createAlias(String alias) {
+    return $RunFractionsTable(attachedDatabase, alias);
+  }
+}
+
+class RunFraction extends DataClass implements Insertable<RunFraction> {
+  final int id;
+  final String runId;
+  final int jarNo;
+
+  /// foreshots | heads | hearts | tails | feints
+  final String kind;
+  final double volumeMl;
+  final double abv;
+  final double? tempC;
+  final String note;
+  const RunFraction({
+    required this.id,
+    required this.runId,
+    required this.jarNo,
+    required this.kind,
+    required this.volumeMl,
+    required this.abv,
+    this.tempC,
+    required this.note,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['run_id'] = Variable<String>(runId);
+    map['jar_no'] = Variable<int>(jarNo);
+    map['kind'] = Variable<String>(kind);
+    map['volume_ml'] = Variable<double>(volumeMl);
+    map['abv'] = Variable<double>(abv);
+    if (!nullToAbsent || tempC != null) {
+      map['temp_c'] = Variable<double>(tempC);
+    }
+    map['note'] = Variable<String>(note);
+    return map;
+  }
+
+  RunFractionsCompanion toCompanion(bool nullToAbsent) {
+    return RunFractionsCompanion(
+      id: Value(id),
+      runId: Value(runId),
+      jarNo: Value(jarNo),
+      kind: Value(kind),
+      volumeMl: Value(volumeMl),
+      abv: Value(abv),
+      tempC: tempC == null && nullToAbsent
+          ? const Value.absent()
+          : Value(tempC),
+      note: Value(note),
+    );
+  }
+
+  factory RunFraction.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return RunFraction(
+      id: serializer.fromJson<int>(json['id']),
+      runId: serializer.fromJson<String>(json['runId']),
+      jarNo: serializer.fromJson<int>(json['jarNo']),
+      kind: serializer.fromJson<String>(json['kind']),
+      volumeMl: serializer.fromJson<double>(json['volumeMl']),
+      abv: serializer.fromJson<double>(json['abv']),
+      tempC: serializer.fromJson<double?>(json['tempC']),
+      note: serializer.fromJson<String>(json['note']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'runId': serializer.toJson<String>(runId),
+      'jarNo': serializer.toJson<int>(jarNo),
+      'kind': serializer.toJson<String>(kind),
+      'volumeMl': serializer.toJson<double>(volumeMl),
+      'abv': serializer.toJson<double>(abv),
+      'tempC': serializer.toJson<double?>(tempC),
+      'note': serializer.toJson<String>(note),
+    };
+  }
+
+  RunFraction copyWith({
+    int? id,
+    String? runId,
+    int? jarNo,
+    String? kind,
+    double? volumeMl,
+    double? abv,
+    Value<double?> tempC = const Value.absent(),
+    String? note,
+  }) => RunFraction(
+    id: id ?? this.id,
+    runId: runId ?? this.runId,
+    jarNo: jarNo ?? this.jarNo,
+    kind: kind ?? this.kind,
+    volumeMl: volumeMl ?? this.volumeMl,
+    abv: abv ?? this.abv,
+    tempC: tempC.present ? tempC.value : this.tempC,
+    note: note ?? this.note,
+  );
+  RunFraction copyWithCompanion(RunFractionsCompanion data) {
+    return RunFraction(
+      id: data.id.present ? data.id.value : this.id,
+      runId: data.runId.present ? data.runId.value : this.runId,
+      jarNo: data.jarNo.present ? data.jarNo.value : this.jarNo,
+      kind: data.kind.present ? data.kind.value : this.kind,
+      volumeMl: data.volumeMl.present ? data.volumeMl.value : this.volumeMl,
+      abv: data.abv.present ? data.abv.value : this.abv,
+      tempC: data.tempC.present ? data.tempC.value : this.tempC,
+      note: data.note.present ? data.note.value : this.note,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('RunFraction(')
+          ..write('id: $id, ')
+          ..write('runId: $runId, ')
+          ..write('jarNo: $jarNo, ')
+          ..write('kind: $kind, ')
+          ..write('volumeMl: $volumeMl, ')
+          ..write('abv: $abv, ')
+          ..write('tempC: $tempC, ')
+          ..write('note: $note')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, runId, jarNo, kind, volumeMl, abv, tempC, note);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is RunFraction &&
+          other.id == this.id &&
+          other.runId == this.runId &&
+          other.jarNo == this.jarNo &&
+          other.kind == this.kind &&
+          other.volumeMl == this.volumeMl &&
+          other.abv == this.abv &&
+          other.tempC == this.tempC &&
+          other.note == this.note);
+}
+
+class RunFractionsCompanion extends UpdateCompanion<RunFraction> {
+  final Value<int> id;
+  final Value<String> runId;
+  final Value<int> jarNo;
+  final Value<String> kind;
+  final Value<double> volumeMl;
+  final Value<double> abv;
+  final Value<double?> tempC;
+  final Value<String> note;
+  const RunFractionsCompanion({
+    this.id = const Value.absent(),
+    this.runId = const Value.absent(),
+    this.jarNo = const Value.absent(),
+    this.kind = const Value.absent(),
+    this.volumeMl = const Value.absent(),
+    this.abv = const Value.absent(),
+    this.tempC = const Value.absent(),
+    this.note = const Value.absent(),
+  });
+  RunFractionsCompanion.insert({
+    this.id = const Value.absent(),
+    required String runId,
+    this.jarNo = const Value.absent(),
+    required String kind,
+    required double volumeMl,
+    required double abv,
+    this.tempC = const Value.absent(),
+    this.note = const Value.absent(),
+  }) : runId = Value(runId),
+       kind = Value(kind),
+       volumeMl = Value(volumeMl),
+       abv = Value(abv);
+  static Insertable<RunFraction> custom({
+    Expression<int>? id,
+    Expression<String>? runId,
+    Expression<int>? jarNo,
+    Expression<String>? kind,
+    Expression<double>? volumeMl,
+    Expression<double>? abv,
+    Expression<double>? tempC,
+    Expression<String>? note,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (runId != null) 'run_id': runId,
+      if (jarNo != null) 'jar_no': jarNo,
+      if (kind != null) 'kind': kind,
+      if (volumeMl != null) 'volume_ml': volumeMl,
+      if (abv != null) 'abv': abv,
+      if (tempC != null) 'temp_c': tempC,
+      if (note != null) 'note': note,
+    });
+  }
+
+  RunFractionsCompanion copyWith({
+    Value<int>? id,
+    Value<String>? runId,
+    Value<int>? jarNo,
+    Value<String>? kind,
+    Value<double>? volumeMl,
+    Value<double>? abv,
+    Value<double?>? tempC,
+    Value<String>? note,
+  }) {
+    return RunFractionsCompanion(
+      id: id ?? this.id,
+      runId: runId ?? this.runId,
+      jarNo: jarNo ?? this.jarNo,
+      kind: kind ?? this.kind,
+      volumeMl: volumeMl ?? this.volumeMl,
+      abv: abv ?? this.abv,
+      tempC: tempC ?? this.tempC,
+      note: note ?? this.note,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (runId.present) {
+      map['run_id'] = Variable<String>(runId.value);
+    }
+    if (jarNo.present) {
+      map['jar_no'] = Variable<int>(jarNo.value);
+    }
+    if (kind.present) {
+      map['kind'] = Variable<String>(kind.value);
+    }
+    if (volumeMl.present) {
+      map['volume_ml'] = Variable<double>(volumeMl.value);
+    }
+    if (abv.present) {
+      map['abv'] = Variable<double>(abv.value);
+    }
+    if (tempC.present) {
+      map['temp_c'] = Variable<double>(tempC.value);
+    }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('RunFractionsCompanion(')
+          ..write('id: $id, ')
+          ..write('runId: $runId, ')
+          ..write('jarNo: $jarNo, ')
+          ..write('kind: $kind, ')
+          ..write('volumeMl: $volumeMl, ')
+          ..write('abv: $abv, ')
+          ..write('tempC: $tempC, ')
+          ..write('note: $note')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $VesselsTable extends Vessels with TableInfo<$VesselsTable, Vessel> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $VesselsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _kindMeta = const VerificationMeta('kind');
+  @override
+  late final GeneratedColumn<String> kind = GeneratedColumn<String>(
+    'kind',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _volumeLMeta = const VerificationMeta(
+    'volumeL',
+  );
+  @override
+  late final GeneratedColumn<double> volumeL = GeneratedColumn<double>(
+    'volume_l',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _materialMeta = const VerificationMeta(
+    'material',
+  );
+  @override
+  late final GeneratedColumn<String> material = GeneratedColumn<String>(
+    'material',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _charLevelMeta = const VerificationMeta(
+    'charLevel',
+  );
+  @override
+  late final GeneratedColumn<int> charLevel = GeneratedColumn<int>(
+    'char_level',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _locationMeta = const VerificationMeta(
+    'location',
+  );
+  @override
+  late final GeneratedColumn<String> location = GeneratedColumn<String>(
+    'location',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _isOccupiedMeta = const VerificationMeta(
+    'isOccupied',
+  );
+  @override
+  late final GeneratedColumn<bool> isOccupied = GeneratedColumn<bool>(
+    'is_occupied',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_occupied" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    name,
+    kind,
+    volumeL,
+    material,
+    charLevel,
+    location,
+    isOccupied,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'vessels';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<Vessel> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('kind')) {
+      context.handle(
+        _kindMeta,
+        kind.isAcceptableOrUnknown(data['kind']!, _kindMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_kindMeta);
+    }
+    if (data.containsKey('volume_l')) {
+      context.handle(
+        _volumeLMeta,
+        volumeL.isAcceptableOrUnknown(data['volume_l']!, _volumeLMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_volumeLMeta);
+    }
+    if (data.containsKey('material')) {
+      context.handle(
+        _materialMeta,
+        material.isAcceptableOrUnknown(data['material']!, _materialMeta),
+      );
+    }
+    if (data.containsKey('char_level')) {
+      context.handle(
+        _charLevelMeta,
+        charLevel.isAcceptableOrUnknown(data['char_level']!, _charLevelMeta),
+      );
+    }
+    if (data.containsKey('location')) {
+      context.handle(
+        _locationMeta,
+        location.isAcceptableOrUnknown(data['location']!, _locationMeta),
+      );
+    }
+    if (data.containsKey('is_occupied')) {
+      context.handle(
+        _isOccupiedMeta,
+        isOccupied.isAcceptableOrUnknown(data['is_occupied']!, _isOccupiedMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Vessel map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Vessel(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      kind: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}kind'],
+      )!,
+      volumeL: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}volume_l'],
+      )!,
+      material: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}material'],
+      )!,
+      charLevel: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}char_level'],
+      ),
+      location: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}location'],
+      )!,
+      isOccupied: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_occupied'],
+      )!,
+    );
+  }
+
+  @override
+  $VesselsTable createAlias(String alias) {
+    return $VesselsTable(attachedDatabase, alias);
+  }
+}
+
+class Vessel extends DataClass implements Insertable<Vessel> {
+  final String id;
+  final String name;
+
+  /// barrel | glass | steel | jar | bottle | fermenter
+  final String kind;
+  final double volumeL;
+  final String material;
+
+  /// Обжиг бочки: 1 — лёгкий, 2 — средний, 3 — сильный.
+  final int? charLevel;
+  final String location;
+  final bool isOccupied;
+  const Vessel({
+    required this.id,
+    required this.name,
+    required this.kind,
+    required this.volumeL,
+    required this.material,
+    this.charLevel,
+    required this.location,
+    required this.isOccupied,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['name'] = Variable<String>(name);
+    map['kind'] = Variable<String>(kind);
+    map['volume_l'] = Variable<double>(volumeL);
+    map['material'] = Variable<String>(material);
+    if (!nullToAbsent || charLevel != null) {
+      map['char_level'] = Variable<int>(charLevel);
+    }
+    map['location'] = Variable<String>(location);
+    map['is_occupied'] = Variable<bool>(isOccupied);
+    return map;
+  }
+
+  VesselsCompanion toCompanion(bool nullToAbsent) {
+    return VesselsCompanion(
+      id: Value(id),
+      name: Value(name),
+      kind: Value(kind),
+      volumeL: Value(volumeL),
+      material: Value(material),
+      charLevel: charLevel == null && nullToAbsent
+          ? const Value.absent()
+          : Value(charLevel),
+      location: Value(location),
+      isOccupied: Value(isOccupied),
+    );
+  }
+
+  factory Vessel.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Vessel(
+      id: serializer.fromJson<String>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+      kind: serializer.fromJson<String>(json['kind']),
+      volumeL: serializer.fromJson<double>(json['volumeL']),
+      material: serializer.fromJson<String>(json['material']),
+      charLevel: serializer.fromJson<int?>(json['charLevel']),
+      location: serializer.fromJson<String>(json['location']),
+      isOccupied: serializer.fromJson<bool>(json['isOccupied']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'name': serializer.toJson<String>(name),
+      'kind': serializer.toJson<String>(kind),
+      'volumeL': serializer.toJson<double>(volumeL),
+      'material': serializer.toJson<String>(material),
+      'charLevel': serializer.toJson<int?>(charLevel),
+      'location': serializer.toJson<String>(location),
+      'isOccupied': serializer.toJson<bool>(isOccupied),
+    };
+  }
+
+  Vessel copyWith({
+    String? id,
+    String? name,
+    String? kind,
+    double? volumeL,
+    String? material,
+    Value<int?> charLevel = const Value.absent(),
+    String? location,
+    bool? isOccupied,
+  }) => Vessel(
+    id: id ?? this.id,
+    name: name ?? this.name,
+    kind: kind ?? this.kind,
+    volumeL: volumeL ?? this.volumeL,
+    material: material ?? this.material,
+    charLevel: charLevel.present ? charLevel.value : this.charLevel,
+    location: location ?? this.location,
+    isOccupied: isOccupied ?? this.isOccupied,
+  );
+  Vessel copyWithCompanion(VesselsCompanion data) {
+    return Vessel(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      kind: data.kind.present ? data.kind.value : this.kind,
+      volumeL: data.volumeL.present ? data.volumeL.value : this.volumeL,
+      material: data.material.present ? data.material.value : this.material,
+      charLevel: data.charLevel.present ? data.charLevel.value : this.charLevel,
+      location: data.location.present ? data.location.value : this.location,
+      isOccupied: data.isOccupied.present
+          ? data.isOccupied.value
+          : this.isOccupied,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Vessel(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('kind: $kind, ')
+          ..write('volumeL: $volumeL, ')
+          ..write('material: $material, ')
+          ..write('charLevel: $charLevel, ')
+          ..write('location: $location, ')
+          ..write('isOccupied: $isOccupied')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    name,
+    kind,
+    volumeL,
+    material,
+    charLevel,
+    location,
+    isOccupied,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Vessel &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.kind == this.kind &&
+          other.volumeL == this.volumeL &&
+          other.material == this.material &&
+          other.charLevel == this.charLevel &&
+          other.location == this.location &&
+          other.isOccupied == this.isOccupied);
+}
+
+class VesselsCompanion extends UpdateCompanion<Vessel> {
+  final Value<String> id;
+  final Value<String> name;
+  final Value<String> kind;
+  final Value<double> volumeL;
+  final Value<String> material;
+  final Value<int?> charLevel;
+  final Value<String> location;
+  final Value<bool> isOccupied;
+  final Value<int> rowid;
+  const VesselsCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.kind = const Value.absent(),
+    this.volumeL = const Value.absent(),
+    this.material = const Value.absent(),
+    this.charLevel = const Value.absent(),
+    this.location = const Value.absent(),
+    this.isOccupied = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  VesselsCompanion.insert({
+    required String id,
+    required String name,
+    required String kind,
+    required double volumeL,
+    this.material = const Value.absent(),
+    this.charLevel = const Value.absent(),
+    this.location = const Value.absent(),
+    this.isOccupied = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       name = Value(name),
+       kind = Value(kind),
+       volumeL = Value(volumeL);
+  static Insertable<Vessel> custom({
+    Expression<String>? id,
+    Expression<String>? name,
+    Expression<String>? kind,
+    Expression<double>? volumeL,
+    Expression<String>? material,
+    Expression<int>? charLevel,
+    Expression<String>? location,
+    Expression<bool>? isOccupied,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (kind != null) 'kind': kind,
+      if (volumeL != null) 'volume_l': volumeL,
+      if (material != null) 'material': material,
+      if (charLevel != null) 'char_level': charLevel,
+      if (location != null) 'location': location,
+      if (isOccupied != null) 'is_occupied': isOccupied,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  VesselsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? name,
+    Value<String>? kind,
+    Value<double>? volumeL,
+    Value<String>? material,
+    Value<int?>? charLevel,
+    Value<String>? location,
+    Value<bool>? isOccupied,
+    Value<int>? rowid,
+  }) {
+    return VesselsCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      kind: kind ?? this.kind,
+      volumeL: volumeL ?? this.volumeL,
+      material: material ?? this.material,
+      charLevel: charLevel ?? this.charLevel,
+      location: location ?? this.location,
+      isOccupied: isOccupied ?? this.isOccupied,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (kind.present) {
+      map['kind'] = Variable<String>(kind.value);
+    }
+    if (volumeL.present) {
+      map['volume_l'] = Variable<double>(volumeL.value);
+    }
+    if (material.present) {
+      map['material'] = Variable<String>(material.value);
+    }
+    if (charLevel.present) {
+      map['char_level'] = Variable<int>(charLevel.value);
+    }
+    if (location.present) {
+      map['location'] = Variable<String>(location.value);
+    }
+    if (isOccupied.present) {
+      map['is_occupied'] = Variable<bool>(isOccupied.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('VesselsCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('kind: $kind, ')
+          ..write('volumeL: $volumeL, ')
+          ..write('material: $material, ')
+          ..write('charLevel: $charLevel, ')
+          ..write('location: $location, ')
+          ..write('isOccupied: $isOccupied, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $AgingTable extends Aging with TableInfo<$AgingTable, AgingEntry> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $AgingTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _batchIdMeta = const VerificationMeta(
+    'batchId',
+  );
+  @override
+  late final GeneratedColumn<String> batchId = GeneratedColumn<String>(
+    'batch_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES batches (id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _vesselIdMeta = const VerificationMeta(
+    'vesselId',
+  );
+  @override
+  late final GeneratedColumn<String> vesselId = GeneratedColumn<String>(
+    'vessel_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES vessels (id)',
+    ),
+  );
+  static const VerificationMeta _startedAtMeta = const VerificationMeta(
+    'startedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> startedAt = GeneratedColumn<DateTime>(
+    'started_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _plannedEndAtMeta = const VerificationMeta(
+    'plannedEndAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> plannedEndAt = GeneratedColumn<DateTime>(
+    'planned_end_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _angelSharePctYearMeta = const VerificationMeta(
+    'angelSharePctYear',
+  );
+  @override
+  late final GeneratedColumn<double> angelSharePctYear =
+      GeneratedColumn<double>(
+        'angel_share_pct_year',
+        aliasedName,
+        false,
+        type: DriftSqlType.double,
+        requiredDuringInsert: false,
+        defaultValue: const Constant(3),
+      );
+  static const VerificationMeta _lastToppedAtMeta = const VerificationMeta(
+    'lastToppedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> lastToppedAt = GeneratedColumn<DateTime>(
+    'last_topped_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _notesMeta = const VerificationMeta('notes');
+  @override
+  late final GeneratedColumn<String> notes = GeneratedColumn<String>(
+    'notes',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    batchId,
+    vesselId,
+    startedAt,
+    plannedEndAt,
+    angelSharePctYear,
+    lastToppedAt,
+    notes,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'aging';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<AgingEntry> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('batch_id')) {
+      context.handle(
+        _batchIdMeta,
+        batchId.isAcceptableOrUnknown(data['batch_id']!, _batchIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_batchIdMeta);
+    }
+    if (data.containsKey('vessel_id')) {
+      context.handle(
+        _vesselIdMeta,
+        vesselId.isAcceptableOrUnknown(data['vessel_id']!, _vesselIdMeta),
+      );
+    }
+    if (data.containsKey('started_at')) {
+      context.handle(
+        _startedAtMeta,
+        startedAt.isAcceptableOrUnknown(data['started_at']!, _startedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_startedAtMeta);
+    }
+    if (data.containsKey('planned_end_at')) {
+      context.handle(
+        _plannedEndAtMeta,
+        plannedEndAt.isAcceptableOrUnknown(
+          data['planned_end_at']!,
+          _plannedEndAtMeta,
+        ),
+      );
+    }
+    if (data.containsKey('angel_share_pct_year')) {
+      context.handle(
+        _angelSharePctYearMeta,
+        angelSharePctYear.isAcceptableOrUnknown(
+          data['angel_share_pct_year']!,
+          _angelSharePctYearMeta,
+        ),
+      );
+    }
+    if (data.containsKey('last_topped_at')) {
+      context.handle(
+        _lastToppedAtMeta,
+        lastToppedAt.isAcceptableOrUnknown(
+          data['last_topped_at']!,
+          _lastToppedAtMeta,
+        ),
+      );
+    }
+    if (data.containsKey('notes')) {
+      context.handle(
+        _notesMeta,
+        notes.isAcceptableOrUnknown(data['notes']!, _notesMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  AgingEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return AgingEntry(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      batchId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}batch_id'],
+      )!,
+      vesselId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}vessel_id'],
+      ),
+      startedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}started_at'],
+      )!,
+      plannedEndAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}planned_end_at'],
+      ),
+      angelSharePctYear: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}angel_share_pct_year'],
+      )!,
+      lastToppedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}last_topped_at'],
+      ),
+      notes: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}notes'],
+      )!,
+    );
+  }
+
+  @override
+  $AgingTable createAlias(String alias) {
+    return $AgingTable(attachedDatabase, alias);
+  }
+}
+
+class AgingEntry extends DataClass implements Insertable<AgingEntry> {
+  final String id;
+  final String batchId;
+  final String? vesselId;
+  final DateTime startedAt;
+  final DateTime? plannedEndAt;
+
+  /// Потери на испарение, % в год.
+  final double angelSharePctYear;
+  final DateTime? lastToppedAt;
+  final String notes;
+  const AgingEntry({
+    required this.id,
+    required this.batchId,
+    this.vesselId,
+    required this.startedAt,
+    this.plannedEndAt,
+    required this.angelSharePctYear,
+    this.lastToppedAt,
+    required this.notes,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['batch_id'] = Variable<String>(batchId);
+    if (!nullToAbsent || vesselId != null) {
+      map['vessel_id'] = Variable<String>(vesselId);
+    }
+    map['started_at'] = Variable<DateTime>(startedAt);
+    if (!nullToAbsent || plannedEndAt != null) {
+      map['planned_end_at'] = Variable<DateTime>(plannedEndAt);
+    }
+    map['angel_share_pct_year'] = Variable<double>(angelSharePctYear);
+    if (!nullToAbsent || lastToppedAt != null) {
+      map['last_topped_at'] = Variable<DateTime>(lastToppedAt);
+    }
+    map['notes'] = Variable<String>(notes);
+    return map;
+  }
+
+  AgingCompanion toCompanion(bool nullToAbsent) {
+    return AgingCompanion(
+      id: Value(id),
+      batchId: Value(batchId),
+      vesselId: vesselId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(vesselId),
+      startedAt: Value(startedAt),
+      plannedEndAt: plannedEndAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(plannedEndAt),
+      angelSharePctYear: Value(angelSharePctYear),
+      lastToppedAt: lastToppedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastToppedAt),
+      notes: Value(notes),
+    );
+  }
+
+  factory AgingEntry.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return AgingEntry(
+      id: serializer.fromJson<String>(json['id']),
+      batchId: serializer.fromJson<String>(json['batchId']),
+      vesselId: serializer.fromJson<String?>(json['vesselId']),
+      startedAt: serializer.fromJson<DateTime>(json['startedAt']),
+      plannedEndAt: serializer.fromJson<DateTime?>(json['plannedEndAt']),
+      angelSharePctYear: serializer.fromJson<double>(json['angelSharePctYear']),
+      lastToppedAt: serializer.fromJson<DateTime?>(json['lastToppedAt']),
+      notes: serializer.fromJson<String>(json['notes']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'batchId': serializer.toJson<String>(batchId),
+      'vesselId': serializer.toJson<String?>(vesselId),
+      'startedAt': serializer.toJson<DateTime>(startedAt),
+      'plannedEndAt': serializer.toJson<DateTime?>(plannedEndAt),
+      'angelSharePctYear': serializer.toJson<double>(angelSharePctYear),
+      'lastToppedAt': serializer.toJson<DateTime?>(lastToppedAt),
+      'notes': serializer.toJson<String>(notes),
+    };
+  }
+
+  AgingEntry copyWith({
+    String? id,
+    String? batchId,
+    Value<String?> vesselId = const Value.absent(),
+    DateTime? startedAt,
+    Value<DateTime?> plannedEndAt = const Value.absent(),
+    double? angelSharePctYear,
+    Value<DateTime?> lastToppedAt = const Value.absent(),
+    String? notes,
+  }) => AgingEntry(
+    id: id ?? this.id,
+    batchId: batchId ?? this.batchId,
+    vesselId: vesselId.present ? vesselId.value : this.vesselId,
+    startedAt: startedAt ?? this.startedAt,
+    plannedEndAt: plannedEndAt.present ? plannedEndAt.value : this.plannedEndAt,
+    angelSharePctYear: angelSharePctYear ?? this.angelSharePctYear,
+    lastToppedAt: lastToppedAt.present ? lastToppedAt.value : this.lastToppedAt,
+    notes: notes ?? this.notes,
+  );
+  AgingEntry copyWithCompanion(AgingCompanion data) {
+    return AgingEntry(
+      id: data.id.present ? data.id.value : this.id,
+      batchId: data.batchId.present ? data.batchId.value : this.batchId,
+      vesselId: data.vesselId.present ? data.vesselId.value : this.vesselId,
+      startedAt: data.startedAt.present ? data.startedAt.value : this.startedAt,
+      plannedEndAt: data.plannedEndAt.present
+          ? data.plannedEndAt.value
+          : this.plannedEndAt,
+      angelSharePctYear: data.angelSharePctYear.present
+          ? data.angelSharePctYear.value
+          : this.angelSharePctYear,
+      lastToppedAt: data.lastToppedAt.present
+          ? data.lastToppedAt.value
+          : this.lastToppedAt,
+      notes: data.notes.present ? data.notes.value : this.notes,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AgingEntry(')
+          ..write('id: $id, ')
+          ..write('batchId: $batchId, ')
+          ..write('vesselId: $vesselId, ')
+          ..write('startedAt: $startedAt, ')
+          ..write('plannedEndAt: $plannedEndAt, ')
+          ..write('angelSharePctYear: $angelSharePctYear, ')
+          ..write('lastToppedAt: $lastToppedAt, ')
+          ..write('notes: $notes')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    batchId,
+    vesselId,
+    startedAt,
+    plannedEndAt,
+    angelSharePctYear,
+    lastToppedAt,
+    notes,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is AgingEntry &&
+          other.id == this.id &&
+          other.batchId == this.batchId &&
+          other.vesselId == this.vesselId &&
+          other.startedAt == this.startedAt &&
+          other.plannedEndAt == this.plannedEndAt &&
+          other.angelSharePctYear == this.angelSharePctYear &&
+          other.lastToppedAt == this.lastToppedAt &&
+          other.notes == this.notes);
+}
+
+class AgingCompanion extends UpdateCompanion<AgingEntry> {
+  final Value<String> id;
+  final Value<String> batchId;
+  final Value<String?> vesselId;
+  final Value<DateTime> startedAt;
+  final Value<DateTime?> plannedEndAt;
+  final Value<double> angelSharePctYear;
+  final Value<DateTime?> lastToppedAt;
+  final Value<String> notes;
+  final Value<int> rowid;
+  const AgingCompanion({
+    this.id = const Value.absent(),
+    this.batchId = const Value.absent(),
+    this.vesselId = const Value.absent(),
+    this.startedAt = const Value.absent(),
+    this.plannedEndAt = const Value.absent(),
+    this.angelSharePctYear = const Value.absent(),
+    this.lastToppedAt = const Value.absent(),
+    this.notes = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  AgingCompanion.insert({
+    required String id,
+    required String batchId,
+    this.vesselId = const Value.absent(),
+    required DateTime startedAt,
+    this.plannedEndAt = const Value.absent(),
+    this.angelSharePctYear = const Value.absent(),
+    this.lastToppedAt = const Value.absent(),
+    this.notes = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       batchId = Value(batchId),
+       startedAt = Value(startedAt);
+  static Insertable<AgingEntry> custom({
+    Expression<String>? id,
+    Expression<String>? batchId,
+    Expression<String>? vesselId,
+    Expression<DateTime>? startedAt,
+    Expression<DateTime>? plannedEndAt,
+    Expression<double>? angelSharePctYear,
+    Expression<DateTime>? lastToppedAt,
+    Expression<String>? notes,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (batchId != null) 'batch_id': batchId,
+      if (vesselId != null) 'vessel_id': vesselId,
+      if (startedAt != null) 'started_at': startedAt,
+      if (plannedEndAt != null) 'planned_end_at': plannedEndAt,
+      if (angelSharePctYear != null) 'angel_share_pct_year': angelSharePctYear,
+      if (lastToppedAt != null) 'last_topped_at': lastToppedAt,
+      if (notes != null) 'notes': notes,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  AgingCompanion copyWith({
+    Value<String>? id,
+    Value<String>? batchId,
+    Value<String?>? vesselId,
+    Value<DateTime>? startedAt,
+    Value<DateTime?>? plannedEndAt,
+    Value<double>? angelSharePctYear,
+    Value<DateTime?>? lastToppedAt,
+    Value<String>? notes,
+    Value<int>? rowid,
+  }) {
+    return AgingCompanion(
+      id: id ?? this.id,
+      batchId: batchId ?? this.batchId,
+      vesselId: vesselId ?? this.vesselId,
+      startedAt: startedAt ?? this.startedAt,
+      plannedEndAt: plannedEndAt ?? this.plannedEndAt,
+      angelSharePctYear: angelSharePctYear ?? this.angelSharePctYear,
+      lastToppedAt: lastToppedAt ?? this.lastToppedAt,
+      notes: notes ?? this.notes,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (batchId.present) {
+      map['batch_id'] = Variable<String>(batchId.value);
+    }
+    if (vesselId.present) {
+      map['vessel_id'] = Variable<String>(vesselId.value);
+    }
+    if (startedAt.present) {
+      map['started_at'] = Variable<DateTime>(startedAt.value);
+    }
+    if (plannedEndAt.present) {
+      map['planned_end_at'] = Variable<DateTime>(plannedEndAt.value);
+    }
+    if (angelSharePctYear.present) {
+      map['angel_share_pct_year'] = Variable<double>(angelSharePctYear.value);
+    }
+    if (lastToppedAt.present) {
+      map['last_topped_at'] = Variable<DateTime>(lastToppedAt.value);
+    }
+    if (notes.present) {
+      map['notes'] = Variable<String>(notes.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AgingCompanion(')
+          ..write('id: $id, ')
+          ..write('batchId: $batchId, ')
+          ..write('vesselId: $vesselId, ')
+          ..write('startedAt: $startedAt, ')
+          ..write('plannedEndAt: $plannedEndAt, ')
+          ..write('angelSharePctYear: $angelSharePctYear, ')
+          ..write('lastToppedAt: $lastToppedAt, ')
+          ..write('notes: $notes, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $TastingsTable extends Tastings with TableInfo<$TastingsTable, Tasting> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $TastingsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _batchIdMeta = const VerificationMeta(
+    'batchId',
+  );
+  @override
+  late final GeneratedColumn<String> batchId = GeneratedColumn<String>(
+    'batch_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES batches (id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _atMeta = const VerificationMeta('at');
+  @override
+  late final GeneratedColumn<DateTime> at = GeneratedColumn<DateTime>(
+    'at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _ratingMeta = const VerificationMeta('rating');
+  @override
+  late final GeneratedColumn<int> rating = GeneratedColumn<int>(
+    'rating',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _aromaMeta = const VerificationMeta('aroma');
+  @override
+  late final GeneratedColumn<String> aroma = GeneratedColumn<String>(
+    'aroma',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _tasteMeta = const VerificationMeta('taste');
+  @override
+  late final GeneratedColumn<String> taste = GeneratedColumn<String>(
+    'taste',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _finishMeta = const VerificationMeta('finish');
+  @override
+  late final GeneratedColumn<String> finish = GeneratedColumn<String>(
+    'finish',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _verdictMeta = const VerificationMeta(
+    'verdict',
+  );
+  @override
+  late final GeneratedColumn<String> verdict = GeneratedColumn<String>(
+    'verdict',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _photoPathMeta = const VerificationMeta(
+    'photoPath',
+  );
+  @override
+  late final GeneratedColumn<String> photoPath = GeneratedColumn<String>(
+    'photo_path',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    batchId,
+    at,
+    rating,
+    aroma,
+    taste,
+    finish,
+    verdict,
+    photoPath,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'tastings';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<Tasting> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('batch_id')) {
+      context.handle(
+        _batchIdMeta,
+        batchId.isAcceptableOrUnknown(data['batch_id']!, _batchIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_batchIdMeta);
+    }
+    if (data.containsKey('at')) {
+      context.handle(_atMeta, at.isAcceptableOrUnknown(data['at']!, _atMeta));
+    } else if (isInserting) {
+      context.missing(_atMeta);
+    }
+    if (data.containsKey('rating')) {
+      context.handle(
+        _ratingMeta,
+        rating.isAcceptableOrUnknown(data['rating']!, _ratingMeta),
+      );
+    }
+    if (data.containsKey('aroma')) {
+      context.handle(
+        _aromaMeta,
+        aroma.isAcceptableOrUnknown(data['aroma']!, _aromaMeta),
+      );
+    }
+    if (data.containsKey('taste')) {
+      context.handle(
+        _tasteMeta,
+        taste.isAcceptableOrUnknown(data['taste']!, _tasteMeta),
+      );
+    }
+    if (data.containsKey('finish')) {
+      context.handle(
+        _finishMeta,
+        finish.isAcceptableOrUnknown(data['finish']!, _finishMeta),
+      );
+    }
+    if (data.containsKey('verdict')) {
+      context.handle(
+        _verdictMeta,
+        verdict.isAcceptableOrUnknown(data['verdict']!, _verdictMeta),
+      );
+    }
+    if (data.containsKey('photo_path')) {
+      context.handle(
+        _photoPathMeta,
+        photoPath.isAcceptableOrUnknown(data['photo_path']!, _photoPathMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Tasting map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Tasting(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      batchId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}batch_id'],
+      )!,
+      at: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}at'],
+      )!,
+      rating: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}rating'],
+      )!,
+      aroma: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}aroma'],
+      )!,
+      taste: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}taste'],
+      )!,
+      finish: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}finish'],
+      )!,
+      verdict: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}verdict'],
+      )!,
+      photoPath: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}photo_path'],
+      )!,
+    );
+  }
+
+  @override
+  $TastingsTable createAlias(String alias) {
+    return $TastingsTable(attachedDatabase, alias);
+  }
+}
+
+class Tasting extends DataClass implements Insertable<Tasting> {
+  final String id;
+  final String batchId;
+  final DateTime at;
+
+  /// 1..5
+  final int rating;
+  final String aroma;
+  final String taste;
+  final String finish;
+  final String verdict;
+  final String photoPath;
+  const Tasting({
+    required this.id,
+    required this.batchId,
+    required this.at,
+    required this.rating,
+    required this.aroma,
+    required this.taste,
+    required this.finish,
+    required this.verdict,
+    required this.photoPath,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['batch_id'] = Variable<String>(batchId);
+    map['at'] = Variable<DateTime>(at);
+    map['rating'] = Variable<int>(rating);
+    map['aroma'] = Variable<String>(aroma);
+    map['taste'] = Variable<String>(taste);
+    map['finish'] = Variable<String>(finish);
+    map['verdict'] = Variable<String>(verdict);
+    map['photo_path'] = Variable<String>(photoPath);
+    return map;
+  }
+
+  TastingsCompanion toCompanion(bool nullToAbsent) {
+    return TastingsCompanion(
+      id: Value(id),
+      batchId: Value(batchId),
+      at: Value(at),
+      rating: Value(rating),
+      aroma: Value(aroma),
+      taste: Value(taste),
+      finish: Value(finish),
+      verdict: Value(verdict),
+      photoPath: Value(photoPath),
+    );
+  }
+
+  factory Tasting.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Tasting(
+      id: serializer.fromJson<String>(json['id']),
+      batchId: serializer.fromJson<String>(json['batchId']),
+      at: serializer.fromJson<DateTime>(json['at']),
+      rating: serializer.fromJson<int>(json['rating']),
+      aroma: serializer.fromJson<String>(json['aroma']),
+      taste: serializer.fromJson<String>(json['taste']),
+      finish: serializer.fromJson<String>(json['finish']),
+      verdict: serializer.fromJson<String>(json['verdict']),
+      photoPath: serializer.fromJson<String>(json['photoPath']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'batchId': serializer.toJson<String>(batchId),
+      'at': serializer.toJson<DateTime>(at),
+      'rating': serializer.toJson<int>(rating),
+      'aroma': serializer.toJson<String>(aroma),
+      'taste': serializer.toJson<String>(taste),
+      'finish': serializer.toJson<String>(finish),
+      'verdict': serializer.toJson<String>(verdict),
+      'photoPath': serializer.toJson<String>(photoPath),
+    };
+  }
+
+  Tasting copyWith({
+    String? id,
+    String? batchId,
+    DateTime? at,
+    int? rating,
+    String? aroma,
+    String? taste,
+    String? finish,
+    String? verdict,
+    String? photoPath,
+  }) => Tasting(
+    id: id ?? this.id,
+    batchId: batchId ?? this.batchId,
+    at: at ?? this.at,
+    rating: rating ?? this.rating,
+    aroma: aroma ?? this.aroma,
+    taste: taste ?? this.taste,
+    finish: finish ?? this.finish,
+    verdict: verdict ?? this.verdict,
+    photoPath: photoPath ?? this.photoPath,
+  );
+  Tasting copyWithCompanion(TastingsCompanion data) {
+    return Tasting(
+      id: data.id.present ? data.id.value : this.id,
+      batchId: data.batchId.present ? data.batchId.value : this.batchId,
+      at: data.at.present ? data.at.value : this.at,
+      rating: data.rating.present ? data.rating.value : this.rating,
+      aroma: data.aroma.present ? data.aroma.value : this.aroma,
+      taste: data.taste.present ? data.taste.value : this.taste,
+      finish: data.finish.present ? data.finish.value : this.finish,
+      verdict: data.verdict.present ? data.verdict.value : this.verdict,
+      photoPath: data.photoPath.present ? data.photoPath.value : this.photoPath,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Tasting(')
+          ..write('id: $id, ')
+          ..write('batchId: $batchId, ')
+          ..write('at: $at, ')
+          ..write('rating: $rating, ')
+          ..write('aroma: $aroma, ')
+          ..write('taste: $taste, ')
+          ..write('finish: $finish, ')
+          ..write('verdict: $verdict, ')
+          ..write('photoPath: $photoPath')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    batchId,
+    at,
+    rating,
+    aroma,
+    taste,
+    finish,
+    verdict,
+    photoPath,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Tasting &&
+          other.id == this.id &&
+          other.batchId == this.batchId &&
+          other.at == this.at &&
+          other.rating == this.rating &&
+          other.aroma == this.aroma &&
+          other.taste == this.taste &&
+          other.finish == this.finish &&
+          other.verdict == this.verdict &&
+          other.photoPath == this.photoPath);
+}
+
+class TastingsCompanion extends UpdateCompanion<Tasting> {
+  final Value<String> id;
+  final Value<String> batchId;
+  final Value<DateTime> at;
+  final Value<int> rating;
+  final Value<String> aroma;
+  final Value<String> taste;
+  final Value<String> finish;
+  final Value<String> verdict;
+  final Value<String> photoPath;
+  final Value<int> rowid;
+  const TastingsCompanion({
+    this.id = const Value.absent(),
+    this.batchId = const Value.absent(),
+    this.at = const Value.absent(),
+    this.rating = const Value.absent(),
+    this.aroma = const Value.absent(),
+    this.taste = const Value.absent(),
+    this.finish = const Value.absent(),
+    this.verdict = const Value.absent(),
+    this.photoPath = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  TastingsCompanion.insert({
+    required String id,
+    required String batchId,
+    required DateTime at,
+    this.rating = const Value.absent(),
+    this.aroma = const Value.absent(),
+    this.taste = const Value.absent(),
+    this.finish = const Value.absent(),
+    this.verdict = const Value.absent(),
+    this.photoPath = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       batchId = Value(batchId),
+       at = Value(at);
+  static Insertable<Tasting> custom({
+    Expression<String>? id,
+    Expression<String>? batchId,
+    Expression<DateTime>? at,
+    Expression<int>? rating,
+    Expression<String>? aroma,
+    Expression<String>? taste,
+    Expression<String>? finish,
+    Expression<String>? verdict,
+    Expression<String>? photoPath,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (batchId != null) 'batch_id': batchId,
+      if (at != null) 'at': at,
+      if (rating != null) 'rating': rating,
+      if (aroma != null) 'aroma': aroma,
+      if (taste != null) 'taste': taste,
+      if (finish != null) 'finish': finish,
+      if (verdict != null) 'verdict': verdict,
+      if (photoPath != null) 'photo_path': photoPath,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  TastingsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? batchId,
+    Value<DateTime>? at,
+    Value<int>? rating,
+    Value<String>? aroma,
+    Value<String>? taste,
+    Value<String>? finish,
+    Value<String>? verdict,
+    Value<String>? photoPath,
+    Value<int>? rowid,
+  }) {
+    return TastingsCompanion(
+      id: id ?? this.id,
+      batchId: batchId ?? this.batchId,
+      at: at ?? this.at,
+      rating: rating ?? this.rating,
+      aroma: aroma ?? this.aroma,
+      taste: taste ?? this.taste,
+      finish: finish ?? this.finish,
+      verdict: verdict ?? this.verdict,
+      photoPath: photoPath ?? this.photoPath,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (batchId.present) {
+      map['batch_id'] = Variable<String>(batchId.value);
+    }
+    if (at.present) {
+      map['at'] = Variable<DateTime>(at.value);
+    }
+    if (rating.present) {
+      map['rating'] = Variable<int>(rating.value);
+    }
+    if (aroma.present) {
+      map['aroma'] = Variable<String>(aroma.value);
+    }
+    if (taste.present) {
+      map['taste'] = Variable<String>(taste.value);
+    }
+    if (finish.present) {
+      map['finish'] = Variable<String>(finish.value);
+    }
+    if (verdict.present) {
+      map['verdict'] = Variable<String>(verdict.value);
+    }
+    if (photoPath.present) {
+      map['photo_path'] = Variable<String>(photoPath.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TastingsCompanion(')
+          ..write('id: $id, ')
+          ..write('batchId: $batchId, ')
+          ..write('at: $at, ')
+          ..write('rating: $rating, ')
+          ..write('aroma: $aroma, ')
+          ..write('taste: $taste, ')
+          ..write('finish: $finish, ')
+          ..write('verdict: $verdict, ')
+          ..write('photoPath: $photoPath, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -3782,6 +6912,14 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $BatchEventsTable batchEvents = $BatchEventsTable(this);
   late final $MeasurementsTable measurements = $MeasurementsTable(this);
   late final $AppMetaTable appMeta = $AppMetaTable(this);
+  late final $BatchIngredientsTable batchIngredients = $BatchIngredientsTable(
+    this,
+  );
+  late final $RunsTable runs = $RunsTable(this);
+  late final $RunFractionsTable runFractions = $RunFractionsTable(this);
+  late final $VesselsTable vessels = $VesselsTable(this);
+  late final $AgingTable aging = $AgingTable(this);
+  late final $TastingsTable tastings = $TastingsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -3794,6 +6932,12 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     batchEvents,
     measurements,
     appMeta,
+    batchIngredients,
+    runs,
+    runFractions,
+    vessels,
+    aging,
+    tastings,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
@@ -3824,6 +6968,41 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         limitUpdateKind: UpdateKind.delete,
       ),
       result: [TableUpdate('measurements', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'batches',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('batch_ingredients', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'batches',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('runs', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'runs',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('run_fractions', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'batches',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('aging', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'batches',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('tastings', kind: UpdateKind.delete)],
     ),
   ]);
 }
@@ -5367,6 +8546,83 @@ final class $$BatchesTableReferences
       manager.$state.copyWith(prefetchedData: cache),
     );
   }
+
+  static MultiTypedResultKey<$BatchIngredientsTable, List<BatchIngredient>>
+  _batchIngredientsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.batchIngredients,
+    aliasName: 'batches__id__batch_ingredients__batch_id',
+  );
+
+  $$BatchIngredientsTableProcessedTableManager get batchIngredientsRefs {
+    final manager = $$BatchIngredientsTableTableManager(
+      $_db,
+      $_db.batchIngredients,
+    ).filter((f) => f.batchId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _batchIngredientsRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$RunsTable, List<Run>> _runsRefsTable(
+    _$AppDatabase db,
+  ) => MultiTypedResultKey.fromTable(
+    db.runs,
+    aliasName: 'batches__id__runs__batch_id',
+  );
+
+  $$RunsTableProcessedTableManager get runsRefs {
+    final manager = $$RunsTableTableManager(
+      $_db,
+      $_db.runs,
+    ).filter((f) => f.batchId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_runsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$AgingTable, List<AgingEntry>> _agingRefsTable(
+    _$AppDatabase db,
+  ) => MultiTypedResultKey.fromTable(
+    db.aging,
+    aliasName: 'batches__id__aging__batch_id',
+  );
+
+  $$AgingTableProcessedTableManager get agingRefs {
+    final manager = $$AgingTableTableManager(
+      $_db,
+      $_db.aging,
+    ).filter((f) => f.batchId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_agingRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$TastingsTable, List<Tasting>> _tastingsRefsTable(
+    _$AppDatabase db,
+  ) => MultiTypedResultKey.fromTable(
+    db.tastings,
+    aliasName: 'batches__id__tastings__batch_id',
+  );
+
+  $$TastingsTableProcessedTableManager get tastingsRefs {
+    final manager = $$TastingsTableTableManager(
+      $_db,
+      $_db.tastings,
+    ).filter((f) => f.batchId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_tastingsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 }
 
 class $$BatchesTableFilterComposer
@@ -5497,6 +8753,106 @@ class $$BatchesTableFilterComposer
           }) => $$MeasurementsTableFilterComposer(
             $db: $db,
             $table: $db.measurements,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> batchIngredientsRefs(
+    Expression<bool> Function($$BatchIngredientsTableFilterComposer f) f,
+  ) {
+    final $$BatchIngredientsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.batchIngredients,
+      getReferencedColumn: (t) => t.batchId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$BatchIngredientsTableFilterComposer(
+            $db: $db,
+            $table: $db.batchIngredients,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> runsRefs(
+    Expression<bool> Function($$RunsTableFilterComposer f) f,
+  ) {
+    final $$RunsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.runs,
+      getReferencedColumn: (t) => t.batchId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RunsTableFilterComposer(
+            $db: $db,
+            $table: $db.runs,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> agingRefs(
+    Expression<bool> Function($$AgingTableFilterComposer f) f,
+  ) {
+    final $$AgingTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.aging,
+      getReferencedColumn: (t) => t.batchId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AgingTableFilterComposer(
+            $db: $db,
+            $table: $db.aging,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> tastingsRefs(
+    Expression<bool> Function($$TastingsTableFilterComposer f) f,
+  ) {
+    final $$TastingsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.tastings,
+      getReferencedColumn: (t) => t.batchId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$TastingsTableFilterComposer(
+            $db: $db,
+            $table: $db.tastings,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -5711,6 +9067,106 @@ class $$BatchesTableAnnotationComposer
     );
     return f(composer);
   }
+
+  Expression<T> batchIngredientsRefs<T extends Object>(
+    Expression<T> Function($$BatchIngredientsTableAnnotationComposer a) f,
+  ) {
+    final $$BatchIngredientsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.batchIngredients,
+      getReferencedColumn: (t) => t.batchId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$BatchIngredientsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.batchIngredients,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<T> runsRefs<T extends Object>(
+    Expression<T> Function($$RunsTableAnnotationComposer a) f,
+  ) {
+    final $$RunsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.runs,
+      getReferencedColumn: (t) => t.batchId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RunsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.runs,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<T> agingRefs<T extends Object>(
+    Expression<T> Function($$AgingTableAnnotationComposer a) f,
+  ) {
+    final $$AgingTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.aging,
+      getReferencedColumn: (t) => t.batchId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AgingTableAnnotationComposer(
+            $db: $db,
+            $table: $db.aging,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<T> tastingsRefs<T extends Object>(
+    Expression<T> Function($$TastingsTableAnnotationComposer a) f,
+  ) {
+    final $$TastingsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.tastings,
+      getReferencedColumn: (t) => t.batchId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$TastingsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.tastings,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $$BatchesTableTableManager
@@ -5730,6 +9186,10 @@ class $$BatchesTableTableManager
             bool recipeId,
             bool batchEventsRefs,
             bool measurementsRefs,
+            bool batchIngredientsRefs,
+            bool runsRefs,
+            bool agingRefs,
+            bool tastingsRefs,
           })
         > {
   $$BatchesTableTableManager(_$AppDatabase db, $BatchesTable table)
@@ -5816,12 +9276,20 @@ class $$BatchesTableTableManager
                 recipeId = false,
                 batchEventsRefs = false,
                 measurementsRefs = false,
+                batchIngredientsRefs = false,
+                runsRefs = false,
+                agingRefs = false,
+                tastingsRefs = false,
               }) {
                 return PrefetchHooks(
                   db: db,
                   explicitlyWatchedTables: [
                     if (batchEventsRefs) db.batchEvents,
                     if (measurementsRefs) db.measurements,
+                    if (batchIngredientsRefs) db.batchIngredients,
+                    if (runsRefs) db.runs,
+                    if (agingRefs) db.aging,
+                    if (tastingsRefs) db.tastings,
                   ],
                   addJoins:
                       <
@@ -5895,6 +9363,78 @@ class $$BatchesTableTableManager
                           referencedColumn: 'batch_id',
                           typedResults: items,
                         ),
+                      if (batchIngredientsRefs)
+                        await $_getPrefetchedDataByColumns<
+                          Batch,
+                          $BatchesTable,
+                          BatchIngredient,
+                          $BatchIngredientsTable
+                        >(
+                          currentTable: table,
+                          referencedTable: $$BatchesTableReferences
+                              ._batchIngredientsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$BatchesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).batchIngredientsRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'batch_id',
+                          typedResults: items,
+                        ),
+                      if (runsRefs)
+                        await $_getPrefetchedDataByColumns<
+                          Batch,
+                          $BatchesTable,
+                          Run,
+                          $RunsTable
+                        >(
+                          currentTable: table,
+                          referencedTable: $$BatchesTableReferences
+                              ._runsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$BatchesTableReferences(db, table, p0).runsRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'batch_id',
+                          typedResults: items,
+                        ),
+                      if (agingRefs)
+                        await $_getPrefetchedDataByColumns<
+                          Batch,
+                          $BatchesTable,
+                          AgingEntry,
+                          $AgingTable
+                        >(
+                          currentTable: table,
+                          referencedTable: $$BatchesTableReferences
+                              ._agingRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$BatchesTableReferences(db, table, p0).agingRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'batch_id',
+                          typedResults: items,
+                        ),
+                      if (tastingsRefs)
+                        await $_getPrefetchedDataByColumns<
+                          Batch,
+                          $BatchesTable,
+                          Tasting,
+                          $TastingsTable
+                        >(
+                          currentTable: table,
+                          referencedTable: $$BatchesTableReferences
+                              ._tastingsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$BatchesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).tastingsRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'batch_id',
+                          typedResults: items,
+                        ),
                     ];
                   },
                 );
@@ -5919,6 +9459,10 @@ typedef $$BatchesTableProcessedTableManager =
         bool recipeId,
         bool batchEventsRefs,
         bool measurementsRefs,
+        bool batchIngredientsRefs,
+        bool runsRefs,
+        bool agingRefs,
+        bool tastingsRefs,
       })
     >;
 typedef $$BatchEventsTableCreateCompanionBuilder =
@@ -6808,6 +10352,2431 @@ typedef $$AppMetaTableProcessedTableManager =
       AppMetaData,
       PrefetchHooks Function()
     >;
+typedef $$BatchIngredientsTableCreateCompanionBuilder =
+    BatchIngredientsCompanion Function({
+      Value<int> id,
+      required String batchId,
+      Value<int> sortOrder,
+      required String name,
+      required double amount,
+      required String unit,
+      Value<String> note,
+    });
+typedef $$BatchIngredientsTableUpdateCompanionBuilder =
+    BatchIngredientsCompanion Function({
+      Value<int> id,
+      Value<String> batchId,
+      Value<int> sortOrder,
+      Value<String> name,
+      Value<double> amount,
+      Value<String> unit,
+      Value<String> note,
+    });
+
+final class $$BatchIngredientsTableReferences
+    extends
+        BaseReferences<_$AppDatabase, $BatchIngredientsTable, BatchIngredient> {
+  $$BatchIngredientsTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $BatchesTable _batchIdTable(_$AppDatabase db) =>
+      db.batches.createAlias('batch_ingredients__batch_id__batches__id');
+
+  $$BatchesTableProcessedTableManager get batchId {
+    final $_column = $_itemColumn<String>('batch_id')!;
+
+    final manager = $$BatchesTableTableManager(
+      $_db,
+      $_db.batches,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_batchIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$BatchIngredientsTableFilterComposer
+    extends Composer<_$AppDatabase, $BatchIngredientsTable> {
+  $$BatchIngredientsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get sortOrder => $composableBuilder(
+    column: $table.sortOrder,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get amount => $composableBuilder(
+    column: $table.amount,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get unit => $composableBuilder(
+    column: $table.unit,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$BatchesTableFilterComposer get batchId {
+    final $$BatchesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.batchId,
+      referencedTable: $db.batches,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$BatchesTableFilterComposer(
+            $db: $db,
+            $table: $db.batches,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$BatchIngredientsTableOrderingComposer
+    extends Composer<_$AppDatabase, $BatchIngredientsTable> {
+  $$BatchIngredientsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get sortOrder => $composableBuilder(
+    column: $table.sortOrder,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get amount => $composableBuilder(
+    column: $table.amount,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get unit => $composableBuilder(
+    column: $table.unit,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$BatchesTableOrderingComposer get batchId {
+    final $$BatchesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.batchId,
+      referencedTable: $db.batches,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$BatchesTableOrderingComposer(
+            $db: $db,
+            $table: $db.batches,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$BatchIngredientsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $BatchIngredientsTable> {
+  $$BatchIngredientsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get sortOrder =>
+      $composableBuilder(column: $table.sortOrder, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<double> get amount =>
+      $composableBuilder(column: $table.amount, builder: (column) => column);
+
+  GeneratedColumn<String> get unit =>
+      $composableBuilder(column: $table.unit, builder: (column) => column);
+
+  GeneratedColumn<String> get note =>
+      $composableBuilder(column: $table.note, builder: (column) => column);
+
+  $$BatchesTableAnnotationComposer get batchId {
+    final $$BatchesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.batchId,
+      referencedTable: $db.batches,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$BatchesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.batches,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$BatchIngredientsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $BatchIngredientsTable,
+          BatchIngredient,
+          $$BatchIngredientsTableFilterComposer,
+          $$BatchIngredientsTableOrderingComposer,
+          $$BatchIngredientsTableAnnotationComposer,
+          $$BatchIngredientsTableCreateCompanionBuilder,
+          $$BatchIngredientsTableUpdateCompanionBuilder,
+          (BatchIngredient, $$BatchIngredientsTableReferences),
+          BatchIngredient,
+          PrefetchHooks Function({bool batchId})
+        > {
+  $$BatchIngredientsTableTableManager(
+    _$AppDatabase db,
+    $BatchIngredientsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$BatchIngredientsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$BatchIngredientsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$BatchIngredientsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> batchId = const Value.absent(),
+                Value<int> sortOrder = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<double> amount = const Value.absent(),
+                Value<String> unit = const Value.absent(),
+                Value<String> note = const Value.absent(),
+              }) => BatchIngredientsCompanion(
+                id: id,
+                batchId: batchId,
+                sortOrder: sortOrder,
+                name: name,
+                amount: amount,
+                unit: unit,
+                note: note,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String batchId,
+                Value<int> sortOrder = const Value.absent(),
+                required String name,
+                required double amount,
+                required String unit,
+                Value<String> note = const Value.absent(),
+              }) => BatchIngredientsCompanion.insert(
+                id: id,
+                batchId: batchId,
+                sortOrder: sortOrder,
+                name: name,
+                amount: amount,
+                unit: unit,
+                note: note,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$BatchIngredientsTable, BatchIngredient>(table),
+                  $$BatchIngredientsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({batchId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (batchId) {
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.batchId,
+                        referencedTable: $$BatchIngredientsTableReferences
+                            ._batchIdTable(db),
+                        referencedColumn: $$BatchIngredientsTableReferences
+                            ._batchIdTable(db)
+                            .id,
+                      ) as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$BatchIngredientsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $BatchIngredientsTable,
+      BatchIngredient,
+      $$BatchIngredientsTableFilterComposer,
+      $$BatchIngredientsTableOrderingComposer,
+      $$BatchIngredientsTableAnnotationComposer,
+      $$BatchIngredientsTableCreateCompanionBuilder,
+      $$BatchIngredientsTableUpdateCompanionBuilder,
+      (BatchIngredient, $$BatchIngredientsTableReferences),
+      BatchIngredient,
+      PrefetchHooks Function({bool batchId})
+    >;
+typedef $$RunsTableCreateCompanionBuilder = RunsCompanion Function({
+  required String id,
+  required String batchId,
+  required String kind,
+  required DateTime startedAt,
+  Value<DateTime?> endedAt,
+  Value<double> chargeVolumeL,
+  Value<double> chargeAbv,
+  Value<double?> cubeTempStartC,
+  Value<double?> cubeTempEndC,
+  Value<String> notes,
+  Value<int> rowid,
+});
+typedef $$RunsTableUpdateCompanionBuilder = RunsCompanion Function({
+  Value<String> id,
+  Value<String> batchId,
+  Value<String> kind,
+  Value<DateTime> startedAt,
+  Value<DateTime?> endedAt,
+  Value<double> chargeVolumeL,
+  Value<double> chargeAbv,
+  Value<double?> cubeTempStartC,
+  Value<double?> cubeTempEndC,
+  Value<String> notes,
+  Value<int> rowid,
+});
+
+final class $$RunsTableReferences
+    extends BaseReferences<_$AppDatabase, $RunsTable, Run> {
+  $$RunsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $BatchesTable _batchIdTable(_$AppDatabase db) =>
+      db.batches.createAlias('runs__batch_id__batches__id');
+
+  $$BatchesTableProcessedTableManager get batchId {
+    final $_column = $_itemColumn<String>('batch_id')!;
+
+    final manager = $$BatchesTableTableManager(
+      $_db,
+      $_db.batches,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_batchIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static MultiTypedResultKey<$RunFractionsTable, List<RunFraction>>
+  _runFractionsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.runFractions,
+    aliasName: 'runs__id__run_fractions__run_id',
+  );
+
+  $$RunFractionsTableProcessedTableManager get runFractionsRefs {
+    final manager = $$RunFractionsTableTableManager(
+      $_db,
+      $_db.runFractions,
+    ).filter((f) => f.runId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_runFractionsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $$RunsTableFilterComposer extends Composer<_$AppDatabase, $RunsTable> {
+  $$RunsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get startedAt => $composableBuilder(
+    column: $table.startedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get endedAt => $composableBuilder(
+    column: $table.endedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get chargeVolumeL => $composableBuilder(
+    column: $table.chargeVolumeL,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get chargeAbv => $composableBuilder(
+    column: $table.chargeAbv,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get cubeTempStartC => $composableBuilder(
+    column: $table.cubeTempStartC,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get cubeTempEndC => $composableBuilder(
+    column: $table.cubeTempEndC,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get notes => $composableBuilder(
+    column: $table.notes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$BatchesTableFilterComposer get batchId {
+    final $$BatchesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.batchId,
+      referencedTable: $db.batches,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$BatchesTableFilterComposer(
+            $db: $db,
+            $table: $db.batches,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<bool> runFractionsRefs(
+    Expression<bool> Function($$RunFractionsTableFilterComposer f) f,
+  ) {
+    final $$RunFractionsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.runFractions,
+      getReferencedColumn: (t) => t.runId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RunFractionsTableFilterComposer(
+            $db: $db,
+            $table: $db.runFractions,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$RunsTableOrderingComposer extends Composer<_$AppDatabase, $RunsTable> {
+  $$RunsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get startedAt => $composableBuilder(
+    column: $table.startedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get endedAt => $composableBuilder(
+    column: $table.endedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get chargeVolumeL => $composableBuilder(
+    column: $table.chargeVolumeL,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get chargeAbv => $composableBuilder(
+    column: $table.chargeAbv,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get cubeTempStartC => $composableBuilder(
+    column: $table.cubeTempStartC,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get cubeTempEndC => $composableBuilder(
+    column: $table.cubeTempEndC,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get notes => $composableBuilder(
+    column: $table.notes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$BatchesTableOrderingComposer get batchId {
+    final $$BatchesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.batchId,
+      referencedTable: $db.batches,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$BatchesTableOrderingComposer(
+            $db: $db,
+            $table: $db.batches,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$RunsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $RunsTable> {
+  $$RunsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get kind =>
+      $composableBuilder(column: $table.kind, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get startedAt =>
+      $composableBuilder(column: $table.startedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get endedAt =>
+      $composableBuilder(column: $table.endedAt, builder: (column) => column);
+
+  GeneratedColumn<double> get chargeVolumeL => $composableBuilder(
+    column: $table.chargeVolumeL,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get chargeAbv =>
+      $composableBuilder(column: $table.chargeAbv, builder: (column) => column);
+
+  GeneratedColumn<double> get cubeTempStartC => $composableBuilder(
+    column: $table.cubeTempStartC,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get cubeTempEndC => $composableBuilder(
+    column: $table.cubeTempEndC,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get notes =>
+      $composableBuilder(column: $table.notes, builder: (column) => column);
+
+  $$BatchesTableAnnotationComposer get batchId {
+    final $$BatchesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.batchId,
+      referencedTable: $db.batches,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$BatchesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.batches,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<T> runFractionsRefs<T extends Object>(
+    Expression<T> Function($$RunFractionsTableAnnotationComposer a) f,
+  ) {
+    final $$RunFractionsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.runFractions,
+      getReferencedColumn: (t) => t.runId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RunFractionsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.runFractions,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$RunsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $RunsTable,
+          Run,
+          $$RunsTableFilterComposer,
+          $$RunsTableOrderingComposer,
+          $$RunsTableAnnotationComposer,
+          $$RunsTableCreateCompanionBuilder,
+          $$RunsTableUpdateCompanionBuilder,
+          (Run, $$RunsTableReferences),
+          Run,
+          PrefetchHooks Function({bool batchId, bool runFractionsRefs})
+        > {
+  $$RunsTableTableManager(_$AppDatabase db, $RunsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$RunsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$RunsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$RunsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> batchId = const Value.absent(),
+                Value<String> kind = const Value.absent(),
+                Value<DateTime> startedAt = const Value.absent(),
+                Value<DateTime?> endedAt = const Value.absent(),
+                Value<double> chargeVolumeL = const Value.absent(),
+                Value<double> chargeAbv = const Value.absent(),
+                Value<double?> cubeTempStartC = const Value.absent(),
+                Value<double?> cubeTempEndC = const Value.absent(),
+                Value<String> notes = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => RunsCompanion(
+                id: id,
+                batchId: batchId,
+                kind: kind,
+                startedAt: startedAt,
+                endedAt: endedAt,
+                chargeVolumeL: chargeVolumeL,
+                chargeAbv: chargeAbv,
+                cubeTempStartC: cubeTempStartC,
+                cubeTempEndC: cubeTempEndC,
+                notes: notes,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String batchId,
+                required String kind,
+                required DateTime startedAt,
+                Value<DateTime?> endedAt = const Value.absent(),
+                Value<double> chargeVolumeL = const Value.absent(),
+                Value<double> chargeAbv = const Value.absent(),
+                Value<double?> cubeTempStartC = const Value.absent(),
+                Value<double?> cubeTempEndC = const Value.absent(),
+                Value<String> notes = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => RunsCompanion.insert(
+                id: id,
+                batchId: batchId,
+                kind: kind,
+                startedAt: startedAt,
+                endedAt: endedAt,
+                chargeVolumeL: chargeVolumeL,
+                chargeAbv: chargeAbv,
+                cubeTempStartC: cubeTempStartC,
+                cubeTempEndC: cubeTempEndC,
+                notes: notes,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$RunsTable, Run>(table),
+                  $$RunsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({batchId = false, runFractionsRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [if (runFractionsRefs) db.runFractions],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (batchId) {
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.batchId,
+                        referencedTable: $$RunsTableReferences._batchIdTable(
+                          db,
+                        ),
+                        referencedColumn: $$RunsTableReferences
+                            ._batchIdTable(db)
+                            .id,
+                      ) as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (runFractionsRefs)
+                    await $_getPrefetchedDataByColumns<
+                      Run,
+                      $RunsTable,
+                      RunFraction,
+                      $RunFractionsTable
+                    >(
+                      currentTable: table,
+                      referencedTable: $$RunsTableReferences
+                          ._runFractionsRefsTable(db),
+                      managerFromTypedResult: (p0) =>
+                          $$RunsTableReferences(db, table, p0).runFractionsRefs,
+                      currentColumn: 'id',
+                      referencedColumn: 'run_id',
+                      typedResults: items,
+                    ),
+                ];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$RunsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $RunsTable,
+      Run,
+      $$RunsTableFilterComposer,
+      $$RunsTableOrderingComposer,
+      $$RunsTableAnnotationComposer,
+      $$RunsTableCreateCompanionBuilder,
+      $$RunsTableUpdateCompanionBuilder,
+      (Run, $$RunsTableReferences),
+      Run,
+      PrefetchHooks Function({bool batchId, bool runFractionsRefs})
+    >;
+typedef $$RunFractionsTableCreateCompanionBuilder =
+    RunFractionsCompanion Function({
+      Value<int> id,
+      required String runId,
+      Value<int> jarNo,
+      required String kind,
+      required double volumeMl,
+      required double abv,
+      Value<double?> tempC,
+      Value<String> note,
+    });
+typedef $$RunFractionsTableUpdateCompanionBuilder =
+    RunFractionsCompanion Function({
+      Value<int> id,
+      Value<String> runId,
+      Value<int> jarNo,
+      Value<String> kind,
+      Value<double> volumeMl,
+      Value<double> abv,
+      Value<double?> tempC,
+      Value<String> note,
+    });
+
+final class $$RunFractionsTableReferences
+    extends BaseReferences<_$AppDatabase, $RunFractionsTable, RunFraction> {
+  $$RunFractionsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $RunsTable _runIdTable(_$AppDatabase db) =>
+      db.runs.createAlias('run_fractions__run_id__runs__id');
+
+  $$RunsTableProcessedTableManager get runId {
+    final $_column = $_itemColumn<String>('run_id')!;
+
+    final manager = $$RunsTableTableManager(
+      $_db,
+      $_db.runs,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_runIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$RunFractionsTableFilterComposer
+    extends Composer<_$AppDatabase, $RunFractionsTable> {
+  $$RunFractionsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get jarNo => $composableBuilder(
+    column: $table.jarNo,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get volumeMl => $composableBuilder(
+    column: $table.volumeMl,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get abv => $composableBuilder(
+    column: $table.abv,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get tempC => $composableBuilder(
+    column: $table.tempC,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$RunsTableFilterComposer get runId {
+    final $$RunsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.runId,
+      referencedTable: $db.runs,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RunsTableFilterComposer(
+            $db: $db,
+            $table: $db.runs,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$RunFractionsTableOrderingComposer
+    extends Composer<_$AppDatabase, $RunFractionsTable> {
+  $$RunFractionsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get jarNo => $composableBuilder(
+    column: $table.jarNo,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get volumeMl => $composableBuilder(
+    column: $table.volumeMl,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get abv => $composableBuilder(
+    column: $table.abv,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get tempC => $composableBuilder(
+    column: $table.tempC,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$RunsTableOrderingComposer get runId {
+    final $$RunsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.runId,
+      referencedTable: $db.runs,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RunsTableOrderingComposer(
+            $db: $db,
+            $table: $db.runs,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$RunFractionsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $RunFractionsTable> {
+  $$RunFractionsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get jarNo =>
+      $composableBuilder(column: $table.jarNo, builder: (column) => column);
+
+  GeneratedColumn<String> get kind =>
+      $composableBuilder(column: $table.kind, builder: (column) => column);
+
+  GeneratedColumn<double> get volumeMl =>
+      $composableBuilder(column: $table.volumeMl, builder: (column) => column);
+
+  GeneratedColumn<double> get abv =>
+      $composableBuilder(column: $table.abv, builder: (column) => column);
+
+  GeneratedColumn<double> get tempC =>
+      $composableBuilder(column: $table.tempC, builder: (column) => column);
+
+  GeneratedColumn<String> get note =>
+      $composableBuilder(column: $table.note, builder: (column) => column);
+
+  $$RunsTableAnnotationComposer get runId {
+    final $$RunsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.runId,
+      referencedTable: $db.runs,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RunsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.runs,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$RunFractionsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $RunFractionsTable,
+          RunFraction,
+          $$RunFractionsTableFilterComposer,
+          $$RunFractionsTableOrderingComposer,
+          $$RunFractionsTableAnnotationComposer,
+          $$RunFractionsTableCreateCompanionBuilder,
+          $$RunFractionsTableUpdateCompanionBuilder,
+          (RunFraction, $$RunFractionsTableReferences),
+          RunFraction,
+          PrefetchHooks Function({bool runId})
+        > {
+  $$RunFractionsTableTableManager(_$AppDatabase db, $RunFractionsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$RunFractionsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$RunFractionsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$RunFractionsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> runId = const Value.absent(),
+                Value<int> jarNo = const Value.absent(),
+                Value<String> kind = const Value.absent(),
+                Value<double> volumeMl = const Value.absent(),
+                Value<double> abv = const Value.absent(),
+                Value<double?> tempC = const Value.absent(),
+                Value<String> note = const Value.absent(),
+              }) => RunFractionsCompanion(
+                id: id,
+                runId: runId,
+                jarNo: jarNo,
+                kind: kind,
+                volumeMl: volumeMl,
+                abv: abv,
+                tempC: tempC,
+                note: note,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String runId,
+                Value<int> jarNo = const Value.absent(),
+                required String kind,
+                required double volumeMl,
+                required double abv,
+                Value<double?> tempC = const Value.absent(),
+                Value<String> note = const Value.absent(),
+              }) => RunFractionsCompanion.insert(
+                id: id,
+                runId: runId,
+                jarNo: jarNo,
+                kind: kind,
+                volumeMl: volumeMl,
+                abv: abv,
+                tempC: tempC,
+                note: note,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$RunFractionsTable, RunFraction>(table),
+                  $$RunFractionsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({runId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (runId) {
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.runId,
+                        referencedTable: $$RunFractionsTableReferences
+                            ._runIdTable(db),
+                        referencedColumn: $$RunFractionsTableReferences
+                            ._runIdTable(db)
+                            .id,
+                      ) as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$RunFractionsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $RunFractionsTable,
+      RunFraction,
+      $$RunFractionsTableFilterComposer,
+      $$RunFractionsTableOrderingComposer,
+      $$RunFractionsTableAnnotationComposer,
+      $$RunFractionsTableCreateCompanionBuilder,
+      $$RunFractionsTableUpdateCompanionBuilder,
+      (RunFraction, $$RunFractionsTableReferences),
+      RunFraction,
+      PrefetchHooks Function({bool runId})
+    >;
+typedef $$VesselsTableCreateCompanionBuilder = VesselsCompanion Function({
+  required String id,
+  required String name,
+  required String kind,
+  required double volumeL,
+  Value<String> material,
+  Value<int?> charLevel,
+  Value<String> location,
+  Value<bool> isOccupied,
+  Value<int> rowid,
+});
+typedef $$VesselsTableUpdateCompanionBuilder = VesselsCompanion Function({
+  Value<String> id,
+  Value<String> name,
+  Value<String> kind,
+  Value<double> volumeL,
+  Value<String> material,
+  Value<int?> charLevel,
+  Value<String> location,
+  Value<bool> isOccupied,
+  Value<int> rowid,
+});
+
+final class $$VesselsTableReferences
+    extends BaseReferences<_$AppDatabase, $VesselsTable, Vessel> {
+  $$VesselsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$AgingTable, List<AgingEntry>> _agingRefsTable(
+    _$AppDatabase db,
+  ) => MultiTypedResultKey.fromTable(
+    db.aging,
+    aliasName: 'vessels__id__aging__vessel_id',
+  );
+
+  $$AgingTableProcessedTableManager get agingRefs {
+    final manager = $$AgingTableTableManager(
+      $_db,
+      $_db.aging,
+    ).filter((f) => f.vesselId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_agingRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $$VesselsTableFilterComposer
+    extends Composer<_$AppDatabase, $VesselsTable> {
+  $$VesselsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get volumeL => $composableBuilder(
+    column: $table.volumeL,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get material => $composableBuilder(
+    column: $table.material,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get charLevel => $composableBuilder(
+    column: $table.charLevel,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get location => $composableBuilder(
+    column: $table.location,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isOccupied => $composableBuilder(
+    column: $table.isOccupied,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  Expression<bool> agingRefs(
+    Expression<bool> Function($$AgingTableFilterComposer f) f,
+  ) {
+    final $$AgingTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.aging,
+      getReferencedColumn: (t) => t.vesselId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AgingTableFilterComposer(
+            $db: $db,
+            $table: $db.aging,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$VesselsTableOrderingComposer
+    extends Composer<_$AppDatabase, $VesselsTable> {
+  $$VesselsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get volumeL => $composableBuilder(
+    column: $table.volumeL,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get material => $composableBuilder(
+    column: $table.material,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get charLevel => $composableBuilder(
+    column: $table.charLevel,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get location => $composableBuilder(
+    column: $table.location,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isOccupied => $composableBuilder(
+    column: $table.isOccupied,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$VesselsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $VesselsTable> {
+  $$VesselsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get kind =>
+      $composableBuilder(column: $table.kind, builder: (column) => column);
+
+  GeneratedColumn<double> get volumeL =>
+      $composableBuilder(column: $table.volumeL, builder: (column) => column);
+
+  GeneratedColumn<String> get material =>
+      $composableBuilder(column: $table.material, builder: (column) => column);
+
+  GeneratedColumn<int> get charLevel =>
+      $composableBuilder(column: $table.charLevel, builder: (column) => column);
+
+  GeneratedColumn<String> get location =>
+      $composableBuilder(column: $table.location, builder: (column) => column);
+
+  GeneratedColumn<bool> get isOccupied => $composableBuilder(
+    column: $table.isOccupied,
+    builder: (column) => column,
+  );
+
+  Expression<T> agingRefs<T extends Object>(
+    Expression<T> Function($$AgingTableAnnotationComposer a) f,
+  ) {
+    final $$AgingTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.aging,
+      getReferencedColumn: (t) => t.vesselId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AgingTableAnnotationComposer(
+            $db: $db,
+            $table: $db.aging,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$VesselsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $VesselsTable,
+          Vessel,
+          $$VesselsTableFilterComposer,
+          $$VesselsTableOrderingComposer,
+          $$VesselsTableAnnotationComposer,
+          $$VesselsTableCreateCompanionBuilder,
+          $$VesselsTableUpdateCompanionBuilder,
+          (Vessel, $$VesselsTableReferences),
+          Vessel,
+          PrefetchHooks Function({bool agingRefs})
+        > {
+  $$VesselsTableTableManager(_$AppDatabase db, $VesselsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$VesselsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$VesselsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$VesselsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String> kind = const Value.absent(),
+                Value<double> volumeL = const Value.absent(),
+                Value<String> material = const Value.absent(),
+                Value<int?> charLevel = const Value.absent(),
+                Value<String> location = const Value.absent(),
+                Value<bool> isOccupied = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => VesselsCompanion(
+                id: id,
+                name: name,
+                kind: kind,
+                volumeL: volumeL,
+                material: material,
+                charLevel: charLevel,
+                location: location,
+                isOccupied: isOccupied,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String name,
+                required String kind,
+                required double volumeL,
+                Value<String> material = const Value.absent(),
+                Value<int?> charLevel = const Value.absent(),
+                Value<String> location = const Value.absent(),
+                Value<bool> isOccupied = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => VesselsCompanion.insert(
+                id: id,
+                name: name,
+                kind: kind,
+                volumeL: volumeL,
+                material: material,
+                charLevel: charLevel,
+                location: location,
+                isOccupied: isOccupied,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$VesselsTable, Vessel>(table),
+                  $$VesselsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({agingRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [if (agingRefs) db.aging],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (agingRefs)
+                    await $_getPrefetchedDataByColumns<
+                      Vessel,
+                      $VesselsTable,
+                      AgingEntry,
+                      $AgingTable
+                    >(
+                      currentTable: table,
+                      referencedTable: $$VesselsTableReferences._agingRefsTable(
+                        db,
+                      ),
+                      managerFromTypedResult: (p0) =>
+                          $$VesselsTableReferences(db, table, p0).agingRefs,
+                      currentColumn: 'id',
+                      referencedColumn: 'vessel_id',
+                      typedResults: items,
+                    ),
+                ];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$VesselsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $VesselsTable,
+      Vessel,
+      $$VesselsTableFilterComposer,
+      $$VesselsTableOrderingComposer,
+      $$VesselsTableAnnotationComposer,
+      $$VesselsTableCreateCompanionBuilder,
+      $$VesselsTableUpdateCompanionBuilder,
+      (Vessel, $$VesselsTableReferences),
+      Vessel,
+      PrefetchHooks Function({bool agingRefs})
+    >;
+typedef $$AgingTableCreateCompanionBuilder = AgingCompanion Function({
+  required String id,
+  required String batchId,
+  Value<String?> vesselId,
+  required DateTime startedAt,
+  Value<DateTime?> plannedEndAt,
+  Value<double> angelSharePctYear,
+  Value<DateTime?> lastToppedAt,
+  Value<String> notes,
+  Value<int> rowid,
+});
+typedef $$AgingTableUpdateCompanionBuilder = AgingCompanion Function({
+  Value<String> id,
+  Value<String> batchId,
+  Value<String?> vesselId,
+  Value<DateTime> startedAt,
+  Value<DateTime?> plannedEndAt,
+  Value<double> angelSharePctYear,
+  Value<DateTime?> lastToppedAt,
+  Value<String> notes,
+  Value<int> rowid,
+});
+
+final class $$AgingTableReferences
+    extends BaseReferences<_$AppDatabase, $AgingTable, AgingEntry> {
+  $$AgingTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $BatchesTable _batchIdTable(_$AppDatabase db) =>
+      db.batches.createAlias('aging__batch_id__batches__id');
+
+  $$BatchesTableProcessedTableManager get batchId {
+    final $_column = $_itemColumn<String>('batch_id')!;
+
+    final manager = $$BatchesTableTableManager(
+      $_db,
+      $_db.batches,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_batchIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static $VesselsTable _vesselIdTable(_$AppDatabase db) =>
+      db.vessels.createAlias('aging__vessel_id__vessels__id');
+
+  $$VesselsTableProcessedTableManager? get vesselId {
+    final $_column = $_itemColumn<String>('vessel_id');
+    if ($_column == null) return null;
+    final manager = $$VesselsTableTableManager(
+      $_db,
+      $_db.vessels,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_vesselIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$AgingTableFilterComposer extends Composer<_$AppDatabase, $AgingTable> {
+  $$AgingTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get startedAt => $composableBuilder(
+    column: $table.startedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get plannedEndAt => $composableBuilder(
+    column: $table.plannedEndAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get angelSharePctYear => $composableBuilder(
+    column: $table.angelSharePctYear,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get lastToppedAt => $composableBuilder(
+    column: $table.lastToppedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get notes => $composableBuilder(
+    column: $table.notes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$BatchesTableFilterComposer get batchId {
+    final $$BatchesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.batchId,
+      referencedTable: $db.batches,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$BatchesTableFilterComposer(
+            $db: $db,
+            $table: $db.batches,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$VesselsTableFilterComposer get vesselId {
+    final $$VesselsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.vesselId,
+      referencedTable: $db.vessels,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$VesselsTableFilterComposer(
+            $db: $db,
+            $table: $db.vessels,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$AgingTableOrderingComposer
+    extends Composer<_$AppDatabase, $AgingTable> {
+  $$AgingTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get startedAt => $composableBuilder(
+    column: $table.startedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get plannedEndAt => $composableBuilder(
+    column: $table.plannedEndAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get angelSharePctYear => $composableBuilder(
+    column: $table.angelSharePctYear,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get lastToppedAt => $composableBuilder(
+    column: $table.lastToppedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get notes => $composableBuilder(
+    column: $table.notes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$BatchesTableOrderingComposer get batchId {
+    final $$BatchesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.batchId,
+      referencedTable: $db.batches,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$BatchesTableOrderingComposer(
+            $db: $db,
+            $table: $db.batches,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$VesselsTableOrderingComposer get vesselId {
+    final $$VesselsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.vesselId,
+      referencedTable: $db.vessels,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$VesselsTableOrderingComposer(
+            $db: $db,
+            $table: $db.vessels,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$AgingTableAnnotationComposer
+    extends Composer<_$AppDatabase, $AgingTable> {
+  $$AgingTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get startedAt =>
+      $composableBuilder(column: $table.startedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get plannedEndAt => $composableBuilder(
+    column: $table.plannedEndAt,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get angelSharePctYear => $composableBuilder(
+    column: $table.angelSharePctYear,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get lastToppedAt => $composableBuilder(
+    column: $table.lastToppedAt,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get notes =>
+      $composableBuilder(column: $table.notes, builder: (column) => column);
+
+  $$BatchesTableAnnotationComposer get batchId {
+    final $$BatchesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.batchId,
+      referencedTable: $db.batches,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$BatchesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.batches,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$VesselsTableAnnotationComposer get vesselId {
+    final $$VesselsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.vesselId,
+      referencedTable: $db.vessels,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$VesselsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.vessels,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$AgingTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $AgingTable,
+          AgingEntry,
+          $$AgingTableFilterComposer,
+          $$AgingTableOrderingComposer,
+          $$AgingTableAnnotationComposer,
+          $$AgingTableCreateCompanionBuilder,
+          $$AgingTableUpdateCompanionBuilder,
+          (AgingEntry, $$AgingTableReferences),
+          AgingEntry,
+          PrefetchHooks Function({bool batchId, bool vesselId})
+        > {
+  $$AgingTableTableManager(_$AppDatabase db, $AgingTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$AgingTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$AgingTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$AgingTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> batchId = const Value.absent(),
+                Value<String?> vesselId = const Value.absent(),
+                Value<DateTime> startedAt = const Value.absent(),
+                Value<DateTime?> plannedEndAt = const Value.absent(),
+                Value<double> angelSharePctYear = const Value.absent(),
+                Value<DateTime?> lastToppedAt = const Value.absent(),
+                Value<String> notes = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => AgingCompanion(
+                id: id,
+                batchId: batchId,
+                vesselId: vesselId,
+                startedAt: startedAt,
+                plannedEndAt: plannedEndAt,
+                angelSharePctYear: angelSharePctYear,
+                lastToppedAt: lastToppedAt,
+                notes: notes,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String batchId,
+                Value<String?> vesselId = const Value.absent(),
+                required DateTime startedAt,
+                Value<DateTime?> plannedEndAt = const Value.absent(),
+                Value<double> angelSharePctYear = const Value.absent(),
+                Value<DateTime?> lastToppedAt = const Value.absent(),
+                Value<String> notes = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => AgingCompanion.insert(
+                id: id,
+                batchId: batchId,
+                vesselId: vesselId,
+                startedAt: startedAt,
+                plannedEndAt: plannedEndAt,
+                angelSharePctYear: angelSharePctYear,
+                lastToppedAt: lastToppedAt,
+                notes: notes,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$AgingTable, AgingEntry>(table),
+                  $$AgingTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({batchId = false, vesselId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (batchId) {
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.batchId,
+                        referencedTable: $$AgingTableReferences._batchIdTable(
+                          db,
+                        ),
+                        referencedColumn: $$AgingTableReferences
+                            ._batchIdTable(db)
+                            .id,
+                      ) as T;
+                    }
+                    if (vesselId) {
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.vesselId,
+                        referencedTable: $$AgingTableReferences._vesselIdTable(
+                          db,
+                        ),
+                        referencedColumn: $$AgingTableReferences
+                            ._vesselIdTable(db)
+                            .id,
+                      ) as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$AgingTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $AgingTable,
+      AgingEntry,
+      $$AgingTableFilterComposer,
+      $$AgingTableOrderingComposer,
+      $$AgingTableAnnotationComposer,
+      $$AgingTableCreateCompanionBuilder,
+      $$AgingTableUpdateCompanionBuilder,
+      (AgingEntry, $$AgingTableReferences),
+      AgingEntry,
+      PrefetchHooks Function({bool batchId, bool vesselId})
+    >;
+typedef $$TastingsTableCreateCompanionBuilder = TastingsCompanion Function({
+  required String id,
+  required String batchId,
+  required DateTime at,
+  Value<int> rating,
+  Value<String> aroma,
+  Value<String> taste,
+  Value<String> finish,
+  Value<String> verdict,
+  Value<String> photoPath,
+  Value<int> rowid,
+});
+typedef $$TastingsTableUpdateCompanionBuilder = TastingsCompanion Function({
+  Value<String> id,
+  Value<String> batchId,
+  Value<DateTime> at,
+  Value<int> rating,
+  Value<String> aroma,
+  Value<String> taste,
+  Value<String> finish,
+  Value<String> verdict,
+  Value<String> photoPath,
+  Value<int> rowid,
+});
+
+final class $$TastingsTableReferences
+    extends BaseReferences<_$AppDatabase, $TastingsTable, Tasting> {
+  $$TastingsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $BatchesTable _batchIdTable(_$AppDatabase db) =>
+      db.batches.createAlias('tastings__batch_id__batches__id');
+
+  $$BatchesTableProcessedTableManager get batchId {
+    final $_column = $_itemColumn<String>('batch_id')!;
+
+    final manager = $$BatchesTableTableManager(
+      $_db,
+      $_db.batches,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_batchIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$TastingsTableFilterComposer
+    extends Composer<_$AppDatabase, $TastingsTable> {
+  $$TastingsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get at => $composableBuilder(
+    column: $table.at,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get rating => $composableBuilder(
+    column: $table.rating,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get aroma => $composableBuilder(
+    column: $table.aroma,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get taste => $composableBuilder(
+    column: $table.taste,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get finish => $composableBuilder(
+    column: $table.finish,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get verdict => $composableBuilder(
+    column: $table.verdict,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get photoPath => $composableBuilder(
+    column: $table.photoPath,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$BatchesTableFilterComposer get batchId {
+    final $$BatchesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.batchId,
+      referencedTable: $db.batches,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$BatchesTableFilterComposer(
+            $db: $db,
+            $table: $db.batches,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$TastingsTableOrderingComposer
+    extends Composer<_$AppDatabase, $TastingsTable> {
+  $$TastingsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get at => $composableBuilder(
+    column: $table.at,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get rating => $composableBuilder(
+    column: $table.rating,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get aroma => $composableBuilder(
+    column: $table.aroma,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get taste => $composableBuilder(
+    column: $table.taste,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get finish => $composableBuilder(
+    column: $table.finish,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get verdict => $composableBuilder(
+    column: $table.verdict,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get photoPath => $composableBuilder(
+    column: $table.photoPath,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$BatchesTableOrderingComposer get batchId {
+    final $$BatchesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.batchId,
+      referencedTable: $db.batches,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$BatchesTableOrderingComposer(
+            $db: $db,
+            $table: $db.batches,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$TastingsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $TastingsTable> {
+  $$TastingsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get at =>
+      $composableBuilder(column: $table.at, builder: (column) => column);
+
+  GeneratedColumn<int> get rating =>
+      $composableBuilder(column: $table.rating, builder: (column) => column);
+
+  GeneratedColumn<String> get aroma =>
+      $composableBuilder(column: $table.aroma, builder: (column) => column);
+
+  GeneratedColumn<String> get taste =>
+      $composableBuilder(column: $table.taste, builder: (column) => column);
+
+  GeneratedColumn<String> get finish =>
+      $composableBuilder(column: $table.finish, builder: (column) => column);
+
+  GeneratedColumn<String> get verdict =>
+      $composableBuilder(column: $table.verdict, builder: (column) => column);
+
+  GeneratedColumn<String> get photoPath =>
+      $composableBuilder(column: $table.photoPath, builder: (column) => column);
+
+  $$BatchesTableAnnotationComposer get batchId {
+    final $$BatchesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.batchId,
+      referencedTable: $db.batches,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$BatchesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.batches,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$TastingsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $TastingsTable,
+          Tasting,
+          $$TastingsTableFilterComposer,
+          $$TastingsTableOrderingComposer,
+          $$TastingsTableAnnotationComposer,
+          $$TastingsTableCreateCompanionBuilder,
+          $$TastingsTableUpdateCompanionBuilder,
+          (Tasting, $$TastingsTableReferences),
+          Tasting,
+          PrefetchHooks Function({bool batchId})
+        > {
+  $$TastingsTableTableManager(_$AppDatabase db, $TastingsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$TastingsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$TastingsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$TastingsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> batchId = const Value.absent(),
+                Value<DateTime> at = const Value.absent(),
+                Value<int> rating = const Value.absent(),
+                Value<String> aroma = const Value.absent(),
+                Value<String> taste = const Value.absent(),
+                Value<String> finish = const Value.absent(),
+                Value<String> verdict = const Value.absent(),
+                Value<String> photoPath = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => TastingsCompanion(
+                id: id,
+                batchId: batchId,
+                at: at,
+                rating: rating,
+                aroma: aroma,
+                taste: taste,
+                finish: finish,
+                verdict: verdict,
+                photoPath: photoPath,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String batchId,
+                required DateTime at,
+                Value<int> rating = const Value.absent(),
+                Value<String> aroma = const Value.absent(),
+                Value<String> taste = const Value.absent(),
+                Value<String> finish = const Value.absent(),
+                Value<String> verdict = const Value.absent(),
+                Value<String> photoPath = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => TastingsCompanion.insert(
+                id: id,
+                batchId: batchId,
+                at: at,
+                rating: rating,
+                aroma: aroma,
+                taste: taste,
+                finish: finish,
+                verdict: verdict,
+                photoPath: photoPath,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$TastingsTable, Tasting>(table),
+                  $$TastingsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({batchId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (batchId) {
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.batchId,
+                        referencedTable: $$TastingsTableReferences
+                            ._batchIdTable(db),
+                        referencedColumn: $$TastingsTableReferences
+                            ._batchIdTable(db)
+                            .id,
+                      ) as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$TastingsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $TastingsTable,
+      Tasting,
+      $$TastingsTableFilterComposer,
+      $$TastingsTableOrderingComposer,
+      $$TastingsTableAnnotationComposer,
+      $$TastingsTableCreateCompanionBuilder,
+      $$TastingsTableUpdateCompanionBuilder,
+      (Tasting, $$TastingsTableReferences),
+      Tasting,
+      PrefetchHooks Function({bool batchId})
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -6826,4 +12795,15 @@ class $AppDatabaseManager {
       $$MeasurementsTableTableManager(_db, _db.measurements);
   $$AppMetaTableTableManager get appMeta =>
       $$AppMetaTableTableManager(_db, _db.appMeta);
+  $$BatchIngredientsTableTableManager get batchIngredients =>
+      $$BatchIngredientsTableTableManager(_db, _db.batchIngredients);
+  $$RunsTableTableManager get runs => $$RunsTableTableManager(_db, _db.runs);
+  $$RunFractionsTableTableManager get runFractions =>
+      $$RunFractionsTableTableManager(_db, _db.runFractions);
+  $$VesselsTableTableManager get vessels =>
+      $$VesselsTableTableManager(_db, _db.vessels);
+  $$AgingTableTableManager get aging =>
+      $$AgingTableTableManager(_db, _db.aging);
+  $$TastingsTableTableManager get tastings =>
+      $$TastingsTableTableManager(_db, _db.tastings);
 }

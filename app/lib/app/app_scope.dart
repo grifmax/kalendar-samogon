@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../data/db/app_database.dart';
 import '../data/repositories/batch_repository.dart';
+import '../data/repositories/production_repository.dart';
 import '../data/repositories/recipe_repository.dart';
 import '../services/backup_service.dart';
 import '../services/notification_service.dart';
@@ -17,6 +18,7 @@ class AppScope extends InheritedWidget {
     required this.db,
     required this.recipes,
     required this.batches,
+    required this.production,
     required this.notifications,
     required this.backup,
     required super.child,
@@ -25,6 +27,7 @@ class AppScope extends InheritedWidget {
   final AppDatabase db;
   final RecipeRepository recipes;
   final BatchRepository batches;
+  final ProductionRepository production;
   final NotificationService notifications;
   final BackupService backup;
 

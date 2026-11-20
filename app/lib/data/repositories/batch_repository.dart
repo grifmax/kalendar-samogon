@@ -42,6 +42,9 @@ class BatchRepository {
     required DateTime startedAt,
     required double volumeL,
     String notes = '',
+
+    /// Состав с правками пользователя. Если пусто — копируется из рецепта.
+    List<({String name, double amount, String unit, String note})>? ingredients,
   }) async {
     final id = _uuid.v4();
     final count = await _nextCodeIndex();
@@ -59,6 +62,22 @@ class BatchRepository {
               notes: Value(notes),
             ),
           );
+
+      if (ingredients != null && ingredients.isNotEmpty) {
+        for (var i = 0; i < ingredients.length; i++) {
+          final ing = ingredients[i];
+          await db.into(db.batchIngredients).insert(
+                BatchIngredientsCompanion.insert(
+                  batchId: id,
+                  sortOrder: Value(i),
+                  name: ing.name,
+                  amount: ing.amount,
+                  unit: ing.unit,
+                  note: Value(ing.note),
+                ),
+              );
+        }
+      }
 
       for (final step in steps) {
         for (final at in _eventDates(step, startedAt)) {
@@ -128,6 +147,19 @@ class BatchRepository {
       BatchesCompanion(notes: Value(notes), updatedAt: Value(DateTime.now())),
     );
   }
+
+  /// Состав, сохранённый в партии (с правками).
+  Stream<List<BatchIngredient>> watchIngredients(String batchId) =>
+      (db.select(db.batchIngredients)
+            ..where((t) => t.batchId.equals(batchId))
+            ..orderBy([(t) => OrderingTerm(expression: t.sortOrder)]))
+          .watch();
+
+  Future<List<BatchIngredient>> ingredients(String batchId) =>
+      (db.select(db.batchIngredients)
+            ..where((t) => t.batchId.equals(batchId))
+            ..orderBy([(t) => OrderingTerm(expression: t.sortOrder)]))
+          .get();
 
   Future<void> deleteBatch(String id) async {
     await (db.delete(db.batches)..where((t) => t.id.equals(id))).go();
