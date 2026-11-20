@@ -16,7 +16,7 @@ class BackupService {
 
   final AppDatabase db;
 
-  static const backupVersion = 3;
+  static const backupVersion = 4;
 
   Future<Map<String, dynamic>> exportToMap() async {
     final recipes = await db.select(db.recipes).get();
@@ -279,6 +279,7 @@ class BackupService {
         eventKind: Value(m['eventKind'] as String? ?? 'check'),
         repeatEveryDays: Value((m['repeatEveryDays'] as num?)?.toInt()),
         repeatUntilDay: Value((m['repeatUntilDay'] as num?)?.toInt()),
+        repeatTitle: Value(m['repeatTitle'] as String? ?? ''),
       );
 
   Map<String, dynamic> _batchToMap(Batch b) => {

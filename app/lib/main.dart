@@ -66,6 +66,14 @@ class _BootstrapAppState extends State<BootstrapApp> {
     final db = AppDatabase();
     await RecipeSeeder(db).seedIfNeeded();
 
+    // Партии, заведённые до 0.11.0, хранят старые названия повторов —
+    // подтягиваем их к текущим шагам рецепта.
+    try {
+      await BatchRepository(db).repairRepeatEventTitles();
+    } catch (e) {
+      debugPrint('Ремонт названий повторов не удался: $e');
+    }
+
     final notifications = NotificationService();
     // Не блокируем старт, если разрешения не выданы или сервис недоступен.
     notifications.init().catchError((Object e) {

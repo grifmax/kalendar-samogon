@@ -31,19 +31,41 @@ class _StepRow {
     String day = '0',
     String minutes = '',
     String temp = '',
+    String repeatEvery = '',
+    String repeatUntil = '',
+    String repeatTitle = '',
     this.eventKind = 'check',
   })  : titleController = TextEditingController(text: title),
         descriptionController = TextEditingController(text: description),
         dayController = TextEditingController(text: day),
         minutesController = TextEditingController(text: minutes),
-        tempController = TextEditingController(text: temp);
+        tempController = TextEditingController(text: temp),
+        repeatEveryController = TextEditingController(text: repeatEvery),
+        repeatUntilController = TextEditingController(text: repeatUntil),
+        repeatTitleController = TextEditingController(text: repeatTitle);
 
   final TextEditingController titleController;
   final TextEditingController descriptionController;
   final TextEditingController dayController;
   final TextEditingController minutesController;
   final TextEditingController tempController;
+  final TextEditingController repeatEveryController;
+  final TextEditingController repeatUntilController;
+  final TextEditingController repeatTitleController;
   String eventKind;
+
+  int? get repeatEvery {
+    final v = int.tryParse(repeatEveryController.text.trim());
+    return v != null && v > 0 ? v : null;
+  }
+
+  int? get repeatUntil {
+    final v = int.tryParse(repeatUntilController.text.trim());
+    return v != null && v > 0 ? v : null;
+  }
+
+  /// Повтор задан, только если указаны и шаг, и последний день.
+  bool get hasRepeat => repeatEvery != null && repeatUntil != null;
 
   int get day => int.tryParse(dayController.text.trim()) ?? 0;
   int? get minutes {
@@ -62,6 +84,9 @@ class _StepRow {
     dayController.dispose();
     minutesController.dispose();
     tempController.dispose();
+    repeatEveryController.dispose();
+    repeatUntilController.dispose();
+    repeatTitleController.dispose();
   }
 }
 
@@ -169,6 +194,9 @@ class _RecipeEditScreenState extends State<RecipeEditScreen> {
           day: step.offsetDays.toString(),
           minutes: step.durationMin?.toString() ?? '',
           temp: step.tempC == null ? '' : formatNumber(step.tempC!),
+          repeatEvery: step.repeatEveryDays?.toString() ?? '',
+          repeatUntil: step.repeatUntilDay?.toString() ?? '',
+          repeatTitle: step.repeatTitle,
           eventKind: step.eventKind,
         ));
       }
@@ -259,6 +287,9 @@ class _RecipeEditScreenState extends State<RecipeEditScreen> {
             durationMin: row.minutes,
             tempC: row.temp,
             eventKind: row.eventKind,
+            repeatEveryDays: row.hasRepeat ? row.repeatEvery : null,
+            repeatUntilDay: row.hasRepeat ? row.repeatUntil : null,
+            repeatTitle: row.hasRepeat ? row.repeatTitleController.text.trim() : '',
           ),
     ];
 
@@ -496,6 +527,9 @@ class _RecipeEditScreenState extends State<RecipeEditScreen> {
             durationMin: row.minutes,
             tempC: row.temp,
             eventKind: row.eventKind,
+            repeatEveryDays: row.hasRepeat ? row.repeatEvery : null,
+            repeatUntilDay: row.hasRepeat ? row.repeatUntil : null,
+            repeatTitle: row.hasRepeat ? row.repeatTitleController.text.trim() : '',
           ),
     ];
 
@@ -721,6 +755,54 @@ class _StepEditor extends StatelessWidget {
                 ),
               ],
             ),
+            const SizedBox(height: FormSpacing.fieldToHint),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: row.repeatEveryController,
+                    enabled: enabled,
+                    keyboardType: TextInputType.number,
+                    onChanged: (_) => onChanged(),
+                    decoration: const InputDecoration(
+                      labelText: 'Повтор, дн.',
+                      helperText: 'пусто — без повтора',
+                      border: OutlineInputBorder(),
+                      isDense: true,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: TextField(
+                    controller: row.repeatUntilController,
+                    enabled: enabled,
+                    keyboardType: TextInputType.number,
+                    onChanged: (_) => onChanged(),
+                    decoration: const InputDecoration(
+                      labelText: 'До дня',
+                      border: OutlineInputBorder(),
+                      isDense: true,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            if (row.hasRepeat) ...[
+              const SizedBox(height: FormSpacing.fieldToHint),
+              TextField(
+                controller: row.repeatTitleController,
+                enabled: enabled,
+                onChanged: (_) => onChanged(),
+                decoration: const InputDecoration(
+                  labelText: 'Название повтора',
+                  hintText: 'Взболтать',
+                  helperText: 'Так подпишутся повторные события, а не первое',
+                  border: OutlineInputBorder(),
+                  isDense: true,
+                ),
+              ),
+            ],
             const SizedBox(height: FormSpacing.fieldToHint),
             DropdownButtonFormField<String>(
               initialValue:

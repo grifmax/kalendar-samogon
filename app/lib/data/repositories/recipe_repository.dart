@@ -58,7 +58,10 @@ class RecipeRepository {
               int offsetDays,
               int? durationMin,
               double? tempC,
-              String eventKind
+              String eventKind,
+              int? repeatEveryDays,
+              int? repeatUntilDay,
+              String repeatTitle
             })>
         steps = const [],
   }) async {
@@ -98,7 +101,10 @@ class RecipeRepository {
               int offsetDays,
               int? durationMin,
               double? tempC,
-              String eventKind
+              String eventKind,
+              int? repeatEveryDays,
+              int? repeatUntilDay,
+              String repeatTitle
             })>?
         steps,
   }) async {
@@ -141,7 +147,10 @@ class RecipeRepository {
               int offsetDays,
               int? durationMin,
               double? tempC,
-              String eventKind
+              String eventKind,
+              int? repeatEveryDays,
+              int? repeatUntilDay,
+              String repeatTitle
             })>
         steps,
   ) async {
@@ -170,6 +179,9 @@ class RecipeRepository {
               durationMin: Value(s.durationMin),
               tempC: Value(s.tempC),
               eventKind: Value(s.eventKind),
+              repeatEveryDays: Value(s.repeatEveryDays),
+              repeatUntilDay: Value(s.repeatUntilDay),
+              repeatTitle: Value(s.repeatTitle),
             ),
           );
     }

@@ -353,7 +353,8 @@
      "tempC": null,
      "eventKind": "check",
      "repeatEveryDays": 2,
-     "repeatUntilDay": 8
+     "repeatUntilDay": 8,
+     "repeatTitle": "Проверить брожение"
     },
     {
      "title": "Замер плотности",
@@ -462,7 +463,8 @@
      "tempC": null,
      "eventKind": "check",
      "repeatEveryDays": 2,
-     "repeatUntilDay": 9
+     "repeatUntilDay": 9,
+     "repeatTitle": "Проверить брожение"
     },
     {
      "title": "Готовность",
@@ -560,7 +562,8 @@
      "tempC": null,
      "eventKind": "check",
      "repeatEveryDays": 2,
-     "repeatUntilDay": 10
+     "repeatUntilDay": 10,
+     "repeatTitle": "Проверить брожение"
     },
     {
      "title": "Готовность",
@@ -763,7 +766,8 @@
      "tempC": null,
      "eventKind": "check",
      "repeatEveryDays": 2,
-     "repeatUntilDay": 8
+     "repeatUntilDay": 8,
+     "repeatTitle": "Проверить брожение"
     },
     {
      "title": "Готовность",
@@ -847,7 +851,8 @@
      "tempC": null,
      "eventKind": "check",
      "repeatEveryDays": 3,
-     "repeatUntilDay": 12
+     "repeatUntilDay": 12,
+     "repeatTitle": "Проверить брожение"
     },
     {
      "title": "Готовность",
@@ -941,7 +946,8 @@
      "tempC": null,
      "eventKind": "check",
      "repeatEveryDays": 3,
-     "repeatUntilDay": 14
+     "repeatUntilDay": 14,
+     "repeatTitle": "Проверить брожение"
     },
     {
      "title": "Готовность",
@@ -1020,7 +1026,8 @@
      "tempC": null,
      "eventKind": "check",
      "repeatEveryDays": 2,
-     "repeatUntilDay": 7
+     "repeatUntilDay": 7,
+     "repeatTitle": "Проверить брожение"
     },
     {
      "title": "Готовность",
@@ -1099,7 +1106,8 @@
      "tempC": null,
      "eventKind": "check",
      "repeatEveryDays": 3,
-     "repeatUntilDay": 9
+     "repeatUntilDay": 9,
+     "repeatTitle": "Проверить брожение"
     },
     {
      "title": "Готовность",
@@ -1182,7 +1190,8 @@
      "tempC": null,
      "eventKind": "check",
      "repeatEveryDays": 7,
-     "repeatUntilDay": 28
+     "repeatUntilDay": 28,
+     "repeatTitle": "Проверить брожение"
     },
     {
      "title": "Готовность",
@@ -1488,7 +1497,8 @@
      "tempC": null,
      "eventKind": "macerate",
      "repeatEveryDays": 2,
-     "repeatUntilDay": 6
+     "repeatUntilDay": 6,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Процедить",
@@ -1566,7 +1576,8 @@
      "tempC": null,
      "eventKind": "macerate",
      "repeatEveryDays": 3,
-     "repeatUntilDay": 21
+     "repeatUntilDay": 21,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Процедить",
@@ -1644,7 +1655,8 @@
      "tempC": null,
      "eventKind": "macerate",
      "repeatEveryDays": 3,
-     "repeatUntilDay": 28
+     "repeatUntilDay": 28,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Слить и снять с косточек",
@@ -1722,7 +1734,8 @@
      "tempC": null,
      "eventKind": "macerate",
      "repeatEveryDays": 2,
-     "repeatUntilDay": 8
+     "repeatUntilDay": 8,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Процедить",
@@ -1800,7 +1813,8 @@
      "tempC": null,
      "eventKind": "macerate",
      "repeatEveryDays": 7,
-     "repeatUntilDay": 28
+     "repeatUntilDay": 28,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Процедить",
@@ -1869,7 +1883,8 @@
      "tempC": null,
      "eventKind": "macerate",
      "repeatEveryDays": 1,
-     "repeatUntilDay": 4
+     "repeatUntilDay": 4,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Процедить",
@@ -1947,7 +1962,8 @@
      "tempC": null,
      "eventKind": "macerate",
      "repeatEveryDays": 2,
-     "repeatUntilDay": 9
+     "repeatUntilDay": 9,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Процедить",
@@ -2025,7 +2041,8 @@
      "tempC": null,
      "eventKind": "macerate",
      "repeatEveryDays": 3,
-     "repeatUntilDay": 12
+     "repeatUntilDay": 12,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Процедить",
@@ -2240,7 +2257,8 @@
      "tempC": null,
      "eventKind": "topup",
      "repeatEveryDays": 30,
-     "repeatUntilDay": 360
+     "repeatUntilDay": 360,
+     "repeatTitle": "Долить"
     },
     {
      "title": "Дегустация",
@@ -2319,7 +2337,8 @@
      "tempC": null,
      "eventKind": "check",
      "repeatEveryDays": 3,
-     "repeatUntilDay": 21
+     "repeatUntilDay": 21,
+     "repeatTitle": "Проверить"
     },
     {
      "title": "Проверка вкуса",
@@ -2438,7 +2457,8 @@
      "tempC": null,
      "eventKind": "check",
      "repeatEveryDays": 1,
-     "repeatUntilDay": 5
+     "repeatUntilDay": 5,
+     "repeatTitle": "Перемешать"
     },
     {
      "title": "Замер плотности",
@@ -3067,7 +3087,8 @@
      "tempC": null,
      "eventKind": "check",
      "repeatEveryDays": 1,
-     "repeatUntilDay": 4
+     "repeatUntilDay": 4,
+     "repeatTitle": "Перемешать"
     },
     {
      "title": "Снять с мезги",
@@ -3270,7 +3291,8 @@
      "tempC": null,
      "eventKind": "check",
      "repeatEveryDays": 1,
-     "repeatUntilDay": 4
+     "repeatUntilDay": 4,
+     "repeatTitle": "Перемешать"
     },
     {
      "title": "Отжать мезгу",
@@ -3374,7 +3396,8 @@
      "tempC": null,
      "eventKind": "check",
      "repeatEveryDays": 1,
-     "repeatUntilDay": 5
+     "repeatUntilDay": 5,
+     "repeatTitle": "Перемешать"
     },
     {
      "title": "Отжать мезгу",
@@ -3478,7 +3501,8 @@
      "tempC": null,
      "eventKind": "check",
      "repeatEveryDays": 1,
-     "repeatUntilDay": 5
+     "repeatUntilDay": 5,
+     "repeatTitle": "Проверить брожение"
     },
     {
      "title": "Отжать",
@@ -3607,7 +3631,8 @@
      "tempC": null,
      "eventKind": "check",
      "repeatEveryDays": 1,
-     "repeatUntilDay": 5
+     "repeatUntilDay": 5,
+     "repeatTitle": "Перемешать"
     },
     {
      "title": "Замер плотности",
@@ -3919,7 +3944,8 @@
      "tempC": null,
      "eventKind": "taste",
      "repeatEveryDays": 14,
-     "repeatUntilDay": 180
+     "repeatUntilDay": 180,
+     "repeatTitle": "Проба"
     },
     {
      "title": "Розлив",
@@ -4112,7 +4138,8 @@
      "tempC": null,
      "eventKind": "taste",
      "repeatEveryDays": 30,
-     "repeatUntilDay": 180
+     "repeatUntilDay": 180,
+     "repeatTitle": "Проба"
     },
     {
      "title": "Розлив",
@@ -4206,7 +4233,8 @@
      "tempC": null,
      "eventKind": "taste",
      "repeatEveryDays": 30,
-     "repeatUntilDay": 240
+     "repeatUntilDay": 240,
+     "repeatTitle": "Проба"
     },
     {
      "title": "Розлив",
@@ -4542,7 +4570,8 @@
      "tempC": 20,
      "eventKind": "macerate",
      "repeatEveryDays": 3,
-     "repeatUntilDay": 18
+     "repeatUntilDay": 18,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Снять с ягоды",
@@ -4631,7 +4660,8 @@
      "tempC": 20,
      "eventKind": "macerate",
      "repeatEveryDays": 3,
-     "repeatUntilDay": 27
+     "repeatUntilDay": 27,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Отделить сок",
@@ -4720,7 +4750,8 @@
      "tempC": 20,
      "eventKind": "macerate",
      "repeatEveryDays": 3,
-     "repeatUntilDay": 15
+     "repeatUntilDay": 15,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Процедить",
@@ -4809,7 +4840,8 @@
      "tempC": 20,
      "eventKind": "macerate",
      "repeatEveryDays": 2,
-     "repeatUntilDay": 10
+     "repeatUntilDay": 10,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Слить и отжать",
@@ -4898,7 +4930,8 @@
      "tempC": 20,
      "eventKind": "macerate",
      "repeatEveryDays": 2,
-     "repeatUntilDay": 8
+     "repeatUntilDay": 8,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Процедить",
@@ -4987,7 +5020,8 @@
      "tempC": 20,
      "eventKind": "macerate",
      "repeatEveryDays": 3,
-     "repeatUntilDay": 30
+     "repeatUntilDay": 30,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Снять с осадка",
@@ -5076,7 +5110,8 @@
      "tempC": 20,
      "eventKind": "macerate",
      "repeatEveryDays": 2,
-     "repeatUntilDay": 10
+     "repeatUntilDay": 10,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Процедить",
@@ -5165,7 +5200,8 @@
      "tempC": 20,
      "eventKind": "macerate",
      "repeatEveryDays": 3,
-     "repeatUntilDay": 18
+     "repeatUntilDay": 18,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Процедить",
@@ -5254,7 +5290,8 @@
      "tempC": 20,
      "eventKind": "macerate",
      "repeatEveryDays": 3,
-     "repeatUntilDay": 27
+     "repeatUntilDay": 27,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Процедить",
@@ -5343,7 +5380,8 @@
      "tempC": 20,
      "eventKind": "macerate",
      "repeatEveryDays": 1,
-     "repeatUntilDay": 7
+     "repeatUntilDay": 7,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Процедить",
@@ -5432,7 +5470,8 @@
      "tempC": 20,
      "eventKind": "macerate",
      "repeatEveryDays": 3,
-     "repeatUntilDay": 12
+     "repeatUntilDay": 12,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Процедить",
@@ -5526,7 +5565,8 @@
      "tempC": 20,
      "eventKind": "macerate",
      "repeatEveryDays": 3,
-     "repeatUntilDay": 12
+     "repeatUntilDay": 12,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Процедить",
@@ -5615,7 +5655,8 @@
      "tempC": 20,
      "eventKind": "macerate",
      "repeatEveryDays": 3,
-     "repeatUntilDay": 18
+     "repeatUntilDay": 18,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Процедить",
@@ -5704,7 +5745,8 @@
      "tempC": 20,
      "eventKind": "macerate",
      "repeatEveryDays": 2,
-     "repeatUntilDay": 12
+     "repeatUntilDay": 12,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Процедить",
@@ -5793,7 +5835,8 @@
      "tempC": 20,
      "eventKind": "macerate",
      "repeatEveryDays": 2,
-     "repeatUntilDay": 8
+     "repeatUntilDay": 8,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Процедить",
@@ -5887,7 +5930,8 @@
      "tempC": 20,
      "eventKind": "macerate",
      "repeatEveryDays": 2,
-     "repeatUntilDay": 12
+     "repeatUntilDay": 12,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Процедить",
@@ -5976,7 +6020,8 @@
      "tempC": 20,
      "eventKind": "macerate",
      "repeatEveryDays": 3,
-     "repeatUntilDay": 27
+     "repeatUntilDay": 27,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Процедить",
@@ -6075,7 +6120,8 @@
      "tempC": 20,
      "eventKind": "macerate",
      "repeatEveryDays": 3,
-     "repeatUntilDay": 18
+     "repeatUntilDay": 18,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Процедить",
@@ -7674,7 +7720,8 @@
      "tempC": null,
      "eventKind": "topup",
      "repeatEveryDays": 90,
-     "repeatUntilDay": 540
+     "repeatUntilDay": 540,
+     "repeatTitle": "Долить"
     },
     {
      "title": "Первая дегустация",
@@ -7763,7 +7810,8 @@
      "tempC": null,
      "eventKind": "topup",
      "repeatEveryDays": 90,
-     "repeatUntilDay": 540
+     "repeatUntilDay": 540,
+     "repeatTitle": "Долить"
     },
     {
      "title": "Дегустация",
@@ -7852,7 +7900,8 @@
      "tempC": null,
      "eventKind": "topup",
      "repeatEveryDays": 90,
-     "repeatUntilDay": 300
+     "repeatUntilDay": 300,
+     "repeatTitle": "Долить"
     },
     {
      "title": "Первая дегустация",
@@ -8139,7 +8188,8 @@
      "tempC": 22,
      "eventKind": "macerate",
      "repeatEveryDays": 1,
-     "repeatUntilDay": 2
+     "repeatUntilDay": 2,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Проверить настой",
@@ -8487,7 +8537,8 @@
      "tempC": 22,
      "eventKind": "macerate",
      "repeatEveryDays": 1,
-     "repeatUntilDay": 2
+     "repeatUntilDay": 2,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Проверить настой",
@@ -8815,7 +8866,8 @@
      "tempC": 22,
      "eventKind": "macerate",
      "repeatEveryDays": 1,
-     "repeatUntilDay": 2
+     "repeatUntilDay": 2,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Проверить настой",
@@ -9336,7 +9388,8 @@
      "tempC": null,
      "eventKind": "macerate",
      "repeatEveryDays": 7,
-     "repeatUntilDay": 21
+     "repeatUntilDay": 21,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Попробовать",
@@ -9455,7 +9508,8 @@
      "tempC": null,
      "eventKind": "macerate",
      "repeatEveryDays": 5,
-     "repeatUntilDay": 20
+     "repeatUntilDay": 20,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Попробовать",
@@ -9574,7 +9628,8 @@
      "tempC": null,
      "eventKind": "macerate",
      "repeatEveryDays": 7,
-     "repeatUntilDay": 21
+     "repeatUntilDay": 21,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Попробовать",
@@ -9693,7 +9748,8 @@
      "tempC": null,
      "eventKind": "macerate",
      "repeatEveryDays": 2,
-     "repeatUntilDay": 7
+     "repeatUntilDay": 7,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Проверить настой",
@@ -9832,7 +9888,8 @@
      "tempC": null,
      "eventKind": "macerate",
      "repeatEveryDays": 5,
-     "repeatUntilDay": 14
+     "repeatUntilDay": 14,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Попробовать",
@@ -9961,7 +10018,8 @@
      "tempC": 20,
      "eventKind": "check",
      "repeatEveryDays": 30,
-     "repeatUntilDay": 120
+     "repeatUntilDay": 120,
+     "repeatTitle": "Проба"
     },
     {
      "title": "Контроль выдержки",
@@ -10080,7 +10138,8 @@
      "tempC": null,
      "eventKind": "macerate",
      "repeatEveryDays": 3,
-     "repeatUntilDay": 7
+     "repeatUntilDay": 7,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Слить настой",
@@ -10239,7 +10298,8 @@
      "tempC": null,
      "eventKind": "macerate",
      "repeatEveryDays": 7,
-     "repeatUntilDay": 14
+     "repeatUntilDay": 14,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Слить и отфильтровать",
@@ -10358,7 +10418,8 @@
      "tempC": null,
      "eventKind": "macerate",
      "repeatEveryDays": 3,
-     "repeatUntilDay": 10
+     "repeatUntilDay": 10,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Слить и отфильтровать",
@@ -10472,7 +10533,8 @@
      "tempC": null,
      "eventKind": "macerate",
      "repeatEveryDays": 4,
-     "repeatUntilDay": 12
+     "repeatUntilDay": 12,
+     "repeatTitle": "Взболтать"
     },
     {
      "title": "Проверить настой",

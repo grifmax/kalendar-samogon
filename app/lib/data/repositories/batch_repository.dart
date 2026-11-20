@@ -80,21 +80,46 @@ class BatchRepository {
       }
 
       for (final step in steps) {
-        for (final at in _eventDates(step, startedAt)) {
+        final dates = _eventDates(step, startedAt);
+        for (var i = 0; i < dates.length; i++) {
+          // Первое событие — само действие («Заложить вишню»), дальше идут
+          // повторы с собственным названием («Взболтать»): иначе список
+          // читается как «закладывать вишню каждые три дня».
+          final isRepeat = i > 0;
           await db.into(db.batchEvents).insert(
                 BatchEventsCompanion.insert(
                   id: _uuid.v4(),
                   batchId: id,
                   kind: step.eventKind,
-                  title: step.title,
+                  title: isRepeat
+                      ? repeatEventTitle(step, repeatIndex: i)
+                      : step.title,
                   description: Value(step.description),
-                  plannedAt: at,
+                  plannedAt: dates[i],
                 ),
               );
         }
       }
     });
     return id;
+  }
+
+  /// Название повторного события шага.
+  ///
+  /// Берём `repeatTitle` из рецепта; если его нет — подставляем действие по
+  /// типу события, чтобы не повторять название первого события.
+  static String repeatEventTitle(RecipeStep step, {int repeatIndex = 1}) {
+    final custom = step.repeatTitle.trim();
+    if (custom.isNotEmpty) return custom;
+    return switch (step.eventKind) {
+      'macerate' => 'Взболтать',
+      'topup' => 'Долить',
+      'taste' => 'Проба',
+      'measurement' => 'Замер',
+      'check' => 'Проверить',
+      'rack' => 'Слить с осадка',
+      _ => 'Повторить: ${step.title.toLowerCase()}',
+    };
   }
 
   /// Даты события для шага: одиночная или серия повторов.
@@ -118,6 +143,48 @@ class BatchRepository {
       day += repeat;
     }
     return dates;
+  }
+
+  /// Переименовать уже созданные повторные события старых партий.
+  ///
+  /// До версии 0.11.0 повторы назывались как первый шаг («Заложить вишню»
+  /// каждые три дня). События создаются при запуске партии, поэтому правка
+  /// шаблона их не меняет — проходим по плановым событиям и подставляем
+  /// название повтора из шага. Функция идемпотентна: повторный вызов ничего
+  /// не портит.
+  Future<int> repairRepeatEventTitles() async {
+    final batches = await db.select(db.batches).get();
+    var renamed = 0;
+
+    for (final batch in batches) {
+      final steps = await (db.select(db.recipeSteps)
+            ..where((t) => t.recipeId.equals(batch.recipeId))
+            ..where((t) => t.repeatEveryDays.isNotNull()))
+          .get();
+      if (steps.isEmpty) continue;
+
+      final events = await (db.select(db.batchEvents)
+            ..where((t) => t.batchId.equals(batch.id))
+            ..where((t) => t.status.equals('planned'))
+            ..orderBy([(t) => OrderingTerm(expression: t.plannedAt)]))
+          .get();
+
+      for (final step in steps) {
+        final ofStep = events
+            .where((e) => e.title == step.title && e.kind == step.eventKind)
+            .toList();
+        // Первое событие шага — само действие, его не трогаем.
+        for (final event in ofStep.skip(1)) {
+          final title = repeatEventTitle(step);
+          if (event.title == title) continue;
+          await (db.update(db.batchEvents)
+                ..where((t) => t.id.equals(event.id)))
+              .write(BatchEventsCompanion(title: Value(title)));
+          renamed++;
+        }
+      }
+    }
+    return renamed;
   }
 
   Future<int> _nextCodeIndex() async {

@@ -43,6 +43,9 @@ void main() {
           durationMin: 20,
           tempC: null,
           eventKind: 'start',
+          repeatEveryDays: null,
+          repeatUntilDay: null,
+          repeatTitle: '',
         ),
         (
           title: 'Слить и отфильтровать',
@@ -51,6 +54,9 @@ void main() {
           durationMin: null,
           tempC: null,
           eventKind: 'strain',
+          repeatEveryDays: null,
+          repeatUntilDay: null,
+          repeatTitle: '',
         ),
       ],
     );
@@ -181,7 +187,7 @@ void main() {
     );
 
     final dump = await backup.exportToMap();
-    expect(dump['backupVersion'], 3);
+    expect(dump['backupVersion'], 4);
     expect((dump['vessels'] as List).length, 1);
     expect((dump['aging'] as List).length, 1);
     expect((dump['tastings'] as List).length, 1);

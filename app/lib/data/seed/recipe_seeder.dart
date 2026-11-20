@@ -25,8 +25,9 @@ class RecipeSeeder {
   /// 2 — каталог расширен до 105 рецептов;
   /// 3 — выверены цифры: объёмы, спирт, вода и сахар приведены к арифметике
   ///     приложения. Встроенные рецепты при смене версии перезаписываются,
-  ///     свои рецепты и партии не затрагиваются.
-  static const seedVersion = '3';
+  ///     свои рецепты и партии не затрагиваются;
+  /// 4 — у повторяющихся шагов появилось собственное название («Взболтать»).
+  static const seedVersion = '4';
 
   Future<int> seedIfNeeded() async {
     final meta = await db.select(db.appMeta).get();
@@ -123,6 +124,7 @@ class RecipeSeeder {
                   eventKind: Value(s['eventKind'] as String? ?? 'check'),
                   repeatEveryDays: Value((s['repeatEveryDays'] as num?)?.toInt()),
                   repeatUntilDay: Value((s['repeatUntilDay'] as num?)?.toInt()),
+                  repeatTitle: Value(s['repeatTitle'] as String? ?? ''),
                 ),
               );
         }

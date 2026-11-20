@@ -192,7 +192,7 @@ void main() {
     await production.shakeMaceration(entry.id);
 
     final dump = await backup.exportToMap();
-    expect(dump['backupVersion'], 3);
+    expect(dump['backupVersion'], 4);
     expect((dump['macerations'] as List).length, 1);
 
     final result = await backup.importFromString(jsonEncode(dump));

@@ -14,6 +14,7 @@ part 'app_database.g.dart';
 /// v1 — рецепты, партии, события, замеры.
 /// v2 — состав партии, перегонки с фракциями, тара, выдержка, дегустации.
 /// v3 — настаивание (мацерация) отдельным процессом.
+/// v4 — название повторного события у шага рецепта.
 @DriftDatabase(
   tables: [
     Recipes,
@@ -39,7 +40,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -59,6 +60,10 @@ class AppDatabase extends _$AppDatabase {
           if (from < 3) {
             // M2: настаивание отдельным процессом.
             await m.createTable(macerations);
+          }
+          if (from < 4) {
+            // Повторы шага получают собственное название («Взболтать»).
+            await m.addColumn(recipeSteps, recipeSteps.repeatTitle);
           }
         },
         beforeOpen: (details) async {

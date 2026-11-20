@@ -55,6 +55,11 @@ class RecipeSteps extends Table {
   /// Повторяющийся шаг: каждые N дней до дня `repeatUntilDay`.
   IntColumn get repeatEveryDays => integer().nullable()();
   IntColumn get repeatUntilDay => integer().nullable()();
+
+  /// Название повторного события. Первое событие называется как шаг
+  /// («Заложить вишню»), а повторы — действием, которое реально повторяется
+  /// («Взболтать»). Пусто — берётся по типу события.
+  TextColumn get repeatTitle => text().withDefault(const Constant(''))();
 }
 
 /// Партия — конкретное воплощение рецепта.

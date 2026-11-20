@@ -1324,6 +1324,18 @@ class $RecipeStepsTable extends RecipeSteps
     type: DriftSqlType.int,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _repeatTitleMeta = const VerificationMeta(
+    'repeatTitle',
+  );
+  @override
+  late final GeneratedColumn<String> repeatTitle = GeneratedColumn<String>(
+    'repeat_title',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -1337,6 +1349,7 @@ class $RecipeStepsTable extends RecipeSteps
     eventKind,
     repeatEveryDays,
     repeatUntilDay,
+    repeatTitle,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1429,6 +1442,15 @@ class $RecipeStepsTable extends RecipeSteps
         ),
       );
     }
+    if (data.containsKey('repeat_title')) {
+      context.handle(
+        _repeatTitleMeta,
+        repeatTitle.isAcceptableOrUnknown(
+          data['repeat_title']!,
+          _repeatTitleMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -1482,6 +1504,10 @@ class $RecipeStepsTable extends RecipeSteps
         DriftSqlType.int,
         data['${effectivePrefix}repeat_until_day'],
       ),
+      repeatTitle: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}repeat_title'],
+      )!,
     );
   }
 
@@ -1505,6 +1531,11 @@ class RecipeStep extends DataClass implements Insertable<RecipeStep> {
   /// Повторяющийся шаг: каждые N дней до дня `repeatUntilDay`.
   final int? repeatEveryDays;
   final int? repeatUntilDay;
+
+  /// Название повторного события. Первое событие называется как шаг
+  /// («Заложить вишню»), а повторы — действием, которое реально повторяется
+  /// («Взболтать»). Пусто — берётся по типу события.
+  final String repeatTitle;
   const RecipeStep({
     required this.id,
     required this.recipeId,
@@ -1517,6 +1548,7 @@ class RecipeStep extends DataClass implements Insertable<RecipeStep> {
     required this.eventKind,
     this.repeatEveryDays,
     this.repeatUntilDay,
+    required this.repeatTitle,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -1540,6 +1572,7 @@ class RecipeStep extends DataClass implements Insertable<RecipeStep> {
     if (!nullToAbsent || repeatUntilDay != null) {
       map['repeat_until_day'] = Variable<int>(repeatUntilDay);
     }
+    map['repeat_title'] = Variable<String>(repeatTitle);
     return map;
   }
 
@@ -1564,6 +1597,7 @@ class RecipeStep extends DataClass implements Insertable<RecipeStep> {
       repeatUntilDay: repeatUntilDay == null && nullToAbsent
           ? const Value.absent()
           : Value(repeatUntilDay),
+      repeatTitle: Value(repeatTitle),
     );
   }
 
@@ -1584,6 +1618,7 @@ class RecipeStep extends DataClass implements Insertable<RecipeStep> {
       eventKind: serializer.fromJson<String>(json['eventKind']),
       repeatEveryDays: serializer.fromJson<int?>(json['repeatEveryDays']),
       repeatUntilDay: serializer.fromJson<int?>(json['repeatUntilDay']),
+      repeatTitle: serializer.fromJson<String>(json['repeatTitle']),
     );
   }
   @override
@@ -1601,6 +1636,7 @@ class RecipeStep extends DataClass implements Insertable<RecipeStep> {
       'eventKind': serializer.toJson<String>(eventKind),
       'repeatEveryDays': serializer.toJson<int?>(repeatEveryDays),
       'repeatUntilDay': serializer.toJson<int?>(repeatUntilDay),
+      'repeatTitle': serializer.toJson<String>(repeatTitle),
     };
   }
 
@@ -1616,6 +1652,7 @@ class RecipeStep extends DataClass implements Insertable<RecipeStep> {
     String? eventKind,
     Value<int?> repeatEveryDays = const Value.absent(),
     Value<int?> repeatUntilDay = const Value.absent(),
+    String? repeatTitle,
   }) => RecipeStep(
     id: id ?? this.id,
     recipeId: recipeId ?? this.recipeId,
@@ -1632,6 +1669,7 @@ class RecipeStep extends DataClass implements Insertable<RecipeStep> {
     repeatUntilDay: repeatUntilDay.present
         ? repeatUntilDay.value
         : this.repeatUntilDay,
+    repeatTitle: repeatTitle ?? this.repeatTitle,
   );
   RecipeStep copyWithCompanion(RecipeStepsCompanion data) {
     return RecipeStep(
@@ -1656,6 +1694,9 @@ class RecipeStep extends DataClass implements Insertable<RecipeStep> {
       repeatUntilDay: data.repeatUntilDay.present
           ? data.repeatUntilDay.value
           : this.repeatUntilDay,
+      repeatTitle: data.repeatTitle.present
+          ? data.repeatTitle.value
+          : this.repeatTitle,
     );
   }
 
@@ -1672,7 +1713,8 @@ class RecipeStep extends DataClass implements Insertable<RecipeStep> {
           ..write('tempC: $tempC, ')
           ..write('eventKind: $eventKind, ')
           ..write('repeatEveryDays: $repeatEveryDays, ')
-          ..write('repeatUntilDay: $repeatUntilDay')
+          ..write('repeatUntilDay: $repeatUntilDay, ')
+          ..write('repeatTitle: $repeatTitle')
           ..write(')'))
         .toString();
   }
@@ -1690,6 +1732,7 @@ class RecipeStep extends DataClass implements Insertable<RecipeStep> {
     eventKind,
     repeatEveryDays,
     repeatUntilDay,
+    repeatTitle,
   );
   @override
   bool operator ==(Object other) =>
@@ -1705,7 +1748,8 @@ class RecipeStep extends DataClass implements Insertable<RecipeStep> {
           other.tempC == this.tempC &&
           other.eventKind == this.eventKind &&
           other.repeatEveryDays == this.repeatEveryDays &&
-          other.repeatUntilDay == this.repeatUntilDay);
+          other.repeatUntilDay == this.repeatUntilDay &&
+          other.repeatTitle == this.repeatTitle);
 }
 
 class RecipeStepsCompanion extends UpdateCompanion<RecipeStep> {
@@ -1720,6 +1764,7 @@ class RecipeStepsCompanion extends UpdateCompanion<RecipeStep> {
   final Value<String> eventKind;
   final Value<int?> repeatEveryDays;
   final Value<int?> repeatUntilDay;
+  final Value<String> repeatTitle;
   const RecipeStepsCompanion({
     this.id = const Value.absent(),
     this.recipeId = const Value.absent(),
@@ -1732,6 +1777,7 @@ class RecipeStepsCompanion extends UpdateCompanion<RecipeStep> {
     this.eventKind = const Value.absent(),
     this.repeatEveryDays = const Value.absent(),
     this.repeatUntilDay = const Value.absent(),
+    this.repeatTitle = const Value.absent(),
   });
   RecipeStepsCompanion.insert({
     this.id = const Value.absent(),
@@ -1745,6 +1791,7 @@ class RecipeStepsCompanion extends UpdateCompanion<RecipeStep> {
     this.eventKind = const Value.absent(),
     this.repeatEveryDays = const Value.absent(),
     this.repeatUntilDay = const Value.absent(),
+    this.repeatTitle = const Value.absent(),
   }) : recipeId = Value(recipeId),
        title = Value(title);
   static Insertable<RecipeStep> custom({
@@ -1759,6 +1806,7 @@ class RecipeStepsCompanion extends UpdateCompanion<RecipeStep> {
     Expression<String>? eventKind,
     Expression<int>? repeatEveryDays,
     Expression<int>? repeatUntilDay,
+    Expression<String>? repeatTitle,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1772,6 +1820,7 @@ class RecipeStepsCompanion extends UpdateCompanion<RecipeStep> {
       if (eventKind != null) 'event_kind': eventKind,
       if (repeatEveryDays != null) 'repeat_every_days': repeatEveryDays,
       if (repeatUntilDay != null) 'repeat_until_day': repeatUntilDay,
+      if (repeatTitle != null) 'repeat_title': repeatTitle,
     });
   }
 
@@ -1787,6 +1836,7 @@ class RecipeStepsCompanion extends UpdateCompanion<RecipeStep> {
     Value<String>? eventKind,
     Value<int?>? repeatEveryDays,
     Value<int?>? repeatUntilDay,
+    Value<String>? repeatTitle,
   }) {
     return RecipeStepsCompanion(
       id: id ?? this.id,
@@ -1800,6 +1850,7 @@ class RecipeStepsCompanion extends UpdateCompanion<RecipeStep> {
       eventKind: eventKind ?? this.eventKind,
       repeatEveryDays: repeatEveryDays ?? this.repeatEveryDays,
       repeatUntilDay: repeatUntilDay ?? this.repeatUntilDay,
+      repeatTitle: repeatTitle ?? this.repeatTitle,
     );
   }
 
@@ -1839,6 +1890,9 @@ class RecipeStepsCompanion extends UpdateCompanion<RecipeStep> {
     if (repeatUntilDay.present) {
       map['repeat_until_day'] = Variable<int>(repeatUntilDay.value);
     }
+    if (repeatTitle.present) {
+      map['repeat_title'] = Variable<String>(repeatTitle.value);
+    }
     return map;
   }
 
@@ -1855,7 +1909,8 @@ class RecipeStepsCompanion extends UpdateCompanion<RecipeStep> {
           ..write('tempC: $tempC, ')
           ..write('eventKind: $eventKind, ')
           ..write('repeatEveryDays: $repeatEveryDays, ')
-          ..write('repeatUntilDay: $repeatUntilDay')
+          ..write('repeatUntilDay: $repeatUntilDay, ')
+          ..write('repeatTitle: $repeatTitle')
           ..write(')'))
         .toString();
   }
@@ -8685,6 +8740,7 @@ typedef $$RecipeStepsTableCreateCompanionBuilder =
       Value<String> eventKind,
       Value<int?> repeatEveryDays,
       Value<int?> repeatUntilDay,
+      Value<String> repeatTitle,
     });
 typedef $$RecipeStepsTableUpdateCompanionBuilder =
     RecipeStepsCompanion Function({
@@ -8699,6 +8755,7 @@ typedef $$RecipeStepsTableUpdateCompanionBuilder =
       Value<String> eventKind,
       Value<int?> repeatEveryDays,
       Value<int?> repeatUntilDay,
+      Value<String> repeatTitle,
     });
 
 final class $$RecipeStepsTableReferences
@@ -8779,6 +8836,11 @@ class $$RecipeStepsTableFilterComposer
 
   ColumnFilters<int> get repeatUntilDay => $composableBuilder(
     column: $table.repeatUntilDay,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get repeatTitle => $composableBuilder(
+    column: $table.repeatTitle,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -8865,6 +8927,11 @@ class $$RecipeStepsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get repeatTitle => $composableBuilder(
+    column: $table.repeatTitle,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   $$RecipesTableOrderingComposer get recipeId {
     final $$RecipesTableOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -8938,6 +9005,11 @@ class $$RecipeStepsTableAnnotationComposer
     builder: (column) => column,
   );
 
+  GeneratedColumn<String> get repeatTitle => $composableBuilder(
+    column: $table.repeatTitle,
+    builder: (column) => column,
+  );
+
   $$RecipesTableAnnotationComposer get recipeId {
     final $$RecipesTableAnnotationComposer composer = $composerBuilder(
       composer: this,
@@ -9001,6 +9073,7 @@ class $$RecipeStepsTableTableManager
                 Value<String> eventKind = const Value.absent(),
                 Value<int?> repeatEveryDays = const Value.absent(),
                 Value<int?> repeatUntilDay = const Value.absent(),
+                Value<String> repeatTitle = const Value.absent(),
               }) => RecipeStepsCompanion(
                 id: id,
                 recipeId: recipeId,
@@ -9013,6 +9086,7 @@ class $$RecipeStepsTableTableManager
                 eventKind: eventKind,
                 repeatEveryDays: repeatEveryDays,
                 repeatUntilDay: repeatUntilDay,
+                repeatTitle: repeatTitle,
               ),
           createCompanionCallback:
               ({
@@ -9027,6 +9101,7 @@ class $$RecipeStepsTableTableManager
                 Value<String> eventKind = const Value.absent(),
                 Value<int?> repeatEveryDays = const Value.absent(),
                 Value<int?> repeatUntilDay = const Value.absent(),
+                Value<String> repeatTitle = const Value.absent(),
               }) => RecipeStepsCompanion.insert(
                 id: id,
                 recipeId: recipeId,
@@ -9039,6 +9114,7 @@ class $$RecipeStepsTableTableManager
                 eventKind: eventKind,
                 repeatEveryDays: repeatEveryDays,
                 repeatUntilDay: repeatUntilDay,
+                repeatTitle: repeatTitle,
               ),
           withReferenceMapper: (p0) => p0
               .map(
