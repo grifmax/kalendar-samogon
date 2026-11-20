@@ -4,6 +4,7 @@ import '../../app/app_scope.dart';
 import '../../data/db/app_database.dart';
 import '../../utils/format.dart';
 import 'recipe_detail_screen.dart';
+import 'recipe_edit_screen.dart';
 
 /// Экран «Рецепты»: каталог с поиском и фильтром по типу.
 ///
@@ -37,6 +38,20 @@ class _RecipesScreenState extends State<RecipesScreen> {
       appBar: AppBar(
         title: Text(widget.selectMode ? 'Выберите рецепт' : 'Рецепты'),
       ),
+      floatingActionButton: widget.selectMode
+          ? null
+          : FloatingActionButton.extended(
+              onPressed: () async {
+                final created = await Navigator.of(context).push<bool>(
+                  MaterialPageRoute<bool>(
+                    builder: (_) => const RecipeEditScreen(),
+                  ),
+                );
+                if (created == true) setState(() {});
+              },
+              icon: const Icon(Icons.add),
+              label: const Text('Свой рецепт'),
+            ),
       body: Column(
         children: [
           Padding(

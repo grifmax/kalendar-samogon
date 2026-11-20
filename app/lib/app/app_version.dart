@@ -3,4 +3,4 @@
 /// Держим в синхроне с VERSION в корне проекта и `version:` в pubspec.yaml.
 /// Отдельная константа вместо package_info_plus: плагин не собирался под
 /// Android в текущей связке зависимостей, а показывать нужно только строку.
-const String kAppVersion = '0.4.1';
+const String kAppVersion = '0.5.0';

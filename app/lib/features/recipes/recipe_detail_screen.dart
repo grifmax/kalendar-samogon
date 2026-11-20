@@ -4,6 +4,7 @@ import '../../app/app_scope.dart';
 import '../../data/db/app_database.dart';
 import '../../utils/format.dart';
 import '../batches/batch_detail_screen.dart';
+import 'recipe_edit_screen.dart';
 import 'recipe_tune_sheet.dart';
 
 /// Карточка рецепта: состав, шаги, запуск партии.
@@ -97,8 +98,51 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
           if (recipe != null)
             IconButton(
               tooltip: 'Настроить под себя',
-              icon: const Icon(Icons.edit_outlined),
+              icon: const Icon(Icons.tune),
               onPressed: _startBatch,
+            ),
+          if (recipe != null)
+            PopupMenuButton<String>(
+              onSelected: (value) async {
+                switch (value) {
+                  case 'edit':
+                    final saved = await Navigator.of(context).push<bool>(
+                      MaterialPageRoute<bool>(
+                        builder: (_) => RecipeEditScreen(
+                          recipeId: recipe.id,
+                        ),
+                      ),
+                    );
+                    if (saved == true) await _load();
+                  case 'delete':
+                    final scope = AppScope.of(context);
+                    final ok = await scope.recipes.deleteOwnRecipe(recipe.id);
+                    if (!context.mounted) return;
+                    if (ok) {
+                      Navigator.of(context).pop();
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Встроенный рецепт удалить нельзя'),
+                        ),
+                      );
+                    }
+                }
+              },
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  value: 'edit',
+                  child: Text(
+                    recipe.isBuiltIn
+                        ? 'Открыть и скопировать'
+                        : 'Редактировать рецепт',
+                  ),
+                ),
+                const PopupMenuItem(
+                  value: 'delete',
+                  child: Text('Удалить (только свои)'),
+                ),
+              ],
             ),
           if (recipe != null)
             IconButton(

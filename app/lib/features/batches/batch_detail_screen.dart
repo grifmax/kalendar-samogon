@@ -7,6 +7,7 @@ import '../../data/repositories/batch_repository.dart';
 import '../../utils/format.dart';
 import '../../widgets/event_tile.dart';
 import '../../widgets/form_fields.dart';
+import '../aging/aging_tab.dart';
 import '../runs/runs_tab.dart';
 import '../tastings/tastings_tab.dart';
 
@@ -31,7 +32,7 @@ class BatchDetailScreen extends StatelessWidget {
           );
         }
         return DefaultTabController(
-          length: 4,
+          length: 5,
           child: Scaffold(
             appBar: AppBar(
               title: Text(batch.title, maxLines: 1, overflow: TextOverflow.ellipsis),
@@ -73,6 +74,7 @@ class BatchDetailScreen extends StatelessWidget {
                   Tab(text: 'Таймлайн'),
                   Tab(text: 'Замеры'),
                   Tab(text: 'Перегонки'),
+                  Tab(text: 'Выдержка'),
                   Tab(text: 'Дегустации'),
                 ],
               ),
@@ -86,6 +88,7 @@ class BatchDetailScreen extends StatelessWidget {
                       _TimelineTab(batch: batch),
                       _MeasurementsTab(batch: batch),
                       RunsTab(batchId: batch.id),
+                      AgingTab(batchId: batch.id),
                       TastingsTab(batchId: batch.id),
                     ],
                   ),

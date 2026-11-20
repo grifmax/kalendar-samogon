@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../app/app_scope.dart';
 import '../../data/db/app_database.dart';
@@ -50,6 +53,7 @@ class TastingsTab extends StatelessWidget {
   Future<void> _add(BuildContext context, String batchId) async {
     final scope = AppScope.of(context);
     var rating = 3;
+    String? photoPath;
     final aroma = TextEditingController();
     final taste = TextEditingController();
     final finish = TextEditingController();
@@ -115,6 +119,26 @@ class TastingsTab extends StatelessWidget {
                     isDense: true,
                   ),
                 ),
+                const SizedBox(height: FormSpacing.field),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: OutlinedButton.icon(
+                    onPressed: () async {
+                      final picked = await ImagePicker().pickImage(
+                        source: ImageSource.gallery,
+                        maxWidth: 1600,
+                        imageQuality: 85,
+                      );
+                      if (picked != null) {
+                        setLocal(() => photoPath = picked.path);
+                      }
+                    },
+                    icon: const Icon(Icons.add_a_photo_outlined, size: 18),
+                    label: Text(
+                      photoPath == null ? 'Добавить фото' : 'Фото выбрано',
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -132,6 +156,7 @@ class TastingsTab extends StatelessWidget {
                   taste: taste.text.trim(),
                   finish: finish.text.trim(),
                   verdict: verdict.text.trim(),
+                  photoPath: photoPath ?? '',
                 );
                 if (context.mounted) Navigator.of(context).pop();
               },
@@ -203,6 +228,22 @@ class _TastingCard extends StatelessWidget {
                       ),
                       TextSpan(text: line.$2),
                     ],
+                  ),
+                ),
+              ),
+            if (tasting.photoPath.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.file(
+                    File(tasting.photoPath),
+                    height: 160,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stack) => const SizedBox(
+                      height: 0,
+                    ),
                   ),
                 ),
               ),
