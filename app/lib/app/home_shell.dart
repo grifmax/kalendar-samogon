@@ -1,4 +1,4 @@
-import 'package:material_ui/material_ui.dart';
+import 'package:flutter/material.dart';
 
 import '../features/batches/batches_screen.dart';
 import '../features/calendar/calendar_screen.dart';
@@ -8,8 +8,8 @@ import '../features/today/today_screen.dart';
 
 /// Каркас приложения: нижняя навигация из пяти разделов.
 ///
-/// Индекс выбранного раздела держим в состоянии, чтобы вкладки не теряли
-/// прокрутку при переключении.
+/// IndexedStack сохраняет состояние вкладок: прокрутка и открытые фильтры
+/// не сбрасываются при переключении.
 class HomeShell extends StatefulWidget {
   const HomeShell({super.key});
 

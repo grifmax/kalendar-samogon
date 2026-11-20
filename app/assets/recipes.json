@@ -1,0 +1,2347 @@
+{
+  "version": 1,
+  "recipes": [
+    {
+      "id": "sugar-classic",
+      "title": "Сахарная брага — классика",
+      "kind": "mash",
+      "styleTags": [
+        "сахарная",
+        "базовая",
+        "быстрая"
+      ],
+      "baseVolumeL": 20,
+      "expectedYieldL": 4.4,
+      "expectedAbv": 40,
+      "summary": "Самый простой старт: сахар, вода, дрожжи. Гидромодуль 1:4, брожение 7–10 дней при 25–28 °C.",
+      "source": "Базовый рецепт. Из 5 кг сахара теоретически 3,2 л АС, практически 2,8–3,0 л после двух перегонок.",
+      "ingredients": [
+        {
+          "name": "Сахар",
+          "amount": 5000,
+          "unit": "г"
+        },
+        {
+          "name": "Вода",
+          "amount": 20,
+          "unit": "л"
+        },
+        {
+          "name": "Дрожжи спиртовые",
+          "amount": 100,
+          "unit": "г"
+        },
+        {
+          "name": "Подкормка (диаммонийфосфат)",
+          "amount": 10,
+          "unit": "г"
+        },
+        {
+          "name": "Лимонная кислота",
+          "amount": 8,
+          "unit": "г"
+        }
+      ],
+      "steps": [
+        {
+          "title": "Поставить брагу",
+          "description": "Растворить сахар в тёплой воде (не выше 30 °C), добавить подкормку и лимонную кислоту, затем развести дрожжи по инструкции и внести. Гидрозатвор.",
+          "offsetDays": 0,
+          "durationMin": 60,
+          "tempC": 28,
+          "eventKind": "start",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Бурное брожение",
+          "description": "Пена и шипение, температура не выше 30 °C. При перегреве — охладить, снять часть пены.",
+          "offsetDays": 1,
+          "durationMin": null,
+          "tempC": null,
+          "eventKind": "check",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Контроль плотности",
+          "description": "Замер ареометром. Ожидаемо падение с 1.090 до 1.060.",
+          "offsetDays": 3,
+          "durationMin": null,
+          "tempC": null,
+          "eventKind": "measurement",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Контроль плотности",
+          "description": "Ниже 1.040 — брожение идёт нормально.",
+          "offsetDays": 6,
+          "durationMin": null,
+          "tempC": null,
+          "eventKind": "measurement",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Осветление и готовность",
+          "description": "Плотность 1.000 или ниже, вкус горький без сладости, брага осветляется. Слить с осадка.",
+          "offsetDays": 10,
+          "durationMin": 60,
+          "tempC": null,
+          "eventKind": "rack",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Проверить готовность",
+          "description": "Если ещё сладкая — дать 2–3 дня и замерить снова.",
+          "offsetDays": 12,
+          "durationMin": null,
+          "tempC": null,
+          "eventKind": "check",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        }
+      ]
+    },
+    {
+      "id": "sugar-inverted",
+      "title": "Сахарная брага с инверсией",
+      "kind": "mash",
+      "styleTags": [
+        "сахарная",
+        "инверсия"
+      ],
+      "baseVolumeL": 20,
+      "expectedYieldL": 4.4,
+      "expectedAbv": 40,
+      "summary": "Сахар инвертируется в сироп с лимонной кислотой — брожение стартует быстрее, меньше «сахарного» привкуса в дистилляте.",
+      "source": "собственная практика",
+      "ingredients": [
+        {
+          "name": "Сахар",
+          "amount": 5000,
+          "unit": "г"
+        },
+        {
+          "name": "Вода",
+          "amount": 20,
+          "unit": "л"
+        },
+        {
+          "name": "Лимонная кислота",
+          "amount": 12,
+          "unit": "г"
+        },
+        {
+          "name": "Дрожжи спиртовые",
+          "amount": 100,
+          "unit": "г"
+        },
+        {
+          "name": "Подкормка",
+          "amount": 10,
+          "unit": "г"
+        }
+      ],
+      "steps": [
+        {
+          "title": "Сварить инвертный сироп",
+          "description": "2 л воды + сахар + лимонная кислота, кипятить 60–90 мин при 90–95 °C до янтарного цвета. Не допускать карамелизации.",
+          "offsetDays": 0,
+          "durationMin": 90,
+          "tempC": 95,
+          "eventKind": "start",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Остудить и внести",
+          "description": "Сироп разбавить холодной водой до 20 л, температура не выше 28 °C, внести дрожжи и подкормку.",
+          "offsetDays": 0,
+          "durationMin": 45,
+          "tempC": 28,
+          "eventKind": "start",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Контроль плотности",
+          "description": "Стартовая плотность ниже, чем у обычной сахарной браги.",
+          "offsetDays": 3,
+          "durationMin": null,
+          "tempC": null,
+          "eventKind": "measurement",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Осветление",
+          "description": "Плотность 1.000, брага горчит. Снять с осадка.",
+          "offsetDays": 8,
+          "durationMin": 60,
+          "tempC": null,
+          "eventKind": "rack",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        }
+      ]
+    },
+    {
+      "id": "sugar-turbo",
+      "title": "Турбо-брага за 5 дней",
+      "kind": "mash",
+      "styleTags": [
+        "сахарная",
+        "турбо",
+        "быстрая"
+      ],
+      "baseVolumeL": 20,
+      "expectedYieldL": 4.2,
+      "expectedAbv": 40,
+      "summary": "Турбо-дрожжи и подкормка: готовность за 4–6 дней. Требует стабильных 25–30 °C и точного гидромодуля.",
+      "source": "собственная практика",
+      "ingredients": [
+        {
+          "name": "Сахар",
+          "amount": 5000,
+          "unit": "г"
+        },
+        {
+          "name": "Вода",
+          "amount": 22,
+          "unit": "л"
+        },
+        {
+          "name": "Дрожжи турбо",
+          "amount": 80,
+          "unit": "г"
+        }
+      ],
+      "steps": [
+        {
+          "title": "Поставить брагу",
+          "description": "Сахар растворить в воде 30–32 °C, внести турбо-дрожжи. Гидромодуль 1:4,4.",
+          "offsetDays": 0,
+          "durationMin": 45,
+          "tempC": 30,
+          "eventKind": "start",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Бурное брожение",
+          "description": "Первые 48 часов самые активные: пена может уходить через гидрозатвор.",
+          "offsetDays": 1,
+          "durationMin": null,
+          "tempC": null,
+          "eventKind": "check",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Замер плотности",
+          "description": "Ожидается 1.030–1.040.",
+          "offsetDays": 3,
+          "durationMin": null,
+          "tempC": null,
+          "eventKind": "measurement",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Готовность",
+          "description": "Плотность 1.000, осадок плотный, запах спиртовой без дрожжевого тона.",
+          "offsetDays": 5,
+          "durationMin": 30,
+          "tempC": null,
+          "eventKind": "rack",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        }
+      ]
+    },
+    {
+      "id": "grain-corn",
+      "title": "Кукурузная брага (КОДИ)",
+      "kind": "mash",
+      "styleTags": [
+        "зерновая",
+        "кукуруза",
+        "КОДИ",
+        "бурбон-стиль"
+      ],
+      "baseVolumeL": 25,
+      "expectedYieldL": 5.0,
+      "expectedAbv": 40,
+      "summary": "Холодное осахаривание кукурузной крупы ферментами А+Г: без варки, но с точной температурой и кислотностью.",
+      "source": "собственная практика",
+      "ingredients": [
+        {
+          "name": "Кукурузная крупа",
+          "amount": 6000,
+          "unit": "г"
+        },
+        {
+          "name": "Вода",
+          "amount": 25,
+          "unit": "л"
+        },
+        {
+          "name": "Фермент А (амилосубтилин)",
+          "amount": 9,
+          "unit": "г"
+        },
+        {
+          "name": "Фермент Г (глюкоамилаза)",
+          "amount": 12,
+          "unit": "г"
+        },
+        {
+          "name": "Дрожжи спиртовые",
+          "amount": 120,
+          "unit": "г"
+        },
+        {
+          "name": "Лимонная кислота",
+          "amount": 20,
+          "unit": "г"
+        },
+        {
+          "name": "Подкормка",
+          "amount": 12,
+          "unit": "г"
+        }
+      ],
+      "steps": [
+        {
+          "title": "Замешать затор",
+          "description": "Крупу залить водой 60–65 °C, размешать до однородности, внести фермент А, выдержать 2 часа при 60–65 °C.",
+          "offsetDays": 0,
+          "durationMin": 120,
+          "tempC": 62,
+          "eventKind": "start",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Осахарить",
+          "description": "Остудить до 58–60 °C, внести фермент Г, держать 1–2 часа. Йодная проба — без синего.",
+          "offsetDays": 0,
+          "durationMin": 120,
+          "tempC": 58,
+          "eventKind": "start",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Охладить и внести дрожжи",
+          "description": "До 28–30 °C, добавить кислоту и подкормку, затем дрожжи.",
+          "offsetDays": 0,
+          "durationMin": 60,
+          "tempC": 28,
+          "eventKind": "start",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Бурное брожение",
+          "description": "Затор густой, перемешивать 1–2 раза в день.",
+          "offsetDays": 2,
+          "durationMin": null,
+          "tempC": null,
+          "eventKind": "check",
+          "repeatEveryDays": 2,
+          "repeatUntilDay": 8
+        },
+        {
+          "title": "Замер плотности",
+          "description": "Ожидаемо 1.020 и ниже.",
+          "offsetDays": 6,
+          "durationMin": null,
+          "tempC": null,
+          "eventKind": "measurement",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Готовность",
+          "description": "Плотность 1.000, затор расслоился. Перегонять с парогенератором или отжать через мешок.",
+          "offsetDays": 12,
+          "durationMin": 90,
+          "tempC": null,
+          "eventKind": "rack",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        }
+      ]
+    },
+    {
+      "id": "grain-wheat",
+      "title": "Пшеничная брага (КОДИ)",
+      "kind": "mash",
+      "styleTags": [
+        "зерновая",
+        "пшеница",
+        "КОДИ"
+      ],
+      "baseVolumeL": 25,
+      "expectedYieldL": 4.8,
+      "expectedAbv": 40,
+      "summary": "Мягкий пшеничный дистиллят — основа для настоек и «пшеничной» водки.",
+      "source": "собственная практика",
+      "ingredients": [
+        {
+          "name": "Пшеничная крупа или мука",
+          "amount": 6000,
+          "unit": "г"
+        },
+        {
+          "name": "Вода",
+          "amount": 25,
+          "unit": "л"
+        },
+        {
+          "name": "Фермент А",
+          "amount": 9,
+          "unit": "г"
+        },
+        {
+          "name": "Фермент Г",
+          "amount": 12,
+          "unit": "г"
+        },
+        {
+          "name": "Дрожжи спиртовые",
+          "amount": 120,
+          "unit": "г"
+        },
+        {
+          "name": "Лимонная кислота",
+          "amount": 18,
+          "unit": "г"
+        }
+      ],
+      "steps": [
+        {
+          "title": "Замешать затор",
+          "description": "Крупу залить водой 62 °C, фермент А, выдержать 2 часа.",
+          "offsetDays": 0,
+          "durationMin": 120,
+          "tempC": 62,
+          "eventKind": "start",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Осахарить",
+          "description": "58 °C, фермент Г, 1,5–2 часа, йодная проба.",
+          "offsetDays": 0,
+          "durationMin": 120,
+          "tempC": 58,
+          "eventKind": "start",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Внести дрожжи",
+          "description": "Охладить до 28 °C, кислота, дрожжи.",
+          "offsetDays": 0,
+          "durationMin": 45,
+          "tempC": 28,
+          "eventKind": "start",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Брожение",
+          "description": "Перемешивать раз в день, держать 26–28 °C.",
+          "offsetDays": 2,
+          "durationMin": null,
+          "tempC": null,
+          "eventKind": "check",
+          "repeatEveryDays": 2,
+          "repeatUntilDay": 9
+        },
+        {
+          "title": "Готовность",
+          "description": "Плотность 1.000, вкус горький. Слить с осадка.",
+          "offsetDays": 11,
+          "durationMin": 60,
+          "tempC": null,
+          "eventKind": "rack",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        }
+      ]
+    },
+    {
+      "id": "grain-rye",
+      "title": "Ржаная брага",
+      "kind": "mash",
+      "styleTags": [
+        "зерновая",
+        "рожь"
+      ],
+      "baseVolumeL": 25,
+      "expectedYieldL": 4.6,
+      "expectedAbv": 40,
+      "summary": "Пряный, чуть «хлебный» дистиллят. Рожь склонна к пене — нужен антипеногаситель или свободный объём.",
+      "source": "собственная практика",
+      "ingredients": [
+        {
+          "name": "Ржаная мука или крупа",
+          "amount": 6000,
+          "unit": "г"
+        },
+        {
+          "name": "Вода",
+          "amount": 26,
+          "unit": "л"
+        },
+        {
+          "name": "Фермент А",
+          "amount": 10,
+          "unit": "г"
+        },
+        {
+          "name": "Фермент Г",
+          "amount": 13,
+          "unit": "г"
+        },
+        {
+          "name": "Дрожжи спиртовые",
+          "amount": 130,
+          "unit": "г"
+        },
+        {
+          "name": "Лимонная кислота",
+          "amount": 20,
+          "unit": "г"
+        }
+      ],
+      "steps": [
+        {
+          "title": "Затор",
+          "description": "Мука + вода 62 °C + фермент А, 2 часа, помешивать.",
+          "offsetDays": 0,
+          "durationMin": 120,
+          "tempC": 62,
+          "eventKind": "start",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Осахаривание",
+          "description": "58 °C, фермент Г, 2 часа.",
+          "offsetDays": 0,
+          "durationMin": 120,
+          "tempC": 58,
+          "eventKind": "start",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Дрожжи",
+          "description": "28 °C, кислота, дрожжи. Оставить 1/5 объёма под пену.",
+          "offsetDays": 0,
+          "durationMin": 45,
+          "tempC": 28,
+          "eventKind": "start",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Брожение",
+          "description": "Перемешивать, следить за пеной.",
+          "offsetDays": 2,
+          "durationMin": null,
+          "tempC": null,
+          "eventKind": "check",
+          "repeatEveryDays": 2,
+          "repeatUntilDay": 10
+        },
+        {
+          "title": "Готовность",
+          "description": "Плотность 1.000. Перегонять с паром — ржаная брага густая.",
+          "offsetDays": 13,
+          "durationMin": 90,
+          "tempC": null,
+          "eventKind": "rack",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        }
+      ]
+    },
+    {
+      "id": "grain-malt",
+      "title": "Солодовая брага (горячий затор)",
+      "kind": "mash",
+      "styleTags": [
+        "зерновая",
+        "солод",
+        "all-grain",
+        "виски-стиль"
+      ],
+      "baseVolumeL": 25,
+      "expectedYieldL": 4.2,
+      "expectedAbv": 40,
+      "summary": "Классический односолодовый затор с паузами: осахаривание своим солодом, без ферментов.",
+      "source": "собственная практика",
+      "ingredients": [
+        {
+          "name": "Солод пилснер",
+          "amount": 6000,
+          "unit": "г"
+        },
+        {
+          "name": "Вода",
+          "amount": 25,
+          "unit": "л"
+        },
+        {
+          "name": "Дрожжи винные или виски",
+          "amount": 100,
+          "unit": "г"
+        }
+      ],
+      "steps": [
+        {
+          "title": "Залить солод",
+          "description": "Солод смолоть, залить водой 65 °C (гидромодуль 1:4).",
+          "offsetDays": 0,
+          "durationMin": 30,
+          "tempC": 65,
+          "eventKind": "start",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Пауза осахаривания",
+          "description": "62–65 °C, 60 минут, йодная проба — без синего.",
+          "offsetDays": 0,
+          "durationMin": 60,
+          "tempC": 63,
+          "eventKind": "start",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Мэш-аут",
+          "description": "Поднять до 76 °C на 10 минут, затем охладить.",
+          "offsetDays": 0,
+          "durationMin": 30,
+          "tempC": 76,
+          "eventKind": "start",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Внести дрожжи",
+          "description": "28 °C, дрожжи. Брожение 7–10 дней.",
+          "offsetDays": 0,
+          "durationMin": 30,
+          "tempC": 28,
+          "eventKind": "start",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Контроль",
+          "description": "Плотность падает до 1.010 и ниже.",
+          "offsetDays": 5,
+          "durationMin": null,
+          "tempC": null,
+          "eventKind": "measurement",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Готовность",
+          "description": "Плотность стабильна 2 дня. Снять с осадка.",
+          "offsetDays": 10,
+          "durationMin": 60,
+          "tempC": null,
+          "eventKind": "rack",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        }
+      ]
+    },
+    {
+      "id": "starch-potato",
+      "title": "Картофельная брага",
+      "kind": "mash",
+      "styleTags": [
+        "крахмал",
+        "картофель"
+      ],
+      "baseVolumeL": 25,
+      "expectedYieldL": 4.0,
+      "expectedAbv": 40,
+      "summary": "Картофель даёт мягкий спирт, но брага густая и пенная — нужен парогенератор и антипеногаситель.",
+      "source": "собственная практика",
+      "ingredients": [
+        {
+          "name": "Картофель",
+          "amount": 15000,
+          "unit": "г"
+        },
+        {
+          "name": "Вода",
+          "amount": 20,
+          "unit": "л"
+        },
+        {
+          "name": "Фермент А",
+          "amount": 12,
+          "unit": "г"
+        },
+        {
+          "name": "Фермент Г",
+          "amount": 15,
+          "unit": "г"
+        },
+        {
+          "name": "Дрожжи спиртовые",
+          "amount": 120,
+          "unit": "г"
+        },
+        {
+          "name": "Лимонная кислота",
+          "amount": 15,
+          "unit": "г"
+        }
+      ],
+      "steps": [
+        {
+          "title": "Подготовить картофель",
+          "description": "Помыть, измельчить (тёрка/блендер), не очищать полностью.",
+          "offsetDays": 0,
+          "durationMin": 90,
+          "tempC": null,
+          "eventKind": "start",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Разварить",
+          "description": "Варить 40–60 минут до мягкости, остудить до 62 °C.",
+          "offsetDays": 0,
+          "durationMin": 60,
+          "tempC": 62,
+          "eventKind": "start",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Осахарить",
+          "description": "Фермент А 2 часа при 62 °C, затем Г 2 часа при 58 °C.",
+          "offsetDays": 0,
+          "durationMin": 240,
+          "tempC": 60,
+          "eventKind": "start",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Дрожжи",
+          "description": "28 °C, кислота, дрожжи.",
+          "offsetDays": 0,
+          "durationMin": 45,
+          "tempC": 28,
+          "eventKind": "start",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Брожение",
+          "description": "Следить за пеной, перемешивать.",
+          "offsetDays": 2,
+          "durationMin": null,
+          "tempC": null,
+          "eventKind": "check",
+          "repeatEveryDays": 2,
+          "repeatUntilDay": 8
+        },
+        {
+          "title": "Готовность",
+          "description": "Плотность 1.000. Перегонять с паром.",
+          "offsetDays": 10,
+          "durationMin": 90,
+          "tempC": null,
+          "eventKind": "rack",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        }
+      ]
+    },
+    {
+      "id": "fruit-apple",
+      "title": "Яблочная брага (кальвадос-стиль)",
+      "kind": "mash",
+      "styleTags": [
+        "фруктовая",
+        "яблоко",
+        "кальвадос"
+      ],
+      "baseVolumeL": 25,
+      "expectedYieldL": 4.5,
+      "expectedAbv": 40,
+      "summary": "Яблочный сок или дроблёные яблоки с пектолитическим ферментом. Аромат сохраняется только при медленном брожении.",
+      "source": "собственная практика",
+      "ingredients": [
+        {
+          "name": "Яблоки или сок",
+          "amount": 22000,
+          "unit": "г"
+        },
+        {
+          "name": "Вода",
+          "amount": 3,
+          "unit": "л"
+        },
+        {
+          "name": "Пектолитический фермент",
+          "amount": 3,
+          "unit": "г"
+        },
+        {
+          "name": "Дрожжи винные",
+          "amount": 100,
+          "unit": "г"
+        },
+        {
+          "name": "Сахар",
+          "amount": 1000,
+          "unit": "г"
+        }
+      ],
+      "steps": [
+        {
+          "title": "Подготовка",
+          "description": "Яблоки дробят, добавляют пектолитический фермент, держат 12–24 часа.",
+          "offsetDays": 0,
+          "durationMin": 720,
+          "tempC": 22,
+          "eventKind": "start",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Внести дрожжи",
+          "description": "Добавить сахар и дрожжи, гидрозатвор. Температура 18–22 °C — медленно, ради аромата.",
+          "offsetDays": 1,
+          "durationMin": 45,
+          "tempC": 20,
+          "eventKind": "start",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Бурное брожение",
+          "description": "Следить за пеной и температурой.",
+          "offsetDays": 3,
+          "durationMin": null,
+          "tempC": null,
+          "eventKind": "check",
+          "repeatEveryDays": 3,
+          "repeatUntilDay": 12
+        },
+        {
+          "title": "Готовность",
+          "description": "Плотность 1.000, осадок плотный.",
+          "offsetDays": 21,
+          "durationMin": 60,
+          "tempC": null,
+          "eventKind": "rack",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Отдых на осадке",
+          "description": "2–4 недели для развития аромата, затем перегонка.",
+          "offsetDays": 35,
+          "durationMin": null,
+          "tempC": null,
+          "eventKind": "check",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        }
+      ]
+    },
+    {
+      "id": "fruit-plum",
+      "title": "Сливовая брага",
+      "kind": "mash",
+      "styleTags": [
+        "фруктовая",
+        "слива",
+        "сливовица"
+      ],
+      "baseVolumeL": 25,
+      "expectedYieldL": 4.6,
+      "expectedAbv": 40,
+      "summary": "Слива даёт насыщенный аромат, но много пектина — обязателен пектолитический фермент, иначе метанол.",
+      "source": "собственная практика",
+      "ingredients": [
+        {
+          "name": "Слива",
+          "amount": 20000,
+          "unit": "г"
+        },
+        {
+          "name": "Вода",
+          "amount": 5,
+          "unit": "л"
+        },
+        {
+          "name": "Пектолитический фермент",
+          "amount": 4,
+          "unit": "г"
+        },
+        {
+          "name": "Дрожжи винные",
+          "amount": 100,
+          "unit": "г"
+        },
+        {
+          "name": "Сахар",
+          "amount": 1500,
+          "unit": "г"
+        }
+      ],
+      "steps": [
+        {
+          "title": "Подготовка сливы",
+          "description": "Удалить косточки, размять, внести пектолитический фермент на 12–24 ч.",
+          "offsetDays": 0,
+          "durationMin": 720,
+          "tempC": 22,
+          "eventKind": "start",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Дрожжи",
+          "description": "Сахар, вода, дрожжи, гидрозатвор.",
+          "offsetDays": 1,
+          "durationMin": 45,
+          "tempC": 22,
+          "eventKind": "start",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Брожение",
+          "description": "18–22 °C, перемешивать, следить за пеной.",
+          "offsetDays": 3,
+          "durationMin": null,
+          "tempC": null,
+          "eventKind": "check",
+          "repeatEveryDays": 3,
+          "repeatUntilDay": 14
+        },
+        {
+          "title": "Готовность",
+          "description": "Плотность 1.000, слива осела.",
+          "offsetDays": 21,
+          "durationMin": 60,
+          "tempC": null,
+          "eventKind": "rack",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        }
+      ]
+    },
+    {
+      "id": "fruit-grape",
+      "title": "Виноградная брага (чача)",
+      "kind": "mash",
+      "styleTags": [
+        "фруктовая",
+        "виноград",
+        "чача"
+      ],
+      "baseVolumeL": 25,
+      "expectedYieldL": 4.4,
+      "expectedAbv": 40,
+      "summary": "Из выжимок или дробного винограда. Быстрое брожение, перегонять сразу после осветления.",
+      "source": "собственная практика",
+      "ingredients": [
+        {
+          "name": "Виноград или выжимки",
+          "amount": 20000,
+          "unit": "г"
+        },
+        {
+          "name": "Вода",
+          "amount": 5,
+          "unit": "л"
+        },
+        {
+          "name": "Дрожжи винные",
+          "amount": 100,
+          "unit": "г"
+        },
+        {
+          "name": "Сахар",
+          "amount": 1000,
+          "unit": "г"
+        }
+      ],
+      "steps": [
+        {
+          "title": "Подготовка",
+          "description": "Размять виноград, при необходимости добавить воду и сахар.",
+          "offsetDays": 0,
+          "durationMin": 60,
+          "tempC": null,
+          "eventKind": "start",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Дрожжи",
+          "description": "Внести дрожжи, гидрозатвор, 20–24 °C.",
+          "offsetDays": 0,
+          "durationMin": 30,
+          "tempC": 22,
+          "eventKind": "start",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Бурное брожение",
+          "description": "3–5 дней, перемешивать шапку.",
+          "offsetDays": 2,
+          "durationMin": null,
+          "tempC": null,
+          "eventKind": "check",
+          "repeatEveryDays": 2,
+          "repeatUntilDay": 7
+        },
+        {
+          "title": "Готовность",
+          "description": "Плотность 1.000, вкус сухой. Перегонять не откладывая.",
+          "offsetDays": 10,
+          "durationMin": 60,
+          "tempC": null,
+          "eventKind": "rack",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        }
+      ]
+    },
+    {
+      "id": "fruit-jam",
+      "title": "Брага из варенья",
+      "kind": "mash",
+      "styleTags": [
+        "фруктовая",
+        "варенье",
+        "быстрая"
+      ],
+      "baseVolumeL": 20,
+      "expectedYieldL": 3.8,
+      "expectedAbv": 40,
+      "summary": "Утилизация старого варенья: сахар уже есть, нужны вода, кислота и дрожжи. Считать по сахару.",
+      "source": "собственная практика",
+      "ingredients": [
+        {
+          "name": "Варенье",
+          "amount": 6000,
+          "unit": "г"
+        },
+        {
+          "name": "Вода",
+          "amount": 18,
+          "unit": "л"
+        },
+        {
+          "name": "Дрожжи спиртовые",
+          "amount": 100,
+          "unit": "г"
+        },
+        {
+          "name": "Лимонная кислота",
+          "amount": 10,
+          "unit": "г"
+        }
+      ],
+      "steps": [
+        {
+          "title": "Развести варенье",
+          "description": "Развести в воде 30 °C, проверить плотность (норма 1.080–1.100).",
+          "offsetDays": 0,
+          "durationMin": 45,
+          "tempC": 30,
+          "eventKind": "start",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Дрожжи",
+          "description": "Внести дрожжи и кислоту.",
+          "offsetDays": 0,
+          "durationMin": 20,
+          "tempC": 28,
+          "eventKind": "start",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Брожение",
+          "description": "6–9 дней при 25–28 °C.",
+          "offsetDays": 3,
+          "durationMin": null,
+          "tempC": null,
+          "eventKind": "check",
+          "repeatEveryDays": 3,
+          "repeatUntilDay": 9
+        },
+        {
+          "title": "Готовность",
+          "description": "Плотность 1.000, снять с осадка.",
+          "offsetDays": 9,
+          "durationMin": 45,
+          "tempC": null,
+          "eventKind": "rack",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        }
+      ]
+    },
+    {
+      "id": "honey-mead",
+      "title": "Медовая брага",
+      "kind": "mash",
+      "styleTags": [
+        "медовая",
+        "медовуха"
+      ],
+      "baseVolumeL": 20,
+      "expectedYieldL": 3.6,
+      "expectedAbv": 40,
+      "summary": "Мёд бродит медленно и бедно — нужна подкормка. Аромат сохраняется при 20–24 °C.",
+      "source": "собственная практика",
+      "ingredients": [
+        {
+          "name": "Мёд",
+          "amount": 5000,
+          "unit": "г"
+        },
+        {
+          "name": "Вода",
+          "amount": 18,
+          "unit": "л"
+        },
+        {
+          "name": "Дрожжи винные",
+          "amount": 100,
+          "unit": "г"
+        },
+        {
+          "name": "Подкормка",
+          "amount": 15,
+          "unit": "г"
+        },
+        {
+          "name": "Лимонная кислота",
+          "amount": 12,
+          "unit": "г"
+        }
+      ],
+      "steps": [
+        {
+          "title": "Развести мёд",
+          "description": "Мёд растворить в тёплой воде, не кипятить — аромат уходит.",
+          "offsetDays": 0,
+          "durationMin": 45,
+          "tempC": 30,
+          "eventKind": "start",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Дрожжи и подкормка",
+          "description": "28 °C, кислота, подкормка, дрожжи.",
+          "offsetDays": 0,
+          "durationMin": 20,
+          "tempC": 26,
+          "eventKind": "start",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Брожение",
+          "description": "20–24 °C, 2–4 недели. Мёд бродит медленно.",
+          "offsetDays": 7,
+          "durationMin": null,
+          "tempC": null,
+          "eventKind": "check",
+          "repeatEveryDays": 7,
+          "repeatUntilDay": 28
+        },
+        {
+          "title": "Готовность",
+          "description": "Плотность 1.000, вкус сухой.",
+          "offsetDays": 28,
+          "durationMin": 45,
+          "tempC": null,
+          "eventKind": "rack",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        }
+      ]
+    },
+    {
+      "id": "distill-sugar",
+      "title": "Дробная перегонка сахарной браги",
+      "kind": "distillate",
+      "styleTags": [
+        "перегонка",
+        "дробная",
+        "сахарная"
+      ],
+      "baseVolumeL": 20,
+      "expectedYieldL": 4.0,
+      "expectedAbv": 40,
+      "summary": "Два прогона: спирт-сырец до 5% в струе, затем дробный с отбором голов 8–10% от АС и тела до 45–50% в струе.",
+      "source": "собственная практика",
+      "ingredients": [
+        {
+          "name": "Брага",
+          "amount": 20,
+          "unit": "л"
+        },
+        {
+          "name": "Вода для разбавления сырца",
+          "amount": 10,
+          "unit": "л"
+        }
+      ],
+      "steps": [
+        {
+          "title": "Первый перегон (сырец)",
+          "description": "Гнать брагу быстро, отбирать до 5–10% в струе или до нуля по спиртометру. Не дробить.",
+          "offsetDays": 0,
+          "durationMin": 240,
+          "tempC": 100,
+          "eventKind": "distill",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Разбавить сырец",
+          "description": "Разбавить до 20–25% и дать отдохнуть 1–2 дня (по возможности).",
+          "offsetDays": 1,
+          "durationMin": 30,
+          "tempC": null,
+          "eventKind": "check",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Второй перегон: головы",
+          "description": "Отобрать 8–10% от АС покапельно, 1 капля в секунду. Не пить.",
+          "offsetDays": 2,
+          "durationMin": 90,
+          "tempC": 78,
+          "eventKind": "cut",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Тело",
+          "description": "Отбирать до 45–50% в струе, следить за температурой в кубе.",
+          "offsetDays": 2,
+          "durationMin": 180,
+          "tempC": 92,
+          "eventKind": "cut",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Хвосты",
+          "description": "Собирать отдельно, добавлять в следующий прогон.",
+          "offsetDays": 2,
+          "durationMin": 60,
+          "tempC": 98,
+          "eventKind": "cut",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Отдых после разбавления",
+          "description": "Разбавить до питьевой крепости и дать 3–7 дней отдыха.",
+          "offsetDays": 4,
+          "durationMin": null,
+          "tempC": null,
+          "eventKind": "check",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        }
+      ]
+    },
+    {
+      "id": "distill-fruit",
+      "title": "Дробная перегонка фруктовой браги",
+      "kind": "distillate",
+      "styleTags": [
+        "перегонка",
+        "дробная",
+        "фруктовая"
+      ],
+      "baseVolumeL": 25,
+      "expectedYieldL": 4.2,
+      "expectedAbv": 40,
+      "summary": "Фруктовые браги требуют отбора голов 10–15% от АС: пектин даёт метанол, который уходит первым.",
+      "source": "собственная практика",
+      "ingredients": [
+        {
+          "name": "Фруктовая брага",
+          "amount": 25,
+          "unit": "л"
+        }
+      ],
+      "steps": [
+        {
+          "title": "Первый перегон",
+          "description": "Быстро, до 5% в струе. Аромат сохраняется при невысокой мощности.",
+          "offsetDays": 0,
+          "durationMin": 240,
+          "tempC": 100,
+          "eventKind": "distill",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Головы",
+          "description": "10–15% от АС, покапельно. Головы фруктовых браг пахнут ацетоном и «химией».",
+          "offsetDays": 2,
+          "durationMin": 120,
+          "tempC": 78,
+          "eventKind": "cut",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Тело",
+          "description": "До 45% в струе. Хвосты фруктовых ароматны — их можно добавлять в следующую партию.",
+          "offsetDays": 2,
+          "durationMin": 180,
+          "tempC": 92,
+          "eventKind": "cut",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Отдых",
+          "description": "Разбавить и дать 7–14 дней — фруктовый дистиллят «собирается» дольше.",
+          "offsetDays": 3,
+          "durationMin": null,
+          "tempC": null,
+          "eventKind": "check",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        }
+      ]
+    },
+    {
+      "id": "distill-rect",
+      "title": "Ректификация спирта-сырца",
+      "kind": "rectification",
+      "styleTags": [
+        "перегонка",
+        "колонна",
+        "спирт"
+      ],
+      "baseVolumeL": 20,
+      "expectedYieldL": 6.0,
+      "expectedAbv": 96,
+      "summary": "Получение спирта 96%+ на колонне: стабилизация, отбор голов, тело по температуре и скорости.",
+      "source": "собственная практика",
+      "ingredients": [
+        {
+          "name": "Спирт-сырец",
+          "amount": 20,
+          "unit": "л"
+        },
+        {
+          "name": "Вода",
+          "amount": 20,
+          "unit": "л"
+        }
+      ],
+      "steps": [
+        {
+          "title": "Разбавить сырец",
+          "description": "До 20–30%, залить в куб не более 2/3 объёма.",
+          "offsetDays": 0,
+          "durationMin": 30,
+          "tempC": null,
+          "eventKind": "start",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Стабилизация колонны",
+          "description": "Выйти на рабочий режим 15–20 минут, температура вверху стабильна.",
+          "offsetDays": 0,
+          "durationMin": 25,
+          "tempC": 78,
+          "eventKind": "check",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Отбор голов",
+          "description": "5–8% от АС, скорость 1–2 капли в секунду, до исчезновения запаха.",
+          "offsetDays": 0,
+          "durationMin": 120,
+          "tempC": 78,
+          "eventKind": "cut",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Отбор тела",
+          "description": "Скорость 600–900 мл/ч, контроль температуры. Тело — до 90–92 °C в кубе.",
+          "offsetDays": 0,
+          "durationMin": 240,
+          "tempC": 85,
+          "eventKind": "cut",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Хвосты",
+          "description": "Отбирать отдельно, добавить в следующий сырец.",
+          "offsetDays": 0,
+          "durationMin": 60,
+          "tempC": 95,
+          "eventKind": "cut",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Отдых",
+          "description": "Разбавить до нужной крепости, отдых 3–7 дней.",
+          "offsetDays": 2,
+          "durationMin": null,
+          "tempC": null,
+          "eventKind": "check",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        }
+      ]
+    },
+    {
+      "id": "tinct-hrenovuha",
+      "title": "Хреновуха",
+      "kind": "tincture",
+      "styleTags": [
+        "пряная",
+        "хрен",
+        "скоропорт"
+      ],
+      "baseVolumeL": 3,
+      "expectedYieldL": 3.0,
+      "expectedAbv": 40,
+      "summary": "Классика: корень хрена на спирте 40–45%, мёд и лимон для баланса. Передерживать нельзя — становится жгучей и мутной.",
+      "source": "собственная практика",
+      "ingredients": [
+        {
+          "name": "Спирт 40–45%",
+          "amount": 2.5,
+          "unit": "л"
+        },
+        {
+          "name": "Корень хрена свежий",
+          "amount": 120,
+          "unit": "г"
+        },
+        {
+          "name": "Мёд",
+          "amount": 100,
+          "unit": "г"
+        },
+        {
+          "name": "Лимон",
+          "amount": 1,
+          "unit": "шт"
+        },
+        {
+          "name": "Вода",
+          "amount": 0.4,
+          "unit": "л"
+        }
+      ],
+      "steps": [
+        {
+          "title": "Заложить хрен",
+          "description": "Хрен натереть, залить спиртом. Настаивать 5–7 дней в темноте.",
+          "offsetDays": 0,
+          "durationMin": 20,
+          "tempC": null,
+          "eventKind": "macerate",
+          "repeatEveryDays": 2,
+          "repeatUntilDay": 6
+        },
+        {
+          "title": "Процедить",
+          "description": "Отфильтровать через марлю и ватный фильтр, отжать жмых.",
+          "offsetDays": 7,
+          "durationMin": 30,
+          "tempC": null,
+          "eventKind": "strain",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Сироп",
+          "description": "Мёд растворить в тёплой воде, влить в настойку, добавить сок лимона.",
+          "offsetDays": 7,
+          "durationMin": 20,
+          "tempC": null,
+          "eventKind": "sweeten",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Отдых",
+          "description": "7–14 дней в темноте, затем при необходимости осветлить.",
+          "offsetDays": 8,
+          "durationMin": null,
+          "tempC": null,
+          "eventKind": "check",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        }
+      ]
+    },
+    {
+      "id": "tinct-klyukva",
+      "title": "Клюквовка",
+      "kind": "tincture",
+      "styleTags": [
+        "ягодная",
+        "клюква"
+      ],
+      "baseVolumeL": 3,
+      "expectedYieldL": 2.8,
+      "expectedAbv": 35,
+      "summary": "Кислая ягода требует сахара: 100–150 г/л. Настаивать на 40% и не давить ягоды — уйдёт горечь из косточек.",
+      "source": "собственная практика",
+      "ingredients": [
+        {
+          "name": "Спирт 40%",
+          "amount": 2.0,
+          "unit": "л"
+        },
+        {
+          "name": "Клюква",
+          "amount": 600,
+          "unit": "г"
+        },
+        {
+          "name": "Сахар",
+          "amount": 250,
+          "unit": "г"
+        },
+        {
+          "name": "Вода",
+          "amount": 0.5,
+          "unit": "л"
+        }
+      ],
+      "steps": [
+        {
+          "title": "Заложить клюкву",
+          "description": "Ягоды целиком (или слегка раздавить), залить спиртом.",
+          "offsetDays": 0,
+          "durationMin": 15,
+          "tempC": null,
+          "eventKind": "macerate",
+          "repeatEveryDays": 3,
+          "repeatUntilDay": 21
+        },
+        {
+          "title": "Процедить",
+          "description": "Отфильтровать, ягоды отжать.",
+          "offsetDays": 21,
+          "durationMin": 40,
+          "tempC": null,
+          "eventKind": "strain",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Сироп",
+          "description": "Сахар в воде, влить, размешать.",
+          "offsetDays": 21,
+          "durationMin": 20,
+          "tempC": null,
+          "eventKind": "sweeten",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Отдых",
+          "description": "14 дней, затем снять с осадка.",
+          "offsetDays": 22,
+          "durationMin": null,
+          "tempC": null,
+          "eventKind": "check",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        }
+      ]
+    },
+    {
+      "id": "tinct-vishnevka",
+      "title": "Вишнёвка",
+      "kind": "tincture",
+      "styleTags": [
+        "ягодная",
+        "вишня"
+      ],
+      "baseVolumeL": 3,
+      "expectedYieldL": 2.9,
+      "expectedAbv": 30,
+      "summary": "Вишня с косточкой даёт миндальный тон, но держать её дольше 4–6 недель нельзя — появляется горечь и синильная нота.",
+      "source": "собственная практика",
+      "ingredients": [
+        {
+          "name": "Спирт 45%",
+          "amount": 2.0,
+          "unit": "л"
+        },
+        {
+          "name": "Вишня",
+          "amount": 800,
+          "unit": "г"
+        },
+        {
+          "name": "Сахар",
+          "amount": 200,
+          "unit": "г"
+        },
+        {
+          "name": "Вода",
+          "amount": 0.4,
+          "unit": "л"
+        }
+      ],
+      "steps": [
+        {
+          "title": "Заложить вишню",
+          "description": "Вишню с косточкой залить спиртом.",
+          "offsetDays": 0,
+          "durationMin": 15,
+          "tempC": null,
+          "eventKind": "macerate",
+          "repeatEveryDays": 3,
+          "repeatUntilDay": 28
+        },
+        {
+          "title": "Слить и снять с косточек",
+          "description": "Настойку слить, ягоды залить водой на 3 дня и добавить к настойке.",
+          "offsetDays": 28,
+          "durationMin": 30,
+          "tempC": null,
+          "eventKind": "strain",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Сироп",
+          "description": "Сахар растворить, влить, размешать.",
+          "offsetDays": 31,
+          "durationMin": 20,
+          "tempC": null,
+          "eventKind": "sweeten",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Отдых",
+          "description": "21 день, фильтрация, розлив.",
+          "offsetDays": 32,
+          "durationMin": null,
+          "tempC": null,
+          "eventKind": "check",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        }
+      ]
+    },
+    {
+      "id": "tinct-limoncello",
+      "title": "Лимончелло",
+      "kind": "tincture",
+      "styleTags": [
+        "цитрус",
+        "ликёр"
+      ],
+      "baseVolumeL": 3,
+      "expectedYieldL": 3.0,
+      "expectedAbv": 30,
+      "summary": "Только цедра, без белой части — она горчит. Настойка на 90% за 7–10 дней, затем сироп.",
+      "source": "собственная практика",
+      "ingredients": [
+        {
+          "name": "Спирт 90%",
+          "amount": 1.0,
+          "unit": "л"
+        },
+        {
+          "name": "Цедра лимона",
+          "amount": 120,
+          "unit": "г"
+        },
+        {
+          "name": "Сахар",
+          "amount": 500,
+          "unit": "г"
+        },
+        {
+          "name": "Вода",
+          "amount": 1.5,
+          "unit": "л"
+        }
+      ],
+      "steps": [
+        {
+          "title": "Заложить цедру",
+          "description": "Снять цедру без белого, залить спиртом 90%.",
+          "offsetDays": 0,
+          "durationMin": 20,
+          "tempC": null,
+          "eventKind": "macerate",
+          "repeatEveryDays": 2,
+          "repeatUntilDay": 8
+        },
+        {
+          "title": "Процедить",
+          "description": "Отфильтровать цедру.",
+          "offsetDays": 8,
+          "durationMin": 30,
+          "tempC": null,
+          "eventKind": "strain",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Сироп",
+          "description": "Сахар в воде, остудить, влить в настойку.",
+          "offsetDays": 8,
+          "durationMin": 30,
+          "tempC": null,
+          "eventKind": "sweeten",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Отдых и охлаждение",
+          "description": "7 дней в холоде — ликёр станет прозрачным.",
+          "offsetDays": 9,
+          "durationMin": null,
+          "tempC": null,
+          "eventKind": "check",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        }
+      ]
+    },
+    {
+      "id": "tinct-kedrovka",
+      "title": "Кедровка",
+      "kind": "tincture",
+      "styleTags": [
+        "ореховая",
+        "кедр"
+      ],
+      "baseVolumeL": 3,
+      "expectedYieldL": 2.8,
+      "expectedAbv": 35,
+      "summary": "Кедровые орехи на спирте 40–45%. Держать 3–4 недели, иначе появляется маслянистость.",
+      "source": "собственная практика",
+      "ingredients": [
+        {
+          "name": "Спирт 45%",
+          "amount": 2.0,
+          "unit": "л"
+        },
+        {
+          "name": "Кедровые орехи",
+          "amount": 300,
+          "unit": "г"
+        },
+        {
+          "name": "Сахар",
+          "amount": 100,
+          "unit": "г"
+        },
+        {
+          "name": "Вода",
+          "amount": 0.5,
+          "unit": "л"
+        }
+      ],
+      "steps": [
+        {
+          "title": "Заложить орехи",
+          "description": "Орехи слегка раздавить, залить спиртом.",
+          "offsetDays": 0,
+          "durationMin": 15,
+          "tempC": null,
+          "eventKind": "macerate",
+          "repeatEveryDays": 7,
+          "repeatUntilDay": 28
+        },
+        {
+          "title": "Процедить",
+          "description": "Фильтрация через вату — масла мутят.",
+          "offsetDays": 28,
+          "durationMin": 40,
+          "tempC": null,
+          "eventKind": "strain",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Сироп и отдых",
+          "description": "Сахар в воде, влить, дать 14 дней.",
+          "offsetDays": 29,
+          "durationMin": null,
+          "tempC": null,
+          "eventKind": "check",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        }
+      ]
+    },
+    {
+      "id": "tinct-percovka",
+      "title": "Перцовка",
+      "kind": "tincture",
+      "styleTags": [
+        "пряная",
+        "перец",
+        "скоропорт"
+      ],
+      "baseVolumeL": 3,
+      "expectedYieldL": 3.0,
+      "expectedAbv": 40,
+      "summary": "Острый вариант: чёрный перец и чили. 3–5 дней достаточно, иначе жжёт.",
+      "source": "собственная практика",
+      "ingredients": [
+        {
+          "name": "Спирт 40%",
+          "amount": 2.8,
+          "unit": "л"
+        },
+        {
+          "name": "Чёрный перец горошком",
+          "amount": 20,
+          "unit": "г"
+        },
+        {
+          "name": "Чили сушёный",
+          "amount": 1,
+          "unit": "шт"
+        },
+        {
+          "name": "Мёд",
+          "amount": 60,
+          "unit": "г"
+        }
+      ],
+      "steps": [
+        {
+          "title": "Заложить перец",
+          "description": "Перец и чили (без семян) залить спиртом.",
+          "offsetDays": 0,
+          "durationMin": 10,
+          "tempC": null,
+          "eventKind": "macerate",
+          "repeatEveryDays": 1,
+          "repeatUntilDay": 4
+        },
+        {
+          "title": "Процедить",
+          "description": "Слить, попробовать: если жжёт слишком — разбавить.",
+          "offsetDays": 4,
+          "durationMin": 20,
+          "tempC": null,
+          "eventKind": "strain",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Мёд",
+          "description": "Растворить мёд в тёплой воде, влить.",
+          "offsetDays": 4,
+          "durationMin": 15,
+          "tempC": null,
+          "eventKind": "sweeten",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Отдых",
+          "description": "5–7 дней.",
+          "offsetDays": 5,
+          "durationMin": null,
+          "tempC": null,
+          "eventKind": "check",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        }
+      ]
+    },
+    {
+      "id": "tinct-kofe",
+      "title": "Кофейная настойка",
+      "kind": "tincture",
+      "styleTags": [
+        "кофе",
+        "скоропорт"
+      ],
+      "baseVolumeL": 3,
+      "expectedYieldL": 2.9,
+      "expectedAbv": 35,
+      "summary": "На зерне, а не на молотом — молотый даёт горечь. 7–10 дней, затем сироп по вкусу.",
+      "source": "собственная практика",
+      "ingredients": [
+        {
+          "name": "Спирт 40%",
+          "amount": 2.5,
+          "unit": "л"
+        },
+        {
+          "name": "Кофе в зёрнах",
+          "amount": 150,
+          "unit": "г"
+        },
+        {
+          "name": "Сахар",
+          "amount": 150,
+          "unit": "г"
+        },
+        {
+          "name": "Вода",
+          "amount": 0.4,
+          "unit": "л"
+        }
+      ],
+      "steps": [
+        {
+          "title": "Заложить кофе",
+          "description": "Зёрна целиком залить спиртом.",
+          "offsetDays": 0,
+          "durationMin": 10,
+          "tempC": null,
+          "eventKind": "macerate",
+          "repeatEveryDays": 2,
+          "repeatUntilDay": 9
+        },
+        {
+          "title": "Процедить",
+          "description": "Отфильтровать, при необходимости осветлить.",
+          "offsetDays": 10,
+          "durationMin": 30,
+          "tempC": null,
+          "eventKind": "strain",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Сироп",
+          "description": "Сахар в воде, влить, размешать.",
+          "offsetDays": 10,
+          "durationMin": 15,
+          "tempC": null,
+          "eventKind": "sweeten",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Отдых",
+          "description": "7 дней.",
+          "offsetDays": 11,
+          "durationMin": null,
+          "tempC": null,
+          "eventKind": "check",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        }
+      ]
+    },
+    {
+      "id": "tinct-oblepiha",
+      "title": "Облепиховая",
+      "kind": "tincture",
+      "styleTags": [
+        "ягодная",
+        "облепиха"
+      ],
+      "baseVolumeL": 3,
+      "expectedYieldL": 2.9,
+      "expectedAbv": 35,
+      "summary": "Облепиха быстро отдаёт цвет и масла. Держать 10–14 дней, иначе настойка мутнеет.",
+      "source": "собственная практика",
+      "ingredients": [
+        {
+          "name": "Спирт 40%",
+          "amount": 2.0,
+          "unit": "л"
+        },
+        {
+          "name": "Облепиха",
+          "amount": 500,
+          "unit": "г"
+        },
+        {
+          "name": "Мёд",
+          "amount": 150,
+          "unit": "г"
+        },
+        {
+          "name": "Вода",
+          "amount": 0.5,
+          "unit": "л"
+        }
+      ],
+      "steps": [
+        {
+          "title": "Заложить облепиху",
+          "description": "Ягоды размять, залить спиртом.",
+          "offsetDays": 0,
+          "durationMin": 15,
+          "tempC": null,
+          "eventKind": "macerate",
+          "repeatEveryDays": 3,
+          "repeatUntilDay": 12
+        },
+        {
+          "title": "Процедить",
+          "description": "Отфильтровать через ватный фильтр.",
+          "offsetDays": 13,
+          "durationMin": 40,
+          "tempC": null,
+          "eventKind": "strain",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Мёд и отдых",
+          "description": "Мёд растворить, влить, дать 10 дней.",
+          "offsetDays": 14,
+          "durationMin": null,
+          "tempC": null,
+          "eventKind": "check",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        }
+      ]
+    },
+    {
+      "id": "liqueur-cream",
+      "title": "Крем-ликёр",
+      "kind": "liqueur",
+      "styleTags": [
+        "сливочный",
+        "ликёр"
+      ],
+      "baseVolumeL": 1.5,
+      "expectedYieldL": 1.4,
+      "expectedAbv": 17,
+      "summary": "Сливочный ликёр на сгущённом молоке. Главное — вливать спирт в молочную часть тонкой струёй, не наоборот.",
+      "source": "собственная практика",
+      "ingredients": [
+        {
+          "name": "Сгущённое молоко",
+          "amount": 400,
+          "unit": "г"
+        },
+        {
+          "name": "Сливки 20%",
+          "amount": 200,
+          "unit": "мл"
+        },
+        {
+          "name": "Спирт 96%",
+          "amount": 200,
+          "unit": "мл"
+        },
+        {
+          "name": "Вода",
+          "amount": 150,
+          "unit": "мл"
+        },
+        {
+          "name": "Ванильный сахар",
+          "amount": 10,
+          "unit": "г"
+        }
+      ],
+      "steps": [
+        {
+          "title": "Смешать молочное",
+          "description": "Сгущёнка + сливки + ваниль, взбить до однородности.",
+          "offsetDays": 0,
+          "durationMin": 15,
+          "tempC": null,
+          "eventKind": "sweeten",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Влить спирт",
+          "description": "Спирт разбавить водой до 40%, вливать тонкой струёй при помешивании.",
+          "offsetDays": 0,
+          "durationMin": 15,
+          "tempC": null,
+          "eventKind": "sweeten",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Охладить",
+          "description": "В холодильник на 12–24 часа, взболтать перед употреблением.",
+          "offsetDays": 1,
+          "durationMin": null,
+          "tempC": null,
+          "eventKind": "check",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        }
+      ]
+    },
+    {
+      "id": "liqueur-cherry",
+      "title": "Вишнёвый ликёр",
+      "kind": "liqueur",
+      "styleTags": [
+        "ягодный",
+        "ликёр"
+      ],
+      "baseVolumeL": 3,
+      "expectedYieldL": 2.9,
+      "expectedAbv": 25,
+      "summary": "Сладкий ликёр из вишнёвого настоя с сиропом. Хорош через месяц отдыха.",
+      "source": "собственная практика",
+      "ingredients": [
+        {
+          "name": "Вишнёвая настойка",
+          "amount": 1.5,
+          "unit": "л"
+        },
+        {
+          "name": "Сахар",
+          "amount": 400,
+          "unit": "г"
+        },
+        {
+          "name": "Вода",
+          "amount": 0.8,
+          "unit": "л"
+        },
+        {
+          "name": "Вишнёвый сок",
+          "amount": 0.3,
+          "unit": "л"
+        }
+      ],
+      "steps": [
+        {
+          "title": "Сварить сироп",
+          "description": "Сахар в воде, довести до кипения, остудить.",
+          "offsetDays": 0,
+          "durationMin": 20,
+          "tempC": null,
+          "eventKind": "sweeten",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Смешать",
+          "description": "Настойка + сироп + сок, размешать.",
+          "offsetDays": 0,
+          "durationMin": 15,
+          "tempC": null,
+          "eventKind": "sweeten",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Отдых",
+          "description": "30 дней в темноте, затем фильтрация.",
+          "offsetDays": 1,
+          "durationMin": null,
+          "tempC": null,
+          "eventKind": "check",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        }
+      ]
+    },
+    {
+      "id": "aging-barrel",
+      "title": "Выдержка в бочке",
+      "kind": "aging",
+      "styleTags": [
+        "бочка",
+        "выдержка",
+        "виски-стиль"
+      ],
+      "baseVolumeL": 10,
+      "expectedYieldL": 9.0,
+      "expectedAbv": 55,
+      "summary": "Заливка дистиллята 55–60% в дубовую бочку. Малый объём = быстрая выдержка и большая ангельская доля.",
+      "source": "собственная практика",
+      "ingredients": [
+        {
+          "name": "Дистиллят 55–60%",
+          "amount": 10,
+          "unit": "л"
+        }
+      ],
+      "steps": [
+        {
+          "title": "Подготовить бочку",
+          "description": "Проверить на течи, пропарить, залить дистиллят под горлышко.",
+          "offsetDays": 0,
+          "durationMin": 120,
+          "tempC": null,
+          "eventKind": "barrel",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Первая дегустация",
+          "description": "Оценить цвет и дуб: если дуба много — перелить в стекло раньше.",
+          "offsetDays": 30,
+          "durationMin": null,
+          "tempC": null,
+          "eventKind": "taste",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Доливка",
+          "description": "Долить до полного, чтобы не было воздуха. Каждые 30 дней.",
+          "offsetDays": 30,
+          "durationMin": 30,
+          "tempC": null,
+          "eventKind": "topup",
+          "repeatEveryDays": 30,
+          "repeatUntilDay": 360
+        },
+        {
+          "title": "Дегустация",
+          "description": "Сравнить с предыдущей, записать выводы.",
+          "offsetDays": 90,
+          "durationMin": null,
+          "tempC": null,
+          "eventKind": "taste",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Дегустация",
+          "description": "Половина срока: решить, продолжать или снимать.",
+          "offsetDays": 180,
+          "durationMin": null,
+          "tempC": null,
+          "eventKind": "taste",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Розлив",
+          "description": "Разбавить до питьевой крепости, отдых 14 дней, розлив.",
+          "offsetDays": 365,
+          "durationMin": 90,
+          "tempC": null,
+          "eventKind": "bottle",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        }
+      ]
+    },
+    {
+      "id": "aging-chips",
+      "title": "Выдержка на щепе",
+      "kind": "aging",
+      "styleTags": [
+        "щепа",
+        "выдержка",
+        "быстро"
+      ],
+      "baseVolumeL": 3,
+      "expectedYieldL": 2.8,
+      "expectedAbv": 45,
+      "summary": "Дубовая щепа вместо бочки: 2–4 г/л среднего обжига на 1–3 недели. Легко передержать — проверять каждые 3 дня.",
+      "source": "собственная практика",
+      "ingredients": [
+        {
+          "name": "Дистиллят 45–50%",
+          "amount": 3,
+          "unit": "л"
+        },
+        {
+          "name": "Дубовая щепа среднего обжига",
+          "amount": 9,
+          "unit": "г"
+        }
+      ],
+      "steps": [
+        {
+          "title": "Подготовить щепу",
+          "description": "Щепу промыть, можно прогреть в духовке 150 °C 10 минут.",
+          "offsetDays": 0,
+          "durationMin": 30,
+          "tempC": null,
+          "eventKind": "barrel",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Заложить",
+          "description": "2–3 г/л, в тёмное место, взбалтывать раз в 2–3 дня.",
+          "offsetDays": 1,
+          "durationMin": 15,
+          "tempC": null,
+          "eventKind": "check",
+          "repeatEveryDays": 3,
+          "repeatUntilDay": 21
+        },
+        {
+          "title": "Проверка вкуса",
+          "description": "Если дуб перебивает — снять щепу немедленно.",
+          "offsetDays": 7,
+          "durationMin": null,
+          "tempC": null,
+          "eventKind": "taste",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        },
+        {
+          "title": "Снять с щепы",
+          "description": "Отфильтровать, дать отдых 7–14 дней.",
+          "offsetDays": 21,
+          "durationMin": 40,
+          "tempC": null,
+          "eventKind": "bottle",
+          "repeatEveryDays": null,
+          "repeatUntilDay": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,54 +1,182 @@
-import 'package:material_ui/material_ui.dart';
-import 'package:package_info_plus/package_info_plus.dart';
+import 'dart:convert';
 
-/// Экран «Ещё»: калькуляторы, склад, дегустации, оборудование, справочник,
-/// настройки. Появится в M1–M2.
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
+
+import '../../app/app_scope.dart';
+import '../../app/app_version.dart';
+import '../../utils/format.dart';
+import '../calculators/calculators_screen.dart';
+
+/// Экран «Ещё»: калькуляторы, бэкап, служебная информация.
 class MoreScreen extends StatelessWidget {
   const MoreScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final scope = AppScope.of(context);
+
     return Scaffold(
       appBar: AppBar(title: const Text('Ещё')),
       body: ListView(
         children: [
           const SizedBox(height: 8),
-          _Tile(
-            icon: Icons.calculate_outlined,
-            title: 'Калькуляторы',
-            subtitle: 'Брага, разбавление, фракции, сироп, бочка',
+          ListTile(
+            leading: const Icon(Icons.calculate_outlined),
+            title: const Text('Калькуляторы'),
+            subtitle: const Text('Брага, разбавление, фракции, щепа, масштаб'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => const CalculatorsScreen(),
+              ),
+            ),
           ),
-          _Tile(
-            icon: Icons.inventory_2_outlined,
-            title: 'Склад и погреб',
-            subtitle: 'Бочки, бутыли, что готово к розливу',
+          ListTile(
+            leading: const Icon(Icons.backup_outlined),
+            title: const Text('Резервная копия'),
+            subtitle: const Text('Сохранить все данные в файл'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => _backup(context),
           ),
-          _Tile(
-            icon: Icons.local_bar_outlined,
-            title: 'Дегустации',
-            subtitle: 'Оценки, заметки, фото',
+          ListTile(
+            leading: const Icon(Icons.restore),
+            title: const Text('Восстановить из копии'),
+            subtitle: const Text('Заменить данные содержимым файла'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => _restore(context),
           ),
-          _Tile(
-            icon: Icons.precision_manufacturing_outlined,
-            title: 'Оборудование',
-            subtitle: 'Аппарат, куб, датчики, Smart-Column S3',
+          ListTile(
+            leading: const Icon(Icons.notifications_outlined),
+            title: const Text('Проверить напоминания'),
+            subtitle: Text(
+              scope.notifications.isReady
+                  ? (scope.notifications.exactAllowed
+                      ? 'Точные напоминания доступны'
+                      : 'Разрешены неточные напоминания')
+                  : 'Разрешения не выданы',
+            ),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () async {
+              if (!scope.notifications.exactAllowed) {
+                await scope.notifications.requestExactAlarms();
+              }
+              await scope.notifications.showNow(
+                title: 'Календарь самогонщика',
+                body: 'Напоминания работают. События придут в назначенное время.',
+              );
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Тестовое уведомление отправлено')),
+                );
+              }
+            },
           ),
-          _Tile(
-            icon: Icons.auto_stories_outlined,
-            title: 'Справочник',
-            subtitle: 'Статьи, глоссарий, таблицы',
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.auto_stories_outlined),
+            title: const Text('Справочник'),
+            subtitle: const Text('Статьи, глоссарий, таблицы — в M2'),
+            enabled: false,
           ),
-          _Tile(
-            icon: Icons.settings_outlined,
-            title: 'Настройки',
-            subtitle: 'Тема, напоминания, бэкап, экспорт',
+          ListTile(
+            leading: const Icon(Icons.inventory_2_outlined),
+            title: const Text('Склад и погреб'),
+            subtitle: const Text('Бочки и бутыли — в M2'),
+            enabled: false,
+          ),
+          ListTile(
+            leading: const Icon(Icons.precision_manufacturing_outlined),
+            title: const Text('Оборудование'),
+            subtitle: const Text('Интеграция с колонной — после релиза'),
+            enabled: false,
           ),
           const SizedBox(height: 24),
           const Center(child: _VersionLabel()),
-          const SizedBox(height: 24),
+          const SizedBox(height: 32),
         ],
       ),
     );
+  }
+
+  Future<void> _backup(BuildContext context) async {
+    final scope = AppScope.of(context);
+    try {
+      final path = await scope.backup.exportToFile();
+      await scope.backup.markBackupNow();
+      final last = await scope.backup.lastBackupAt();
+      await SharePlus.instance.share(
+        ShareParams(
+          files: [XFile(path)],
+          subject: 'Резервная копия «Календарь самогонщика»',
+        ),
+      );
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Копия сохранена${last != null ? ' (${formatFullDate(DateTime.parse(last))})' : ''}',
+          ),
+        ),
+      );
+    } catch (e) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Не удалось сохранить копию: $e')),
+      );
+    }
+  }
+
+  Future<void> _restore(BuildContext context) async {
+    final scope = AppScope.of(context);
+    final picked = await FilePicker.pickFile();
+    if (picked == null) return;
+    if (!context.mounted) return;
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Заменить все данные?'),
+        content: const Text(
+          'Текущие рецепты, партии, события и замеры будут заменены '
+          'содержимым файла. Отменить это будет нельзя.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Отмена'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Восстановить'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !context.mounted) return;
+
+    try {
+      final content = await picked.xFile.readAsString();
+      final result = await scope.backup.importFromString(content);
+      if (!context.mounted) return;
+      final summary = result.counts.entries
+          .map((e) => '${e.value} ${e.key}')
+          .join(', ');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Восстановлено: $summary')),
+      );
+    } on FormatException catch (e) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.message)),
+      );
+    } catch (e) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Не удалось восстановить: ${jsonEncode('$e')}')),
+      );
+    }
   }
 }
 
@@ -58,47 +186,11 @@ class _VersionLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return FutureBuilder<PackageInfo>(
-      future: PackageInfo.fromPlatform(),
-      builder: (context, snapshot) {
-        final info = snapshot.data;
-        final text = info == null
-            ? 'Календарь самогонщика'
-            : 'Календарь самогонщика · версия ${info.version}';
-        return Text(
-          text,
-          style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.colorScheme.onSurfaceVariant,
-          ),
-        );
-      },
-    );
-  }
-}
-
-class _Tile extends StatelessWidget {
-  const _Tile({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-  });
-
-  final IconData icon;
-  final String title;
-  final String subtitle;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(icon),
-      title: Text(title),
-      subtitle: Text(subtitle),
-      trailing: const Icon(Icons.chevron_right),
-      onTap: () {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('«$title» появится на следующем этапе')),
-        );
-      },
+    return Text(
+      'Календарь самогонщика · версия $kAppVersion',
+      style: theme.textTheme.bodySmall?.copyWith(
+        color: theme.colorScheme.onSurfaceVariant,
+      ),
     );
   }
 }

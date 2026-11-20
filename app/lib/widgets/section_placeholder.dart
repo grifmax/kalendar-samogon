@@ -1,4 +1,4 @@
-import 'package:material_ui/material_ui.dart';
+import 'package:flutter/material.dart';
 
 /// Заглушка раздела до наполнения на этапе M1.
 class SectionPlaceholder extends StatelessWidget {
