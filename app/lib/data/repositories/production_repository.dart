@@ -179,7 +179,7 @@ class ProductionRepository {
     await (db.delete(db.aging)..where((t) => t.id.equals(id))).go();
   }
 
-  /// Прогноз остатка с учётом ангельской доли.
+  /// Прогноз остатка с учётом доли ангела.
   static double projectedVolume({
     required double volumeL,
     required DateTime startedAt,

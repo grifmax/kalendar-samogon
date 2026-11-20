@@ -123,7 +123,7 @@ void main() {
       expect(grams, lessThan(40));
     });
 
-    test('ангельская доля при 3%/год за год ≈ 3% объёма', () {
+    test('доля ангела при 3%/год за год ≈ 3% объёма', () {
       final loss = angelShareLoss(volumeL: 100, months: 12, annualPercent: 3);
       expect(loss, closeTo(3, 1e-6));
     });

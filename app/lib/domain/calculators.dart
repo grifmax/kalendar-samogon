@@ -217,7 +217,7 @@ double chipsEquivalentGrams({required double volumeL, required double months}) {
   return volumeL * months * speed;
 }
 
-/// Ангельская доля: сколько литров испарится за [months] месяцев.
+/// Доля ангела: сколько литров испарится за [months] месяцев.
 ///
 /// [annualPercent] — потери в год: 2–3% в прохладе, до 5% в жаре,
 /// 10–15% в малых бочках 5–10 л.
@@ -290,7 +290,7 @@ double blendThree({
   return (v1 * a1 + v2 * a2 + v3 * a3) / total;
 }
 
-/// Сколько долить в бочку, чтобы компенсировать ангельскую долю.
+/// Сколько долить в бочку, чтобы компенсировать долю ангела.
 ///
 /// [currentL] — сколько сейчас в бочке, [targetL] — до какого уровня доливать.
 double topUpNeeded({required double currentL, required double targetL}) {

@@ -77,7 +77,7 @@ class CalculatorsScreen extends StatelessWidget {
     ),
     _CalcEntry(
       'Щепа и бочка',
-      'Эквивалент щепы и ангельская доля',
+      'Эквивалент щепы и доля ангела',
       Icons.inventory_2,
       () => const _ChipsCalculator(),
     ),
@@ -1293,7 +1293,7 @@ class _ChipsCalculatorState extends State<_ChipsCalculator> {
         ),
         _NumField(
           controller: _barrel,
-          label: 'Объём бочки (для ангельской доли)',
+          label: 'Объём бочки (для доли ангела)',
           suffix: 'л',
           onChanged: () => setState(() {}),
         ),

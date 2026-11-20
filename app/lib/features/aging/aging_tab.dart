@@ -197,7 +197,7 @@ class _AgingCard extends StatelessWidget {
               _row('Залито', formatVolume(volume)),
               _row('Осталось (расчёт)', formatVolume(remaining)),
               _row(
-                'Ангельская доля',
+                'Доля ангела',
                 '${formatVolume(loss)} '
                     '(${volume > 0 ? (loss / volume * 100).round() : 0}%)',
               ),
