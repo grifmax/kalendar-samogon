@@ -16,6 +16,9 @@ app/ios/Pods/
 *.jks
 *.keystore
 
+# Рабочие файлы слияния рецептов (см. app/tools/merge_recipes.py)
+app/assets/_recipes_*.json
+
 # Локальные данные и мусор
 *.log
 *.db

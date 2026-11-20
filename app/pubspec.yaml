@@ -3,7 +3,7 @@ description: "Календарь самогонщика — рецепты, па
 publish_to: 'none'
 
 # Версию синхронизируем с VERSION в корне проекта (docs/CONVENTIONS.md).
-version: 0.7.0+9
+version: 0.8.0+10
 
 environment:
   sdk: ^3.14.0

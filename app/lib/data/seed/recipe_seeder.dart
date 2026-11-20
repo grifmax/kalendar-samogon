@@ -21,7 +21,10 @@ class RecipeSeeder {
   static const _versionKey = 'recipesSeedVersion';
 
   /// Актуальная версия набора рецептов — поднимать при изменении assets.
-  static const seedVersion = '1';
+  ///
+  /// 2 — каталог расширен до 105 рецептов; существующие записи не трогаются,
+  /// добавляются только новые id.
+  static const seedVersion = '2';
 
   Future<int> seedIfNeeded() async {
     final meta = await db.select(db.appMeta).get();

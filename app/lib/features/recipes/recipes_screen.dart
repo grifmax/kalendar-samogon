@@ -106,7 +106,9 @@ class _RecipesScreenState extends State<RecipesScreen> {
                   );
                 }
                 return ListView.separated(
-                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
+                  // Нижний отступ — под плавающую кнопку «Свой рецепт»,
+                  // иначе она накрывает последнюю карточку.
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 96),
                   itemCount: recipes.length,
                   separatorBuilder: (_, _) => const SizedBox(height: 8),
                   itemBuilder: (context, i) => _RecipeTile(
