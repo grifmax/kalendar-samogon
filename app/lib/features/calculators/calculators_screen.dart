@@ -4,6 +4,7 @@ import '../../domain/calculators.dart';
 import '../../domain/reference.dart';
 import '../../domain/recipe_tuning.dart';
 import '../../utils/format.dart';
+import '../../widgets/form_fields.dart';
 
 /// Хаб калькуляторов.
 ///
@@ -148,20 +149,19 @@ class _CalcBody extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ...fields,
-        if (result != null) ...[
-          const SizedBox(height: 24),
+        if (result != null)
           Card(
-            margin: EdgeInsets.zero,
+            margin: const EdgeInsets.only(top: FormSpacing.fieldToHint),
             color: theme.colorScheme.primary.withValues(alpha: 0.10),
             child: Padding(padding: const EdgeInsets.all(16), child: result!),
           ),
-        ],
-        const SizedBox(height: 32),
+        const SizedBox(height: FormSpacing.section),
       ],
     );
   }
 }
 
+/// Обёртка над общим полем: в калькуляторах единица измерения всегда есть.
 class _NumField extends StatelessWidget {
   const _NumField({
     required this.controller,
@@ -177,19 +177,11 @@ class _NumField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: TextField(
-        controller: controller,
-        keyboardType: const TextInputType.numberWithOptions(decimal: true),
-        onChanged: (_) => onChanged?.call(),
-        decoration: InputDecoration(
-          labelText: label,
-          suffixText: suffix,
-          border: const OutlineInputBorder(),
-          isDense: true,
-        ),
-      ),
+    return FormNumberField(
+      controller: controller,
+      label: label,
+      suffix: suffix ?? '',
+      onChanged: onChanged,
     );
   }
 }
@@ -218,53 +210,66 @@ class _StrengthField extends StatelessWidget {
     final temp = _parse(tempController);
     final corrected = hydrometerCorrection(reading: reading, tempC: temp);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              flex: 3,
-              child: _NumField(
-                controller: abvController,
-                label: label,
-                suffix: '%',
-                onChanged: onChanged,
+    final hasCorrection = (temp - 20).abs() > 0.5;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: FormSpacing.field),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                flex: 3,
+                child: FormNumberField(
+                  controller: abvController,
+                  label: label,
+                  suffix: '%',
+                  onChanged: onChanged,
+                  bottomPadding: 0,
+                ),
               ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              flex: 2,
-              child: _NumField(
-                controller: tempController,
-                label: 'Температура',
-                suffix: '°C',
-                onChanged: onChanged,
+              const SizedBox(width: 10),
+              Expanded(
+                flex: 2,
+                child: FormNumberField(
+                  controller: tempController,
+                  label: 'Температура',
+                  suffix: '°C',
+                  onChanged: onChanged,
+                  bottomPadding: 0,
+                ),
               ),
-            ),
-          ],
-        ),
-        if ((temp - 20).abs() > 0.5)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child: Row(
-              children: [
-                Icon(Icons.thermostat,
-                    size: 15, color: theme.colorScheme.primary),
-                const SizedBox(width: 6),
-                Text(
-                  'При 20 °C это ${formatNumber(corrected, decimals: 1)}% '
-                  '(поправка ${corrected >= reading ? '+' : ''}'
-                  '${formatNumber(corrected - reading, decimals: 1)})',
-                  style: theme.textTheme.bodySmall?.copyWith(
+            ],
+          ),
+          if (hasCorrection)
+            Padding(
+              padding: const EdgeInsets.only(top: FormSpacing.fieldToHint),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(
+                    Icons.thermostat,
+                    size: 15,
                     color: theme.colorScheme.primary,
                   ),
-                ),
-              ],
+                  const SizedBox(width: 6),
+                  Expanded(
+                    child: Text(
+                      'При 20 °C это ${formatNumber(corrected, decimals: 1)}% '
+                      '(поправка ${corrected >= reading ? '+' : ''}'
+                      '${formatNumber(corrected - reading, decimals: 1)})',
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.primary,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -286,7 +291,7 @@ class _ResultRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 3),
+      padding: const EdgeInsets.symmetric(vertical: FormSpacing.resultRow / 2),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -294,13 +299,14 @@ class _ResultRow extends StatelessWidget {
           const SizedBox(width: 12),
           Text(
             value,
-            style: (bold
-                    ? theme.textTheme.titleMedium
-                    : theme.textTheme.bodyMedium)
-                ?.copyWith(
-              fontWeight: bold ? FontWeight.w700 : FontWeight.w600,
-              color: warn ? theme.colorScheme.error : null,
-            ),
+            style:
+                (bold
+                        ? theme.textTheme.titleMedium
+                        : theme.textTheme.bodyMedium)
+                    ?.copyWith(
+                      fontWeight: bold ? FontWeight.w700 : FontWeight.w600,
+                      color: warn ? theme.colorScheme.error : null,
+                    ),
           ),
         ],
       ),
@@ -312,8 +318,7 @@ double _parse(TextEditingController c) =>
     double.tryParse(c.text.replaceAll(',', '.')) ?? 0;
 
 /// Стандартная температура по умолчанию для новых полей.
-TextEditingController _tempController() =>
-    TextEditingController(text: '20');
+TextEditingController _tempController() => TextEditingController(text: '20');
 
 // ---------- 1. сахарная брага ----------
 
@@ -346,8 +351,9 @@ class _SugarWashCalculatorState extends State<_SugarWashCalculator> {
     );
     final vessel = _parse(_vessel);
     final fits = vessel <= 0 || tuning.fitsIn(vessel);
-    final sugarForVessel =
-        vessel > 0 ? sugarForVesselCalc(vessel, _parse(_hydro)) : 0.0;
+    final sugarForVessel = vessel > 0
+        ? sugarForVesselCalc(vessel, _parse(_hydro))
+        : 0.0;
 
     return _CalcBody(
       fields: [
@@ -377,9 +383,15 @@ class _SugarWashCalculatorState extends State<_SugarWashCalculator> {
       result: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _ResultRow(label: 'Вода', value: formatVolume(tuning.waterL), bold: true),
           _ResultRow(
-              label: 'Объём браги', value: formatVolume(tuning.totalVolumeL)),
+            label: 'Вода',
+            value: formatVolume(tuning.waterL),
+            bold: true,
+          ),
+          _ResultRow(
+            label: 'Объём браги',
+            value: formatVolume(tuning.totalVolumeL),
+          ),
           if (vessel > 0)
             _ResultRow(
               label: 'Влезает в ${formatVolume(vessel)}',
@@ -416,8 +428,9 @@ class _SugarWashCalculatorState extends State<_SugarWashCalculator> {
               padding: const EdgeInsets.only(top: 6),
               child: Text(
                 warning,
-                style: theme.textTheme.bodySmall
-                    ?.copyWith(color: theme.colorScheme.error),
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.error,
+                ),
               ),
             ),
         ],
@@ -500,7 +513,10 @@ class _DilutionCalculatorState extends State<_DilutionCalculator> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _ResultRow(
-              label: 'Добавить воды', value: formatVolume(water), bold: true),
+            label: 'Добавить воды',
+            value: formatVolume(water),
+            bold: true,
+          ),
           _ResultRow(label: 'Итоговый объём', value: formatVolume(total)),
         ],
       ),
@@ -575,21 +591,25 @@ class _SortingCalculatorState extends State<_SortingCalculator> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _ResultRow(
-              label: 'Спирта ${formatNumber(spiritAbv, decimals: 0)}%',
-              value: formatVolume(plan.spiritL),
-              bold: true),
-          _ResultRow(label: 'Воды', value: formatVolume(plan.waterL), bold: true),
+            label: 'Спирта ${formatNumber(spiritAbv, decimals: 0)}%',
+            value: formatVolume(plan.spiritL),
+            bold: true,
+          ),
           _ResultRow(
-              label: 'Всего',
-              value: formatVolume(plan.spiritL + plan.waterL)),
+            label: 'Воды',
+            value: formatVolume(plan.waterL),
+            bold: true,
+          ),
+          _ResultRow(
+            label: 'Всего',
+            value: formatVolume(plan.spiritL + plan.waterL),
+          ),
           if (impossible)
             Padding(
               padding: const EdgeInsets.only(top: 6),
               child: Text(
                 'Крепость выше крепости спирта — так не получится.',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
+                style: Theme.of(context).textTheme.bodySmall
                     ?.copyWith(color: Theme.of(context).colorScheme.error),
               ),
             ),
@@ -639,7 +659,9 @@ class _FractionsCalculatorState extends State<_FractionsCalculator> {
     );
     final jarMl = _parse(_jar);
     final headsMl = plan.headsL * 1000;
-    final jars = jarMl > 0 ? headsIntoJars(headsMl: headsMl, jarMl: jarMl) : null;
+    final jars = jarMl > 0
+        ? headsIntoJars(headsMl: headsMl, jarMl: jarMl)
+        : null;
 
     return _CalcBody(
       fields: [
@@ -677,18 +699,26 @@ class _FractionsCalculatorState extends State<_FractionsCalculator> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _ResultRow(
-              label: 'Абсолютный спирт',
-              value: formatVolume(plan.absoluteAlcoholL)),
+            label: 'Абсолютный спирт',
+            value: formatVolume(plan.absoluteAlcoholL),
+          ),
           _ResultRow(
-              label: 'Головы', value: formatVolume(plan.headsL), bold: true),
+            label: 'Головы',
+            value: formatVolume(plan.headsL),
+            bold: true,
+          ),
           _ResultRow(
-              label: 'Тело (АС)', value: formatVolume(plan.heartsL), bold: true),
+            label: 'Тело (АС)',
+            value: formatVolume(plan.heartsL),
+            bold: true,
+          ),
           _ResultRow(label: 'Хвосты (АС)', value: formatVolume(plan.tailsL)),
           if (jars != null && jars.fullJars > 0) ...[
             const SizedBox(height: 6),
             _ResultRow(
               label: 'Головы по банкам ${formatNumber(jarMl, decimals: 0)} мл',
-              value: '${jars.fullJars} шт'
+              value:
+                  '${jars.fullJars} шт'
                   '${jars.restMl > 1 ? ' + ${jars.restMl.round()} мл' : ''}',
             ),
           ],
@@ -781,7 +811,9 @@ class _FortifyCalculatorState extends State<_FortifyCalculator> {
           ),
           if (add > 0)
             _ResultRow(
-                label: 'Станет объёма', value: formatVolume(finalVolume)),
+              label: 'Станет объёма',
+              value: formatVolume(finalVolume),
+            ),
         ],
       ),
     );
@@ -937,8 +969,9 @@ class _SugarEffectCalculatorState extends State<_SugarEffectCalculator> {
               ActionChip(
                 label: Text(level.title),
                 onPressed: () {
-                  _sugar.text =
-                      level.averageSugarGramsPerLitre.round().toString();
+                  _sugar.text = level.averageSugarGramsPerLitre
+                      .round()
+                      .toString();
                   setState(() {});
                 },
               ),
@@ -962,10 +995,7 @@ class _SugarEffectCalculatorState extends State<_SugarEffectCalculator> {
             value: '${formatNumber(_parse(_abv) - after, decimals: 1)}%',
             warn: true,
           ),
-          _ResultRow(
-            label: 'Сладость',
-            value: level?.title ?? 'выше ликёрной',
-          ),
+          _ResultRow(label: 'Сладость', value: level?.title ?? 'выше ликёрной'),
           Padding(
             padding: const EdgeInsets.only(top: 8),
             child: Text(
@@ -1047,8 +1077,9 @@ class _YieldCalculatorState extends State<_YieldCalculator> {
               ActionChip(
                 label: Text(material.title.split(' ').first),
                 onPressed: () {
-                  _fraction.text =
-                      (material.sugarFraction * 100).round().toString();
+                  _fraction.text = (material.sugarFraction * 100)
+                      .round()
+                      .toString();
                   setState(() => _fromStarch = true);
                 },
               ),
@@ -1201,7 +1232,8 @@ class _HydrometerCalculatorState extends State<_HydrometerCalculator> {
           ),
           _ResultRow(
             label: 'Поправка',
-            value: '${corrected >= _parse(_reading) ? '+' : ''}'
+            value:
+                '${corrected >= _parse(_reading) ? '+' : ''}'
                 '${formatNumber(corrected - _parse(_reading), decimals: 1)}%',
           ),
         ],
@@ -1281,12 +1313,10 @@ class _ChipsCalculatorState extends State<_ChipsCalculator> {
           ),
           _ResultRow(
             label: 'На литр',
-            value: '${formatNumber(volume > 0 ? chips / volume : 0, decimals: 1)} г/л',
+            value:
+                '${formatNumber(volume > 0 ? chips / volume : 0, decimals: 1)} г/л',
           ),
-          _ResultRow(
-            label: 'Испарится (3 %/год)',
-            value: formatVolume(loss),
-          ),
+          _ResultRow(label: 'Испарится (3 %/год)', value: formatVolume(loss)),
         ],
       ),
     );
@@ -1358,7 +1388,8 @@ class _CostCalculatorState extends State<_CostCalculator> {
           ),
           _ResultRow(
             label: 'Цена литра напитка',
-            value: '${formatNumber(perLiter * _parse(_abv) / 100, decimals: 0)} ₽',
+            value:
+                '${formatNumber(perLiter * _parse(_abv) / 100, decimals: 0)} ₽',
           ),
           _ResultRow(
             label: 'Цена бутылки 0,5 л',

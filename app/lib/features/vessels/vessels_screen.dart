@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../app/app_scope.dart';
 import '../../data/db/app_database.dart';
 import '../../utils/format.dart';
+import '../../widgets/form_fields.dart';
 
 /// Склад и погреб: тара, что в ней и сколько всего занято.
 class VesselsScreen extends StatelessWidget {
@@ -153,7 +154,7 @@ class VesselsScreen extends StatelessWidget {
                   ],
                   onChanged: (value) => setLocal(() => kind = value ?? 'jar'),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: FormSpacing.field),
                 TextField(
                   controller: name,
                   decoration: const InputDecoration(
@@ -163,7 +164,7 @@ class VesselsScreen extends StatelessWidget {
                     isDense: true,
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: FormSpacing.field),
                 TextField(
                   controller: volume,
                   keyboardType:
@@ -175,7 +176,7 @@ class VesselsScreen extends StatelessWidget {
                     isDense: true,
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: FormSpacing.field),
                 TextField(
                   controller: location,
                   decoration: const InputDecoration(
@@ -185,7 +186,7 @@ class VesselsScreen extends StatelessWidget {
                   ),
                 ),
                 if (kind == 'barrel') ...[
-                  const SizedBox(height: 12),
+                  const SizedBox(height: FormSpacing.field),
                   DropdownButtonFormField<int>(
                     initialValue: charLevel,
                     decoration: const InputDecoration(

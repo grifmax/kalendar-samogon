@@ -6,6 +6,7 @@ import '../../data/db/app_database.dart';
 import '../../data/repositories/batch_repository.dart';
 import '../../utils/format.dart';
 import '../../widgets/event_tile.dart';
+import '../../widgets/form_fields.dart';
 import '../runs/runs_tab.dart';
 import '../tastings/tastings_tab.dart';
 
@@ -251,7 +252,7 @@ class _TimelineTab extends StatelessWidget {
                 style: theme.textTheme.bodySmall,
               ),
               if (event.description.isNotEmpty) ...[
-                const SizedBox(height: 12),
+                const SizedBox(height: FormSpacing.field),
                 Text(event.description, style: theme.textTheme.bodyMedium),
               ],
             ],
@@ -294,7 +295,7 @@ class _MeasurementsTab extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: FormSpacing.field),
             ],
             if (prediction != null)
               Card(
@@ -530,7 +531,7 @@ class _AddMeasurementSheetState extends State<_AddMeasurementSheet> {
               isDense: true,
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: FormSpacing.field),
           TextField(
             controller: _noteController,
             decoration: const InputDecoration(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../app/app_scope.dart';
 import '../../data/db/app_database.dart';
 import '../../utils/format.dart';
+import '../../widgets/form_fields.dart';
 
 /// Вкладка «Дегустации»: оценки, аромат, вкус, выводы.
 class TastingsTab extends StatelessWidget {
@@ -86,7 +87,7 @@ class TastingsTab extends StatelessWidget {
                     isDense: true,
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: FormSpacing.field),
                 TextField(
                   controller: taste,
                   decoration: const InputDecoration(
@@ -95,7 +96,7 @@ class TastingsTab extends StatelessWidget {
                     isDense: true,
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: FormSpacing.field),
                 TextField(
                   controller: finish,
                   decoration: const InputDecoration(
@@ -104,7 +105,7 @@ class TastingsTab extends StatelessWidget {
                     isDense: true,
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: FormSpacing.field),
                 TextField(
                   controller: verdict,
                   maxLines: 2,

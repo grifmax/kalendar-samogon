@@ -5,6 +5,7 @@ import '../../data/db/app_database.dart';
 import '../../data/repositories/production_repository.dart';
 import '../../domain/calculators.dart';
 import '../../utils/format.dart';
+import '../../widgets/form_fields.dart';
 
 /// Вкладка «Перегонки»: прогоны куба и фракции по банкам.
 class RunsTab extends StatelessWidget {
@@ -96,7 +97,7 @@ class RunsTab extends StatelessWidget {
                   ],
                   onChanged: (value) => setLocal(() => kind = value ?? 'strip'),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: FormSpacing.field),
                 TextField(
                   controller: volume,
                   keyboardType:
@@ -108,7 +109,7 @@ class RunsTab extends StatelessWidget {
                     isDense: true,
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: FormSpacing.field),
                 TextField(
                   controller: abv,
                   keyboardType:
@@ -120,7 +121,7 @@ class RunsTab extends StatelessWidget {
                     isDense: true,
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: FormSpacing.field),
                 TextField(
                   controller: notes,
                   maxLines: 2,
@@ -336,7 +337,7 @@ class _RunCard extends StatelessWidget {
                   ],
                   onChanged: (value) => setLocal(() => kind = value ?? 'heads'),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: FormSpacing.field),
                 TextField(
                   controller: jar,
                   keyboardType: TextInputType.number,
@@ -346,7 +347,7 @@ class _RunCard extends StatelessWidget {
                     isDense: true,
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: FormSpacing.field),
                 TextField(
                   controller: volume,
                   keyboardType:
@@ -358,7 +359,7 @@ class _RunCard extends StatelessWidget {
                     isDense: true,
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: FormSpacing.field),
                 TextField(
                   controller: abv,
                   keyboardType:
