@@ -10,9 +10,12 @@ Android-приложение на Flutter: рецепты, партии и ка�
 - [`docs/CONTENT.md`](docs/CONTENT.md) — каталог контента: рецепты, справочники, калькуляторы, статьи, глоссарий, шаблоны календаря.
 - [`docs/DATA_MODEL.md`](docs/DATA_MODEL.md) — схема локальной БД.
 - [`docs/UX.md`](docs/UX.md) — экраны, навигация, сценарии, напоминания.
-- [`docs/ROADMAP.md`](docs/ROADMAP.md) — этапы M0–M4 и критерии готовности.
+- [`docs/ROADMAP.md`](docs/ROADMAP.md) — этапы M0–M4, iOS-трек, критерии готовности.
+- [`docs/RELEASE.md`](docs/RELEASE.md) — чек-лист выпуска в RuStore, Google Play, App Store.
 
 ## Окружение (проверено 19.11.2026)
+
+Целевые платформы: **Android** (основная) и **iOS** (закладываем сразу, собирать нужно на macOS или в CI).
 
 | Компонент | Состояние |
 |---|---|
@@ -21,6 +24,7 @@ Android-приложение на Flutter: рецепты, партии и ка�
 | Android SDK | `%LOCALAPPDATA%\Android\Sdk`, platforms 33/34/36, build-tools 34.0.0 и 36.1.0, cmdline-tools latest |
 | Эмулятор | AVD `Medium_Phone_API_36.1` |
 | Системный `java` | 1.8 — для Gradle не годится, Flutter настроен на JBR 21 (`flutter config --jdk-dir`) |
+| Xcode / macOS | нет — iOS собирается только на Mac или GitHub Actions с macOS-раннером |
 
 ## Расположение проекта
 
