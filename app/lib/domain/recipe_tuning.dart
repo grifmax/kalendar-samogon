@@ -96,6 +96,8 @@ class TinctureTuning {
 /// [spiritAbv] — крепость спирта, который есть в наличии.
 /// [rawKg] — сколько сырья кладём.
 /// [sugarKg] — сколько сахара.
+/// [warnAboutDose] — предупреждать ли о дозе вне нормы. Когда значения взяты
+/// из самого рецепта, это выбор автора рецепта, а не ошибка пользователя.
 ///
 /// Возвращает разложение по объёмам и предупреждения, если что-то не сходится.
 TinctureTuning tuneTincture({
@@ -105,6 +107,7 @@ TinctureTuning tuneTincture({
   required double rawKg,
   required double sugarKg,
   RawMaterial? rawMaterial,
+  bool warnAboutDose = true,
 }) {
   final warnings = <String>[];
 
@@ -141,7 +144,7 @@ TinctureTuning tuneTincture({
       'или возьмите тару больше.',
     );
   }
-  if (rawMaterial != null && !rawMaterial.isInRange(rawGpl)) {
+  if (warnAboutDose && rawMaterial != null && !rawMaterial.isInRange(rawGpl)) {
     final lo = rawMaterial.minGramsPerLitre?.round();
     final hi = rawMaterial.maxGramsPerLitre?.round();
     warnings.add(
@@ -274,6 +277,14 @@ MashTuning tuneMash({
   required double hydromodule,
   double extraRawKg = 0,
   RawMaterial? extraRaw,
+
+  /// Вода из рецепта, л. Если задана — берём её, а не сахар × гидромодуль:
+  /// у зерновых и фруктовых браг вода задана отдельно и от сахара не зависит.
+  double? waterL,
+
+  /// Сочное сырьё (фрукты, ягоды) само даёт воду: правило «не гуще 1:3»
+  /// к нему не относится, иначе вишнёвая брага всегда «слишком густая».
+  bool warnAboutHydromodule = true,
 }) {
   final warnings = <String>[];
   final h = hydromodule > 0 ? hydromodule : 4.5;
@@ -281,7 +292,10 @@ MashTuning tuneMash({
   final extraSugar = math.max(0.0, extraRawKg) * (extraRaw?.sugarFraction ?? 0);
   final totalSugar = math.max(0.0, sugarKg) + extraSugar;
 
-  final water = math.max(0.0, sugarKg) * h;
+  final water = math.max(
+    0.0,
+    waterL ?? math.max(0.0, sugarKg) * h,
+  );
   final sugarVolume = math.max(0.0, sugarKg) * kSugarVolumePerKgL;
   final extraVolume =
       math.max(0.0, extraRawKg) * (extraRaw?.volumePerKg ?? 1.0);
@@ -304,7 +318,7 @@ MashTuning tuneMash({
       'не дадут. Ожидайте недоброд.',
     );
   }
-  if (h < 3) {
+  if (warnAboutHydromodule && h < 3) {
     warnings.add(
       'Гидромодуль меньше 1:3 — густая брага, риск перегрева и недоброда.',
     );

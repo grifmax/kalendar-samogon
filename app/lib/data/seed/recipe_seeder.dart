@@ -22,9 +22,11 @@ class RecipeSeeder {
 
   /// Актуальная версия набора рецептов — поднимать при изменении assets.
   ///
-  /// 2 — каталог расширен до 105 рецептов; существующие записи не трогаются,
-  /// добавляются только новые id.
-  static const seedVersion = '2';
+  /// 2 — каталог расширен до 105 рецептов;
+  /// 3 — выверены цифры: объёмы, спирт, вода и сахар приведены к арифметике
+  ///     приложения. Встроенные рецепты при смене версии перезаписываются,
+  ///     свои рецепты и партии не затрагиваются.
+  static const seedVersion = '3';
 
   Future<int> seedIfNeeded() async {
     final meta = await db.select(db.appMeta).get();
@@ -44,7 +46,34 @@ class RecipeSeeder {
         final exists = await (db.select(db.recipes)
               ..where((t) => t.id.equals(id)))
             .getSingleOrNull();
-        if (exists != null) continue;
+
+        if (exists != null) {
+          // Встроенный рецепт обновляем вместе с составом: правки цифр должны
+          // доходить до тех, у кого приложение уже стоит. Свои рецепты
+          // (isBuiltIn = false) не трогаем никогда.
+          if (!exists.isBuiltIn) continue;
+          await (db.delete(db.recipeIngredients)
+                ..where((t) => t.recipeId.equals(id)))
+              .go();
+          await (db.delete(db.recipeSteps)..where((t) => t.recipeId.equals(id)))
+              .go();
+          await (db.update(db.recipes)..where((t) => t.id.equals(id))).write(
+            RecipesCompanion(
+              title: Value(r['title'] as String),
+              kind: Value(r['kind'] as String),
+              styleTags: Value(jsonEncode(r['styleTags'] ?? const [])),
+              baseVolumeL: Value((r['baseVolumeL'] as num?)?.toDouble() ?? 0),
+              expectedYieldL:
+                  Value((r['expectedYieldL'] as num?)?.toDouble() ?? 0),
+              expectedAbv: Value((r['expectedAbv'] as num?)?.toDouble() ?? 0),
+              summary: Value(r['summary'] as String? ?? ''),
+              source: Value(r['source'] as String? ?? ''),
+              updatedAt: Value(DateTime.now()),
+            ),
+          );
+          // Ниже состав и шаги вставляются заново — пропускаем insert рецепта.
+          inserted += 0;
+        } else {
 
         await db.into(db.recipes).insert(
               RecipesCompanion.insert(
@@ -61,6 +90,7 @@ class RecipeSeeder {
                 isBuiltIn: const Value(true),
               ),
             );
+        }
 
         final ingredients =
             (r['ingredients'] as List? ?? const []).cast<Map<String, dynamic>>();

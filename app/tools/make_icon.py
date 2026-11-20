@@ -27,10 +27,11 @@ ANDROID_RES = ROOT / "android" / "app" / "src" / "main" / "res"
 IOS_ICONS = ROOT / "ios" / "Runner" / "Assets.xcassets" / "AppIcon.appiconset"
 FLUTTER_IMAGES = ROOT / "assets" / "images"
 
-# Тёмный тёплый фон приложения: центр светлее, край темнее.
-BG_CENTER = (58, 42, 27)
-BG_EDGE = (16, 12, 9)
-GLOW_COLOR = (255, 236, 200)
+# Фон иконки — тёплый кремовый: иллюстрация плоская, с чёрными контурами,
+# и на тёмном фоне контуры сливались с подложкой. Центр светлее, край темнее.
+BG_CENTER = (251, 243, 230)
+BG_EDGE = (228, 213, 190)
+GLOW_COLOR = (255, 250, 240)
 
 # Доля ширины, которую занимает иллюстрация в обычной иконке.
 LEGACY_SCALE = 0.70

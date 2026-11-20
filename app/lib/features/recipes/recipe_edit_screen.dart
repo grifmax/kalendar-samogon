@@ -92,6 +92,12 @@ class _RecipeEditScreenState extends State<RecipeEditScreen> {
   bool _loading = true;
   bool _isBuiltIn = false;
 
+  /// Объём, под который посчитан текущий состав. При смене объёма количества
+  /// пересчитываются пропорционально: рецепт — это соотношения, а не
+  /// абсолютные граммы, иначе «сделать 5 л вместо 3» даёт ту же закладку
+  /// в большей банке и слабый напиток.
+  double _amountsVolumeL = 3;
+
   static const _units = ['г', 'кг', 'мл', 'л', 'шт'];
 
   static const _eventKinds = {
@@ -110,9 +116,15 @@ class _RecipeEditScreenState extends State<RecipeEditScreen> {
     'bottle': 'Розлив',
   };
 
+  bool _started = false;
+
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // AppScope доступен только здесь: в initState обращение к InheritedWidget
+    // запрещено — на этом падал экран правки в отладочной сборке.
+    if (_started) return;
+    _started = true;
     _load();
   }
 
@@ -135,6 +147,7 @@ class _RecipeEditScreenState extends State<RecipeEditScreen> {
         _titleController.text = recipe.title;
         _summaryController.text = recipe.summary;
         _volumeController.text = formatNumber(recipe.baseVolumeL);
+        if (recipe.baseVolumeL > 0) _amountsVolumeL = recipe.baseVolumeL;
         _yieldController.text = recipe.expectedYieldL > 0
             ? formatNumber(recipe.expectedYieldL)
             : '';
@@ -179,6 +192,41 @@ class _RecipeEditScreenState extends State<RecipeEditScreen> {
       row.dispose();
     }
     super.dispose();
+  }
+
+  /// Пересчитать количества при смене объёма рецепта.
+  ///
+  /// Считаем от объёма, под который состав был посчитан в прошлый раз, и
+  /// запоминаем новый: при наборе «3» → «3,5» пересчёт идёт один раз за
+  /// нажатие, но произведение отношений даёт правильный итог.
+  void _onVolumeChanged() {
+    final next = double.tryParse(
+      _volumeController.text.replaceAll(',', '.'),
+    );
+    if (next == null || next <= 0 || _isBuiltIn) {
+      setState(() {});
+      return;
+    }
+    if (_amountsVolumeL <= 0) {
+      _amountsVolumeL = next;
+      setState(() {});
+      return;
+    }
+    if ((next - _amountsVolumeL).abs() < 0.0001) {
+      setState(() {});
+      return;
+    }
+
+    final ratio = next / _amountsVolumeL;
+    for (final row in _ingredients) {
+      final amount = double.tryParse(
+        row.amountController.text.replaceAll(',', '.'),
+      );
+      if (amount == null || amount <= 0) continue;
+      row.amountController.text = formatNumber(amount * ratio, decimals: 2);
+    }
+    _amountsVolumeL = next;
+    setState(() {});
   }
 
   Future<void> _save() async {
@@ -332,7 +380,11 @@ class _RecipeEditScreenState extends State<RecipeEditScreen> {
             controller: _volumeController,
             label: 'Объём по рецепту',
             suffix: 'л',
-            onChanged: () => setState(() {}),
+            onChanged: _onVolumeChanged,
+            hint: _amountsVolumeL > 0
+                ? 'Состав пересчитан на '
+                      '${formatNumber(_amountsVolumeL, decimals: 2)} л'
+                : null,
           ),
           FormNumberField(
             controller: _yieldController,
@@ -529,13 +581,17 @@ class _IngredientEditor extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           SizedBox(
-            width: 72,
+            // 88 px и isExpanded: со стандартными отступами поля 72 px не
+            // хватало, и строка состава переполнялась на узких экранах.
+            width: 88,
             child: DropdownButtonFormField<String>(
               initialValue: units.contains(row.unit) ? row.unit : units.first,
+              isExpanded: true,
               decoration: const InputDecoration(
                 labelText: 'Ед.',
                 border: OutlineInputBorder(),
                 isDense: true,
+                contentPadding: EdgeInsets.fromLTRB(10, 14, 4, 14),
               ),
               items: [
                 for (final unit in units)

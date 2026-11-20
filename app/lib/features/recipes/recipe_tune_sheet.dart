@@ -1,10 +1,9 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 
 import '../../data/db/app_database.dart';
-import '../../domain/reference.dart';
+import '../../domain/recipe_seed.dart';
 import '../../domain/recipe_tuning.dart';
+import '../../domain/reference.dart';
 import '../../utils/format.dart';
 import '../../widgets/form_fields.dart';
 
@@ -28,85 +27,13 @@ class TuningResult {
   final String summary;
 }
 
-/// Начальные значения для редактора — берутся из рецепта.
-class TuningSeed {
-  const TuningSeed({
-    required this.vesselL,
-    required this.targetAbv,
-    required this.spiritAbv,
-    required this.rawGramsPerLitre,
-    required this.sugarGramsPerLitre,
-    required this.rawMaterial,
-    required this.isMash,
-    required this.hydromodule,
-  });
-
-  final double vesselL;
-  final double targetAbv;
-  final double spiritAbv;
-  final double rawGramsPerLitre;
-  final double sugarGramsPerLitre;
-  final RawMaterial? rawMaterial;
-  final bool isMash;
-  final double hydromodule;
-
-  /// Разобрать рецепт: найти спирт, сырьё, сахар и посчитать дозы.
-  static TuningSeed fromRecipe(
-    Recipe recipe,
-    List<RecipeIngredient> ingredients,
-  ) {
-    final isMash = recipe.kind == 'mash';
-    final vessel = recipe.baseVolumeL > 0 ? recipe.baseVolumeL : 3.0;
-
-    var spiritAbv = 40.0;
-    var sugarG = 0.0;
-    var rawG = 0.0;
-    RawMaterial? raw;
-    var hydromodule = 4.5;
-
-    for (final ing in ingredients) {
-      final name = ing.name.toLowerCase();
-
-      if (name.contains('спирт')) {
-        final match = RegExp(r'(\d+)').firstMatch(ing.name);
-        if (match != null) spiritAbv = double.parse(match.group(1)!);
-      } else if (name.contains('сахар')) {
-        sugarG = ing.unit == 'г' ? ing.amount : ing.amount * 1000;
-      } else if (name.contains('вода')) {
-        // вода в рецепте не задаёт дозу — её считаем сами
-      } else {
-        final material = guessRawMaterial(ing.name);
-        if (material != null && material.category != 'sugar') {
-          raw = material;
-          rawG = ing.unit == 'г' ? ing.amount : ing.amount * 1000;
-        }
-      }
-    }
-
-    final effectiveVessel = vessel > 0 ? vessel : 3.0;
-    final rawGpl = rawG > 0 ? rawG / effectiveVessel : 0.0;
-    final sugarGpl = sugarG > 0 ? sugarG / effectiveVessel : 0.0;
-
-    return TuningSeed(
-      vesselL: effectiveVessel,
-      targetAbv: recipe.expectedAbv > 0
-          ? recipe.expectedAbv
-          : (kTypicalAbvByKind[recipe.kind]?.$1 ?? 40),
-      spiritAbv: spiritAbv,
-      rawGramsPerLitre: rawGpl > 0 ? rawGpl : (raw?.averageGramsPerLitre ?? 0),
-      sugarGramsPerLitre: sugarGpl,
-      rawMaterial: raw,
-      isMash: isMash,
-      hydromodule: hydromodule,
-    );
-  }
-}
-
 /// Редактор рецепта перед запуском партии.
 ///
 /// Один экран закрывает два сценария: «запустить как есть» и «подкрутить под
-/// себя» — больше сырья, крепче, в другую тару. Расчёт живой: меняешь сырьё —
-/// видишь, сколько останется спирта и влезет ли в банку.
+/// себя» — больше сырья, крепче, в другую тару. Стартовые значения берутся из
+/// самого рецепта (его состав, объём и крепость), а не из констант, и всё
+/// считается от требуемого объёма: меняешь объём — пересчитываются спирт,
+/// вода, сахар и сырьё.
 class RecipeTuneSheet extends StatefulWidget {
   const RecipeTuneSheet({
     super.key,
@@ -117,7 +44,7 @@ class RecipeTuneSheet extends StatefulWidget {
 
   final Recipe recipe;
   final List<RecipeIngredient> ingredients;
-  final TuningSeed seed;
+  final RecipeSeed seed;
 
   @override
   State<RecipeTuneSheet> createState() => _RecipeTuneSheetState();
@@ -132,18 +59,31 @@ class _RecipeTuneSheetState extends State<RecipeTuneSheet> {
   late final TextEditingController _rawGpl;
   late final TextEditingController _sugarGpl;
   late final TextEditingController _sugarKg;
-  late final TextEditingController _hydro;
+  late final TextEditingController _water;
   late final TextEditingController _notes;
 
   late DateTime _startedAt;
   late double _spiritAbvValue;
 
+  /// Объём, под который посчитан состав рецепта. Нужен, чтобы понимать,
+  /// на сколько масштабировать «прочие» ингредиенты (дрожжи, травы).
+  late final double _recipeVolumeL;
+
   @override
   void initState() {
     super.initState();
     final s = widget.seed;
-    _vessel = TextEditingController(text: formatNumber(s.vesselL));
-    _abv = TextEditingController(text: formatNumber(s.targetAbv, decimals: 0));
+    _recipeVolumeL = s.vesselL > 0 ? s.vesselL : 3.0;
+
+    _vessel = TextEditingController(
+      text: formatNumber(s.isDistillate ? s.chargeVolumeL : s.vesselL),
+    );
+    _abv = TextEditingController(
+      text: formatNumber(
+        s.isDistillate ? s.chargeAbv : s.targetAbv,
+        decimals: 0,
+      ),
+    );
     _spiritAbv = TextEditingController(
       text: formatNumber(s.spiritAbv, decimals: 0),
     );
@@ -155,10 +95,19 @@ class _RecipeTuneSheetState extends State<RecipeTuneSheet> {
     _sugarGpl = TextEditingController(
       text: s.sugarGramsPerLitre > 0
           ? formatNumber(s.sugarGramsPerLitre, decimals: 0)
-          : '50',
+          : '',
     );
-    _sugarKg = TextEditingController(text: '5');
-    _hydro = TextEditingController(text: formatNumber(s.hydromodule));
+    _sugarKg = TextEditingController(
+      text: s.sugarKg > 0 ? formatNumber(s.sugarKg, decimals: 2) : '',
+    );
+    _water = TextEditingController(
+      text: formatNumber(
+        s.waterL > 0
+            ? s.waterL
+            : (s.sugarKg > 0 ? s.sugarKg * 4.5 : 0),
+        decimals: 2,
+      ),
+    );
     _notes = TextEditingController();
     _startedAt = DateTime.now();
     _spiritAbvValue = s.spiritAbv;
@@ -173,7 +122,7 @@ class _RecipeTuneSheetState extends State<RecipeTuneSheet> {
       _rawGpl,
       _sugarGpl,
       _sugarKg,
-      _hydro,
+      _water,
       _notes,
     ]) {
       c.dispose();
@@ -183,6 +132,13 @@ class _RecipeTuneSheetState extends State<RecipeTuneSheet> {
 
   double _v(TextEditingController c) =>
       double.tryParse(c.text.replaceAll(',', '.')) ?? 0;
+
+  /// Во сколько раз меняется объём относительно рецепта.
+  double get _scale {
+    final current = _v(_vessel);
+    if (_recipeVolumeL <= 0 || current <= 0) return 1;
+    return current / _recipeVolumeL;
+  }
 
   /// Подсказка под полем сырья: обычная норма закладки.
   String? _rawHint() {
@@ -199,12 +155,18 @@ class _RecipeTuneSheetState extends State<RecipeTuneSheet> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isMash = widget.seed.isMash;
+    final seed = widget.seed;
     final vesselL = _v(_vessel);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(isMash ? 'Настроить брагу' : 'Настроить рецепт'),
+        title: Text(
+          switch (seed.mode) {
+            TuningMode.mash => 'Настроить брагу',
+            TuningMode.tincture => 'Настроить рецепт',
+            TuningMode.distillate => 'Настроить перегонку',
+          },
+        ),
         leading: IconButton(
           icon: const Icon(Icons.close),
           onPressed: () => Navigator.of(context).pop(),
@@ -216,11 +178,17 @@ class _RecipeTuneSheetState extends State<RecipeTuneSheet> {
           Text(widget.recipe.title, style: theme.textTheme.titleMedium),
           const SizedBox(height: 6),
           Text(
-            isMash
-                ? 'Сахар, вода и объём браги считаются вместе: меняете сахар — '
-                      'меняется вода и выход.'
-                : 'Крепость готового напитка — это спирт, делённый на весь '
-                      'объём. Сырьё и сахар занимают место и «съедают» крепость.',
+            switch (seed.mode) {
+              TuningMode.mash =>
+                'Сахар, вода и объём браги считаются вместе: меняете сахар — '
+                    'меняется вода и выход.',
+              TuningMode.tincture =>
+                'Крепость готового напитка — это спирт, делённый на весь '
+                    'объём. Сырьё и сахар занимают место и «съедают» крепость.',
+              TuningMode.distillate =>
+                'Объём и крепость заливки в куб. Приложение посчитает спирт '
+                    'в кубе и ожидаемый выход тела.',
+            },
             style: theme.textTheme.bodySmall?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
               height: 1.35,
@@ -228,10 +196,14 @@ class _RecipeTuneSheetState extends State<RecipeTuneSheet> {
           ),
           const SizedBox(height: FormSpacing.section),
 
-          // ---------- тара ----------
+          // ---------- объём ----------
           FormSectionTitle(
-            title: 'Тара',
-            hint: isMash ? 'Объём бродильной ёмкости' : 'Куда закладываем',
+            title: seed.isDistillate ? 'Заливка в куб' : 'Тара',
+            hint: switch (seed.mode) {
+              TuningMode.mash => 'Объём бродильной ёмкости',
+              TuningMode.tincture => 'Куда закладываем',
+              TuningMode.distillate => 'Сколько заливаем',
+            },
           ),
           Wrap(
             spacing: 8,
@@ -251,12 +223,12 @@ class _RecipeTuneSheetState extends State<RecipeTuneSheet> {
           const SizedBox(height: FormSpacing.chipsToField),
           FormNumberField(
             controller: _vessel,
-            label: 'Свой объём',
+            label: seed.isDistillate ? 'Объём заливки' : 'Свой объём',
             suffix: 'л',
             onChanged: () => setState(() {}),
           ),
 
-          if (isMash) ...[
+          if (seed.isMash) ...[
             const SizedBox(height: FormSpacing.sectionAfterField),
             const FormSectionTitle(title: 'Сахар', hint: 'Сколько кладём'),
             FormNumberField(
@@ -266,17 +238,39 @@ class _RecipeTuneSheetState extends State<RecipeTuneSheet> {
               onChanged: () => setState(() {}),
             ),
             FormNumberField(
-              controller: _hydro,
-              label: 'Гидромодуль (1 к N)',
-              suffix: 'N',
+              controller: _water,
+              label: 'Вода',
+              suffix: 'л',
               onChanged: () => setState(() {}),
+              hint: _v(_water) > 0 && _v(_sugarKg) > 0
+                  ? 'Гидромодуль 1:'
+                        '${formatNumber(_v(_water) / _v(_sugarKg), decimals: 1)}'
+                  : null,
             ),
             const SizedBox(height: FormSpacing.fieldToHint),
             _MashResult(
               vesselL: vesselL,
               sugarKg: _v(_sugarKg),
-              hydromodule: _v(_hydro),
+              waterL: _v(_water),
+              extraRaw: seed.rawMaterial,
+              extraRawKg: seed.rawMaterial != null ? _extraRawKg(vesselL) : 0,
+              warnAboutHydromodule:
+                  (seed.rawMaterial?.waterFraction ?? 0) < 0.5,
             ),
+          ] else if (seed.isDistillate) ...[
+            const SizedBox(height: FormSpacing.sectionAfterField),
+            const FormSectionTitle(
+              title: 'Заливка',
+              hint: 'Крепость того, что уже в кубе',
+            ),
+            FormNumberField(
+              controller: _abv,
+              label: 'Крепость заливки',
+              suffix: '%',
+              onChanged: () => setState(() {}),
+            ),
+            const SizedBox(height: FormSpacing.fieldToHint),
+            _DistillateResult(volumeL: vesselL, chargeAbv: _v(_abv)),
           ] else ...[
             const SizedBox(height: FormSpacing.sectionAfterField),
             const FormSectionTitle(
@@ -321,8 +315,8 @@ class _RecipeTuneSheetState extends State<RecipeTuneSheet> {
 
             const SizedBox(height: FormSpacing.sectionAfterField),
             FormSectionTitle(
-              title: widget.seed.rawMaterial?.title ?? 'Сырьё',
-              hint: widget.seed.rawMaterial?.note,
+              title: seed.rawName ?? seed.rawMaterial?.title ?? 'Сырьё',
+              hint: seed.rawMaterial?.note,
             ),
             FormNumberField(
               controller: _rawGpl,
@@ -331,13 +325,13 @@ class _RecipeTuneSheetState extends State<RecipeTuneSheet> {
               onChanged: () => setState(() {}),
               hint: _rawHint(),
               hintIcon:
-                  widget.seed.rawMaterial != null &&
-                      !widget.seed.rawMaterial!.isInRange(_v(_rawGpl))
+                  seed.rawMaterial != null &&
+                      !seed.rawMaterial!.isInRange(_v(_rawGpl))
                   ? Icons.info_outline
                   : Icons.check_circle_outline,
               hintIsWarning:
-                  widget.seed.rawMaterial != null &&
-                  !widget.seed.rawMaterial!.isInRange(_v(_rawGpl)),
+                  seed.rawMaterial != null &&
+                  !seed.rawMaterial!.isInRange(_v(_rawGpl)),
             ),
 
             const SizedBox(height: FormSpacing.sectionAfterField),
@@ -377,7 +371,33 @@ class _RecipeTuneSheetState extends State<RecipeTuneSheet> {
               spiritAbv: _v(_spiritAbv),
               rawGpl: _v(_rawGpl),
               sugarGpl: _v(_sugarGpl),
-              material: widget.seed.rawMaterial,
+              material: seed.rawMaterial,
+              rawTitle: seed.rawName,
+              seedRawGpl: seed.rawGramsPerLitre,
+            ),
+          ],
+
+          if (seed.carried.isNotEmpty) ...[
+            const SizedBox(height: FormSpacing.section),
+            FormSectionTitle(
+              title: 'Из рецепта',
+              hint: 'Пересчитается под объём',
+            ),
+            Card(
+              margin: EdgeInsets.zero,
+              child: Column(
+                children: [
+                  for (final ing in seed.carried)
+                    ListTile(
+                      dense: true,
+                      title: Text(ing.name),
+                      trailing: Text(
+                        _scaledAmountLabel(ing),
+                        style: theme.textTheme.bodySmall,
+                      ),
+                    ),
+                ],
+              ),
             ),
           ],
 
@@ -424,6 +444,19 @@ class _RecipeTuneSheetState extends State<RecipeTuneSheet> {
     );
   }
 
+  /// Сырьё браги (варенье, мёд, зерно), кг — по объёму тары.
+  double _extraRawKg(double vesselL) {
+    final gpl = widget.seed.rawGramsPerLitre;
+    if (gpl <= 0) return 0;
+    return gpl * vesselL / 1000;
+  }
+
+  /// Как изменится количество «прочего» ингредиента при текущем объёме.
+  String _scaledAmountLabel(SeedIngredient ing) {
+    final scaled = ing.amount * _scale;
+    return '${formatNumber(scaled, decimals: 2)} ${ing.unit}';
+  }
+
   Future<void> _pickDate() async {
     final picked = await showDatePicker(
       context: context,
@@ -434,23 +467,56 @@ class _RecipeTuneSheetState extends State<RecipeTuneSheet> {
     if (picked != null) setState(() => _startedAt = picked);
   }
 
-  TuningResult _buildResult() {
-    final vesselL = _v(_vessel);
-    final isMash = widget.seed.isMash;
+  /// Ингредиенты рецепта, которые не считаются формулой, под текущий объём.
+  List<({String name, double amount, String unit, String note})> _carriedList() {
+    final scale = _scale;
+    return [
+      for (final ing in widget.seed.carried)
+        (
+          name: ing.name,
+          amount: ing.amount * scale,
+          unit: ing.unit,
+          note: scale != 1
+              ? 'пересчитано с ${formatVolume(_recipeVolumeL)}'
+              : '',
+        ),
+    ];
+  }
 
-    if (isMash) {
-      final tuning = tuneMash(sugarKg: _v(_sugarKg), hydromodule: _v(_hydro));
+  TuningResult _buildResult() {
+    final seed = widget.seed;
+    final vesselL = _v(_vessel);
+
+    if (seed.isMash) {
+      final tuning = tuneMash(
+        sugarKg: _v(_sugarKg),
+        hydromodule: _v(_sugarKg) > 0 ? _v(_water) / _v(_sugarKg) : 0,
+        waterL: _v(_water),
+        extraRawKg: seed.rawMaterial != null ? _extraRawKg(vesselL) : 0,
+        extraRaw: seed.rawMaterial,
+        warnAboutHydromodule: (seed.rawMaterial?.waterFraction ?? 0) < 0.5,
+      );
       return TuningResult(
         startedAt: _startedAt,
+        // Объём партии — это объём браги, а не тары: иначе выход считается
+        // от пустого места в ёмкости.
         volumeL: tuning.totalVolumeL > 0 ? tuning.totalVolumeL : vesselL,
         ingredients: [
           (name: 'Сахар', amount: _v(_sugarKg), unit: 'кг', note: ''),
+          if (seed.rawMaterial != null && _extraRawKg(vesselL) > 0)
+            (
+              name: seed.rawName ?? seed.rawMaterial!.title,
+              amount: _extraRawKg(vesselL),
+              unit: 'кг',
+              note: '${seed.rawGramsPerLitre.round()} г/л',
+            ),
           (
             name: 'Вода',
             amount: tuning.waterL,
             unit: 'л',
             note: 'гидромодуль 1:${formatNumber(tuning.hydromodule)}',
           ),
+          ..._carriedList(),
         ],
         notes: _notes.text.trim(),
         summary:
@@ -460,13 +526,29 @@ class _RecipeTuneSheetState extends State<RecipeTuneSheet> {
       );
     }
 
+    if (seed.isDistillate) {
+      final volume = vesselL > 0 ? vesselL : seed.chargeVolumeL;
+      final abv = _v(_abv);
+      final alcohol = volume * abv / 100;
+      return TuningResult(
+        startedAt: _startedAt,
+        volumeL: volume,
+        ingredients: _carriedList(),
+        notes: _notes.text.trim(),
+        summary:
+            'Заливка ${formatVolume(volume)} крепостью '
+            '${formatNumber(abv, decimals: 0)}%, '
+            'в кубе ${formatNumber(alcohol, decimals: 2)} л АС',
+      );
+    }
+
     final tuning = tuneTincture(
       vesselVolumeL: vesselL,
       targetAbv: _v(_abv),
       spiritAbv: _v(_spiritAbv),
       rawKg: _v(_rawGpl) * vesselL / 1000,
       sugarKg: _v(_sugarGpl) * vesselL / 1000,
-      rawMaterial: widget.seed.rawMaterial,
+      rawMaterial: seed.rawMaterial,
     );
 
     final ingredients =
@@ -483,16 +565,18 @@ class _RecipeTuneSheetState extends State<RecipeTuneSheet> {
             (name: 'Сахар', amount: tuning.sugarKg, unit: 'кг', note: ''),
           if (tuning.rawKg > 0.0005)
             (
-              name: widget.seed.rawMaterial?.title ?? 'Сырьё',
+              name: seed.rawName ?? seed.rawMaterial?.title ?? 'Сырьё',
               amount: tuning.rawKg,
               unit: 'кг',
               note: '${tuning.rawGramsPerLitre.round()} г/л',
             ),
+          ..._carriedList(),
         ];
 
     return TuningResult(
       startedAt: _startedAt,
-      volumeL: vesselL,
+      // Объём партии — фактическая закладка, а не весь объём тары.
+      volumeL: tuning.fillL > 0 ? tuning.fillL : vesselL,
       ingredients: ingredients,
       notes: _notes.text.trim(),
       summary:
@@ -505,6 +589,76 @@ class _RecipeTuneSheetState extends State<RecipeTuneSheet> {
 
 // ---------- вспомогательные виджеты ----------
 
+/// Общая карточка результата с полосой заполнения тары.
+class _ResultCard extends StatelessWidget {
+  const _ResultCard({
+    required this.title,
+    required this.children,
+    this.fill,
+    this.fillLabel,
+    this.over = false,
+  });
+
+  final String title;
+  final List<Widget> children;
+  final double? fill;
+  final String? fillLabel;
+  final bool over;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Card(
+      margin: EdgeInsets.zero,
+      color: theme.colorScheme.primary.withValues(alpha: 0.10),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title, style: theme.textTheme.titleSmall),
+            const SizedBox(height: FormSpacing.titleToField),
+            if (fill != null) ...[
+              // Рамка вокруг шкалы: при 100 % заполнения трек не виден, и без
+              // контура полоса читается как декоративная линия.
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(color: theme.colorScheme.outlineVariant),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(5),
+                  child: LinearProgressIndicator(
+                    value: fill!.clamp(0.0, 1.0),
+                    minHeight: 10,
+                    backgroundColor: theme.colorScheme.surfaceContainerHighest,
+                    valueColor: AlwaysStoppedAnimation(
+                      over ? theme.colorScheme.error : theme.colorScheme.primary,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 6),
+              if (fillLabel != null)
+                Text(
+                  fillLabel!,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: over
+                        ? theme.colorScheme.error
+                        : theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              const Divider(height: 20),
+            ],
+            ...children,
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _TinctureResult extends StatelessWidget {
   const _TinctureResult({
     required this.vesselL,
@@ -513,6 +667,8 @@ class _TinctureResult extends StatelessWidget {
     required this.rawGpl,
     required this.sugarGpl,
     required this.material,
+    this.rawTitle,
+    this.seedRawGpl = 0,
   });
 
   final double vesselL;
@@ -521,6 +677,10 @@ class _TinctureResult extends StatelessWidget {
   final double rawGpl;
   final double sugarGpl;
   final RawMaterial? material;
+  final String? rawTitle;
+
+  /// Доза из рецепта: если её не меняли, о норме не предупреждаем.
+  final double seedRawGpl;
 
   @override
   Widget build(BuildContext context) {
@@ -532,104 +692,32 @@ class _TinctureResult extends StatelessWidget {
       rawKg: rawGpl * vesselL / 1000,
       sugarKg: sugarGpl * vesselL / 1000,
       rawMaterial: material,
+      warnAboutDose: (rawGpl - seedRawGpl).abs() > 0.5,
     );
 
-    final fill = tuning.fillFraction.clamp(0.0, 1.5);
-    final over = fill > 1.0;
-
-    return Card(
-      margin: EdgeInsets.zero,
-      color: theme.colorScheme.primary.withValues(alpha: 0.10),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Что получится', style: theme.textTheme.titleSmall),
-            const SizedBox(height: FormSpacing.titleToField),
-            // Рамка вокруг шкалы: при 100 % заполнения трек не виден, и без
-            // контура полоса читается как декоративная линия, а не индикатор.
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(6),
-                border: Border.all(color: theme.colorScheme.outlineVariant),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(5),
-                child: LinearProgressIndicator(
-                  value: fill.clamp(0.0, 1.0),
-                  minHeight: 10,
-                  backgroundColor: theme.colorScheme.surfaceContainerHighest,
-                  valueColor: AlwaysStoppedAnimation(
-                    over ? theme.colorScheme.error : theme.colorScheme.primary,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              vesselFitLabel(tuning.fillL, vesselL),
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: over
-                    ? theme.colorScheme.error
-                    : theme.colorScheme.onSurfaceVariant,
-              ),
-            ),
-            const Divider(height: 20),
-            _row('Спирт ${spiritAbv.round()}%', formatVolume(tuning.spiritL)),
-            _row('Вода', formatVolume(tuning.waterL)),
-            _row('Сахар', '${formatNumber(tuning.sugarKg, decimals: 3)} кг'),
-            _row(
-              material?.title ?? 'Сырьё',
-              '${formatNumber(tuning.rawKg, decimals: 3)} кг '
-              '(${tuning.rawGramsPerLitre.round()} г/л)',
-            ),
-            const Divider(height: 20),
-            _row('Жидкость', formatVolume(tuning.liquidL)),
-            _row('Закладка', formatVolume(tuning.fillL)),
-            _row('Выход', formatVolume(tuning.estimatedFinalL)),
-            if (tuning.warnings.isNotEmpty) ...[
-              const SizedBox(height: 10),
-              for (final warning in tuning.warnings)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 6),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Icon(
-                        Icons.warning_amber_rounded,
-                        size: 16,
-                        color: theme.colorScheme.error,
-                      ),
-                      const SizedBox(width: 6),
-                      Expanded(
-                        child: Text(
-                          warning,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: theme.colorScheme.error,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-            ],
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _row(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: FormSpacing.resultRow / 2),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(child: Text(label)),
-          Text(value, style: const TextStyle(fontWeight: FontWeight.w600)),
-        ],
-      ),
+    return _ResultCard(
+      title: 'Что получится',
+      fill: tuning.fillFraction,
+      fillLabel: vesselFitLabel(tuning.fillL, vesselL),
+      over: tuning.fillFraction > 1.0,
+      children: [
+        _row('Спирт ${spiritAbv.round()}%', formatVolume(tuning.spiritL)),
+        _row('Вода', formatVolume(tuning.waterL)),
+        if (tuning.sugarKg > 0.0005)
+          _row('Сахар', '${formatNumber(tuning.sugarKg, decimals: 3)} кг'),
+        if (tuning.rawKg > 0.0005)
+          _row(
+            rawTitle ?? material?.title ?? 'Сырьё',
+            '${formatNumber(tuning.rawKg, decimals: 3)} кг '
+                '(${tuning.rawGramsPerLitre.round()} г/л)',
+          ),
+        const Divider(height: 20),
+        _row('Жидкость', formatVolume(tuning.liquidL)),
+        _row('Закладка', formatVolume(tuning.fillL)),
+        _row('Крепость', '${formatNumber(tuning.actualAbv, decimals: 1)}%'),
+        _row('Выход', formatVolume(tuning.estimatedFinalL)),
+        ..._warnings(theme, tuning.warnings),
+      ],
     );
   }
 }
@@ -638,100 +726,163 @@ class _MashResult extends StatelessWidget {
   const _MashResult({
     required this.vesselL,
     required this.sugarKg,
-    required this.hydromodule,
+    this.waterL,
+    this.extraRaw,
+    this.extraRawKg = 0,
+    this.warnAboutHydromodule = true,
   });
 
   final double vesselL;
   final double sugarKg;
-  final double hydromodule;
+  final double? waterL;
+  final RawMaterial? extraRaw;
+  final double extraRawKg;
+  final bool warnAboutHydromodule;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final tuning = tuneMash(sugarKg: sugarKg, hydromodule: hydromodule);
+    final hydromodule = sugarKg > 0 && (waterL ?? 0) > 0
+        ? waterL! / sugarKg
+        : 4.5;
+    final tuning = tuneMash(
+      sugarKg: sugarKg,
+      hydromodule: hydromodule,
+      waterL: waterL,
+      extraRawKg: extraRawKg,
+      extraRaw: extraRaw,
+      warnAboutHydromodule: warnAboutHydromodule,
+    );
     final fits = tuning.fitsIn(vesselL);
     final sugarForFullVessel = sugarForVessel(
       vesselVolumeL: vesselL,
       hydromodule: hydromodule,
+      extraRawKg: extraRawKg,
+      extraRaw: extraRaw,
     );
 
-    return Card(
-      margin: EdgeInsets.zero,
-      color: theme.colorScheme.primary.withValues(alpha: 0.10),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
+    return _ResultCard(
+      title: 'Что получится',
+      fill: vesselL > 0 ? tuning.totalVolumeL / vesselL : 0,
+      fillLabel: fits
+          ? 'Заполнит ${(tuning.totalVolumeL / vesselL * 100).round()} % тары'
+          : 'Не влезает: не хватает '
+                '${formatNumber(tuning.totalVolumeL - vesselL, decimals: 1)} л',
+      over: !fits,
+      children: [
+        _row('Сахар', '${formatNumber(sugarKg, decimals: 2)} кг'),
+        if (extraRawKg > 0)
+          _row(
+            extraRaw?.title ?? 'Сырьё',
+            '${formatNumber(extraRawKg, decimals: 2)} кг',
+          ),
+        _row('Вода', formatVolume(tuning.waterL)),
+        _row('Объём браги', formatVolume(tuning.totalVolumeL)),
+        const Divider(height: 20),
+        _row('Крепость браги', '${formatNumber(tuning.washAbv, decimals: 1)}%'),
+        _row('Выход АС (теория)', formatVolume(tuning.theoreticalAlcoholL)),
+        _row('Выход АС (практика)', formatVolume(tuning.practicalAlcoholL)),
+        const SizedBox(height: 8),
+        Text(
+          'Чтобы брага заняла ровно ${formatVolume(vesselL)}: '
+          'сахара ${formatNumber(sugarForFullVessel, decimals: 2)} кг.',
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
+        ),
+        ..._warnings(theme, tuning.warnings),
+      ],
+    );
+  }
+}
+
+/// Перегонка: сколько спирта в кубе и сколько ждать тела.
+class _DistillateResult extends StatelessWidget {
+  const _DistillateResult({required this.volumeL, required this.chargeAbv});
+
+  final double volumeL;
+  final double chargeAbv;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final alcohol = volumeL > 0 ? volumeL * chargeAbv / 100 : 0.0;
+    // Практика домашней дробной перегонки: 80–85 % спирта уходит в тело.
+    final hearts = alcohol * 0.82;
+    final heads = alcohol * 0.05;
+    final tails = alcohol * 0.10;
+
+    return _ResultCard(
+      title: 'Что получится',
+      children: [
+        _row('Заливка', formatVolume(volumeL)),
+        _row('Крепость заливки', '${formatNumber(chargeAbv, decimals: 0)}%'),
+        _row('Спирта в кубе', '${formatNumber(alcohol, decimals: 2)} л АС'),
+        const Divider(height: 20),
+        _row('Головы (≈5 %)', '${formatNumber(heads, decimals: 2)} л АС'),
+        _row('Тело (≈82 %)', '${formatNumber(hearts, decimals: 2)} л АС'),
+        _row('Хвосты (≈10 %)', '${formatNumber(tails, decimals: 2)} л АС'),
+        const SizedBox(height: 8),
+        Text(
+          'Тело в пересчёте на 40 % — около '
+          '${formatVolume(hearts / 0.4)} напитка.',
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
+        ),
+        ..._warnings(theme, [
+          if (volumeL <= 0) 'Не задан объём заливки.',
+          if (chargeAbv > 96)
+            'Крепость заливки выше 96 % — так не бывает: спирт-сырец крепче '
+                '96 % не получить.',
+          if (chargeAbv > 0 && chargeAbv < 5)
+            'Заливка крепостью ниже 5 % — спирта в кубе почти нет, гнать '
+                'нечего.',
+        ]),
+      ],
+    );
+  }
+}
+
+Widget _row(String label, String value) => Padding(
+  padding: const EdgeInsets.symmetric(vertical: FormSpacing.resultRow / 2),
+  child: Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      Expanded(child: Text(label)),
+      Text(value, style: const TextStyle(fontWeight: FontWeight.w600)),
+    ],
+  ),
+);
+
+List<Widget> _warnings(ThemeData theme, List<String> warnings) {
+  if (warnings.isEmpty) return const [];
+  return [
+    const SizedBox(height: 10),
+    for (final warning in warnings)
+      Padding(
+        padding: const EdgeInsets.only(bottom: 6),
+        child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Что получится', style: theme.textTheme.titleSmall),
-            const SizedBox(height: FormSpacing.titleToField),
-            _row('Вода', formatVolume(tuning.waterL)),
-            _row('Объём браги', formatVolume(tuning.totalVolumeL)),
-            _row('Влезает в ${formatVolume(vesselL)}', fits ? 'да' : 'нет'),
-            const Divider(height: 20),
-            _row(
-              'Крепость браги',
-              '${formatNumber(tuning.washAbv, decimals: 1)}%',
+            Icon(
+              Icons.warning_amber_rounded,
+              size: 16,
+              color: theme.colorScheme.error,
             ),
-            _row('Выход АС (теория)', formatVolume(tuning.theoreticalAlcoholL)),
-            _row('Выход АС (практика)', formatVolume(tuning.practicalAlcoholL)),
-            const SizedBox(height: 8),
-            Text(
-              'Чтобы брага заняла ровно ${formatVolume(vesselL)}: '
-              'сахара ${formatNumber(sugarForFullVessel, decimals: 2)} кг.',
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
+            const SizedBox(width: 6),
+            Expanded(
+              child: Text(
+                warning,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.error,
+                ),
               ),
             ),
-            if (!fits || tuning.warnings.isNotEmpty) ...[
-              const SizedBox(height: 10),
-              if (!fits)
-                _warn(
-                  theme,
-                  'Не влезает: ${formatVolume(tuning.totalVolumeL)} при таре '
-                  '${formatVolume(vesselL)}.',
-                ),
-              for (final warning in tuning.warnings) _warn(theme, warning),
-            ],
           ],
         ),
       ),
-    );
-  }
-
-  Widget _row(String label, String value) => Padding(
-    padding: const EdgeInsets.symmetric(vertical: FormSpacing.resultRow / 2),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(child: Text(label)),
-        Text(value, style: const TextStyle(fontWeight: FontWeight.w600)),
-      ],
-    ),
-  );
-
-  Widget _warn(ThemeData theme, String text) => Padding(
-    padding: const EdgeInsets.only(bottom: 6),
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Icon(
-          Icons.warning_amber_rounded,
-          size: 16,
-          color: theme.colorScheme.error,
-        ),
-        const SizedBox(width: 6),
-        Expanded(
-          child: Text(
-            text,
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.error,
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
+  ];
 }
 
 /// Окно настройки: возвращает результат или null, если пользователь закрыл.
@@ -740,7 +891,15 @@ Future<TuningResult?> showRecipeTuneSheet({
   required Recipe recipe,
   required List<RecipeIngredient> ingredients,
 }) {
-  final seed = TuningSeed.fromRecipe(recipe, ingredients);
+  final seed = seedFromRecipe(
+    kind: recipe.kind,
+    baseVolumeL: recipe.baseVolumeL,
+    expectedAbv: recipe.expectedAbv,
+    ingredients: [
+      for (final ing in ingredients)
+        SeedIngredient(name: ing.name, amount: ing.amount, unit: ing.unit),
+    ],
+  );
   return Navigator.of(context).push<TuningResult>(
     MaterialPageRoute<TuningResult>(
       fullscreenDialog: true,
@@ -756,16 +915,8 @@ const List<double> kVesselPresets = [0.5, 1.0, 3.0, 5.0, 10.0, 20.0];
 /// Ближайший пресет к произвольному объёму.
 double nearestVesselPreset(double volumeL) {
   var best = kVesselPresets.first;
-  var distance = (best - volumeL).abs();
   for (final preset in kVesselPresets) {
-    final d = (preset - volumeL).abs();
-    if (d < distance) {
-      best = preset;
-      distance = d;
-    }
+    if ((preset - volumeL).abs() < (best - volumeL).abs()) best = preset;
   }
   return best;
 }
-
-/// Максимум из двух чисел — мелкая утилита для UI-расчётов.
-double maxOf(double a, double b) => math.max(a, b);
