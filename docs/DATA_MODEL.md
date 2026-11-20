@@ -68,6 +68,13 @@ metricKind      sg | brix | temp | abv | ph | acidity | sugar
 ### `aging` — выдержка
 `batchId, vesselId, startedAt, plannedEndAt, angelSharePctPerYear, lastToppedAt, nextTopUpAt, nextTasteAt`
 
+### `macerations` — настаивание (v3)
+`batchId, startedAt, plannedEndAt, shakeEveryDays, lastShakenAt, shakenCount, strengthAbv, finishedAt, notes`
+
+Отдельно от `aging`: выдержка — про тару и долю ангела, настаивание — про сырьё,
+срок мацерации и взбалтывания. Запись одна на партию; `finishedAt` закрывает процесс,
+когда сырьё снято с осадка.
+
 ### `tastings`
 `batchId, at, rating (1–5), aroma, taste, finish, verdict, photoPath, wouldRepeat`
 
@@ -92,6 +99,7 @@ recipes 1─n batches ─n batch_events
 batches 1─n measurements
 batches 1─n runs 1─n run_fractions
 batches 1─n aging n─1 vessels
+batches 1─1 macerations
 batches 1─n tastings
 batches 0─1 parentBatch (самоссылка: брага → сырец → сортировка)
 ```
