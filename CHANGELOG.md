@@ -2,6 +2,14 @@
 
 Формат: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/), версии по SemVer.
 
+## [0.12.1] — 2026-11-21
+
+### Добавлено
+
+- **Публичный репозиторий** <https://github.com/grifmax/kalendar-samogon> (ветка `master`, темы `flutter`, `android`, `dart`, `distilling`, `recipes`, `moonshine`).
+- **GitHub Pages** из каталога `docs/`: страница проекта `docs/index.md` и политика конфиденциальности по публичному адресу <https://grifmax.github.io/kalendar-samogon/PRIVACY.html>. Этого адреса не хватало для карточек магазинов — Google Play проверяет ссылку и в карточке, и в приложении.
+- Ссылки для карточек сведены в таблицу в `docs/STORE_LISTING.md`.
+
 ## [0.12.0] — 2026-11-21
 
 ### Добавлено
