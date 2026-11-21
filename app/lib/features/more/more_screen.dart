@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../app/app_scope.dart';
-import '../../app/app_version.dart';
 import '../../utils/format.dart';
+import '../about/about_screen.dart';
 import '../calculators/calculators_screen.dart';
 import '../reference/reference_screen.dart';
 import '../stats/stats_screen.dart';
@@ -34,6 +34,15 @@ class MoreScreen extends StatelessWidget {
               MaterialPageRoute<void>(
                 builder: (_) => const CalculatorsScreen(),
               ),
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.info_outline),
+            title: const Text('О приложении'),
+            subtitle: const Text('Версия, 18+, политика конфиденциальности'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => const AboutScreen()),
             ),
           ),
           ListTile(
@@ -211,7 +220,7 @@ class _VersionLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Text(
-      'Календарь самогонщика · версия $kAppVersion',
+      aboutVersionLabel,
       style: theme.textTheme.bodySmall?.copyWith(
         color: theme.colorScheme.onSurfaceVariant,
       ),

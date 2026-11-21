@@ -2,6 +2,21 @@
 
 Формат: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/), версии по SemVer.
 
+## [0.12.0] — 2026-11-21
+
+### Добавлено
+
+- **Релизная подпись.** `app/android/upload-keystore.jks` (RSA 2048, 10000 дней, alias `upload`), `key.properties` вне git, `signingConfigs.release` в `build.gradle.kts`. Если `key.properties` нет (чистый клон), сборка откатывается на debug-ключ, чтобы `flutter run --release` продолжал работать. Собран `.aab` для Google Play и подписанный `.apk` для RuStore; подпись проверена `apksigner` — CN=Kalendar Samogon, не debug.
+- **Раздел «О приложении»** в «Ещё»: иконка, версия, блок 18+ с предупреждением о вреде чрезмерного употребления и текст политики конфиденциальности прямо в приложении (`assets/privacy.md`).
+- `docs/PRIVACY.md` — политика конфиденциальности: какие данные обрабатываются, что никуда не передаётся, зачем нужны разрешения, как удалить данные.
+- `docs/STORE_LISTING.md` — готовые тексты карточек: название, короткое и полное описание, «что нового», ключевые слова, категории и рейтинги, ответы на анкету IARC.
+- `app/tools/make_screenshots.ps1` — съёмка скриншотов с эмулятора в `dist/screenshots`.
+- Проверены правила площадок по алкогольной тематике: Google Play (Tobacco and Alcohol), RuStore (рейтинг 18+, особые условия для алкоголя), App Store. Итоги — в `docs/RELEASE.md`.
+
+### Исправлено
+
+- `signReleaseBundle` падал с `Given final block not properly padded`: в PKCS12-хранилище (формат по умолчанию в JDK 9+) нет отдельного пароля ключа, `keyPassword` обязан совпадать с `storePassword`. Записано в `docs/RELEASE.md`, чтобы не повторить.
+
 ## [0.11.0] — 2026-11-21
 
 ### Исправлено
